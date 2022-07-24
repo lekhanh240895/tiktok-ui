@@ -4,9 +4,19 @@
 :root {
     --primary-color: #fe2c55;
     --text-color: #161823;
+    --white-color: #fff;
+    --main-background-color: #f1f1f2;
+    --black-color: #000;
+    --main-border-color: rgba(0, 0, 0, 0.12);
+
+    // Default layout
+    --default-layout-width: 1150px;
+    --default-layout-header-height: 60px;
 }
 * {
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 html {
     font-size: 62.5%;
@@ -17,6 +27,7 @@ body {
     font-size: 1.6rem;
     line-height: 1.5;
     text-rendering: optimizeSpeed;
+    color: var(--text-color);
 }
 
 h1,
@@ -26,4 +37,16 @@ h4,
 h5 {
     font-family: 'Poppins', sans-serif;
     color: red;
+}
+
+a[href] {
+    text-decoration: none;
+    color: var(--text-color);
+}
+
+button,
+input,
+[tabindex] {
+    border: none;
+    outline: none;
 }

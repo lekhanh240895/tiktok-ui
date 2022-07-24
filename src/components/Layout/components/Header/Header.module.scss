@@ -1,0 +1,97 @@
+.wrapper {
+    --search-border-radius: 92px;
+    --search-height: 46px;
+    --search-button-width: 52px;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: var(--white-color);
+    height: var(--default-layout-header-height);
+    display: flex;
+    justify-content: center;
+    box-shadow: 0px 1px 1px var(--main-border-color);
+}
+
+.inner {
+    width: var(--default-layout-width);
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.logo {
+    display: block;
+    height: 42px;
+}
+
+.search {
+    padding-left: 16px;
+    border-radius: var(--search-border-radius);
+    background-color: var(--main-background-color);
+    width: 381px;
+    display: flex;
+    height: var(--search-height);
+    position: relative;
+    border: 1.5px solid transparent;
+
+    input {
+        padding: 12px 0;
+        font-size: 1.6rem;
+        background-color: transparent;
+        border: none;
+        outline: none;
+        color: var(--black-color);
+        flex: 1;
+        caret-color: var(--primary-color);
+
+        &:not(:placeholder-shown) ~ .search-btn {
+            color: rgba(22, 24, 35, 0.75);
+        }
+    }
+
+    &::after {
+        content: '';
+        position: absolute;
+        top: 9px;
+        right: var(--search-button-width);
+        width: 1px;
+        height: 28px;
+        background-color: var(--main-border-color);
+    }
+
+    &:focus-within {
+        border-color: rgba(22, 24, 35, 0.2);
+    }
+}
+
+.clear,
+.loading {
+    position: absolute;
+    right: calc(var(--search-button-width) + 16px);
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(22, 24, 35, 0.34);
+    font-size: 1.6rem;
+}
+
+.search-btn {
+    width: var(--search-button-width);
+    height: 100%;
+    font-size: 2.4rem;
+    color: rgba(22, 24, 35, 0.34);
+    border-top-right-radius: var(--search-border-radius);
+    border-bottom-right-radius: var(--search-border-radius);
+    cursor: pointer;
+
+    &:hover {
+        background-color: rgba(22, 24, 35, 0.03);
+    }
+
+    &:active {
+        background-color: rgba(22, 24, 35, 0.06);
+    }
+}
