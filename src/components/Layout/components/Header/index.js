@@ -2,27 +2,47 @@ import React, { useEffect, useState } from 'react';
 import classnames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-    faSearch,
+    faEllipsisV,
     faPlus,
+    faSearch,
     faSpinner,
     faXmarkCircle,
+    faLanguage,
+    faQuestionCircle,
+    faKeyboard,
 } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import Tippy from '@tippyjs/react/headless';
-
 import { Wrapper as PopperWrapper } from '~/components/Popper';
 import styles from './Header.module.scss';
 import images from '~/assets/images';
 import AccountItem from '../AccountItem';
+import Button from '~/components/Button';
+import Menu from '~/components/Popper/Menu';
+
+const cx = classnames.bind(styles);
+const MENU_ITEMS = [
+    {
+        icon: <FontAwesomeIcon icon={faLanguage} />,
+        title: 'English',
+    },
+    {
+        icon: <FontAwesomeIcon icon={faQuestionCircle} />,
+        title: 'Feedback and help',
+        to: '/feedback',
+    },
+    {
+        icon: <FontAwesomeIcon icon={faKeyboard} />,
+        title: 'Keyboard shortcuts',
+    },
+];
 
 export default function Header() {
-    const cx = classnames.bind(styles);
-
     const [searchResult, setSearchResult] = useState([]);
 
     useEffect(() => {
         setTimeout(() => {
-            setSearchResult([1, 2, 3]);
+            setSearchResult([]);
         }, 3000);
     }, []);
 
@@ -85,12 +105,22 @@ export default function Header() {
                 </Tippy>
 
                 <div className={cx('actions')}>
-                    <button>
-                        <FontAwesomeIcon icon={faPlus} />
+                    <Button
+                        secondary
+                        to="/upload"
+                        leftIcon={<FontAwesomeIcon icon={faPlus} />}
+                    >
                         Upload
-                    </button>
+                    </Button>
+                    <Button primary style={{ fontWeight: 700 }}>
+                        Login
+                    </Button>
 
-                    <button>Login</button>
+                    <Menu items={MENU_ITEMS}>
+                        <button className={cx('more-btn')}>
+                            <FontAwesomeIcon icon={faEllipsisV} />
+                        </button>
+                    </Menu>
                 </div>
             </div>
         </header>

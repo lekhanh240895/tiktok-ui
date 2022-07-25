@@ -1,0 +1,23 @@
+.wrapper {
+    width: 223px;
+
+    .menu-item {
+        margin-left: 0;
+        padding: 11px 16px;
+        width: 100%;
+        justify-content: start;
+        border-radius: 0;
+
+        &:last-child {
+            margin-bottom: 8px;
+        }
+
+        &:hover {
+            background: rgba(22, 24, 35, 0.03);
+        }
+
+        span[class*='title'] {
+            font-weight: 500;
+        }
+    }
+}
