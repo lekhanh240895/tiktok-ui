@@ -1,0 +1,48 @@
+.wrapper {
+    padding: 9px 16px;
+    display: flex;
+    align-items: center;
+    &:hover {
+        background: rgba(22, 24, 35, 0.03);
+        cursor: pointer;
+    }
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: contain;
+}
+
+.info {
+    margin-left: 12px;
+    flex-shrink: 0;
+    overflow-x: hidden;
+}
+
+.name {
+    font-size: 1.6rem;
+    color: var(--black-color);
+    font-weight: 600;
+    line-height: 22px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.check {
+    width: 1.4rem;
+    color: rgb(32, 213, 236);
+    margin-left: 8px;
+}
+
+.description {
+    color: rgba(22, 24, 35, 0.5);
+    line-height: 20px;
+    font-weight: 400;
+    font-size: 1.4rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

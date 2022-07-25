@@ -36,7 +36,6 @@ h3,
 h4,
 h5 {
     font-family: 'Poppins', sans-serif;
-    color: red;
 }
 
 a[href] {
@@ -49,4 +48,8 @@ input,
 [tabindex] {
     border: none;
     outline: none;
+}
+
+ul {
+    list-style: none;
 }

@@ -28,11 +28,15 @@
     height: 42px;
 }
 
+.search,
+.search-result {
+    width: 361px;
+}
+
 .search {
     padding-left: 16px;
     border-radius: var(--search-border-radius);
     background-color: var(--main-background-color);
-    width: 381px;
     display: flex;
     height: var(--search-height);
     position: relative;
@@ -94,4 +98,15 @@
     &:active {
         background-color: rgba(22, 24, 35, 0.06);
     }
+}
+
+.search-title {
+    padding: 5px 12px;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: rgba(22, 24, 35, 0.5);
+}
+
+.account-list {
+    max-width: 100%;
 }
