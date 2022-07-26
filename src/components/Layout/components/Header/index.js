@@ -188,7 +188,7 @@ export default function Header() {
                                     className={cx('action-btn')}
                                 >
                                     <InboxIcon />
-                                    <span className={cx('badge')}>1000</span>
+                                    <span className={cx('badge')}>20</span>
                                 </button>
                             </Tippy>
                         </>
