@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap');
 @import 'normalize.css';
 
 :root {
@@ -12,7 +11,46 @@
     // Default layout
     --default-layout-width: 1150px;
     --default-layout-header-height: 60px;
+    --default-layout-horizontal-spacer: 24px;
 }
+
+@font-face {
+    font-family: 'ProximaNova';
+    src: url(../../assets/fonts/Proxima-Nova-Regular.woff2);
+    font-weight: 400;
+}
+@font-face {
+    font-family: 'ProximaNova';
+    src: url(../../assets/fonts/ProximaNova-Semibold.woff2);
+    font-weight: 600;
+}
+@font-face {
+    font-family: 'ProximaNova';
+    src: url(../../assets/fonts/Proxima-Nova-Bold.woff);
+    font-weight: 700;
+}
+
+@font-face {
+    font-family: 'SofiaPro';
+    src: url(../../assets/fonts/sofiapro-medium.woff);
+    font-weight: 500;
+}
+@font-face {
+    font-family: 'SofiaPro';
+    src: url(../../assets/fonts/sofiapro-medium.woff);
+    font-weight: 600;
+}
+@font-face {
+    font-family: 'SofiaPro';
+    src: url(../../assets/fonts/sofiapro-bold.woff);
+    font-weight: 700;
+}
+@font-face {
+    font-family: 'SofiaPro';
+    src: url(../../assets/fonts/sofiapro-bold.woff2);
+    font-weight: 700;
+}
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -23,7 +61,7 @@ html {
 }
 
 body {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'ProximaNova', sans-serif;
     font-size: 1.6rem;
     line-height: 1.5;
     text-rendering: optimizeSpeed;
@@ -35,7 +73,7 @@ h2,
 h3,
 h4,
 h5 {
-    font-family: 'Poppins', sans-serif;
+    font-family: 'SofiaPro', sans-serif;
 }
 
 a[href] {
@@ -52,4 +90,29 @@ input,
 
 ul {
     list-style: none;
+}
+
+.icon-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+body {
+    .tippy-box {
+        background-color: #545454eb;
+        color: var(--white-color);
+        border-radius: 8px;
+        font-size: 1.6rem;
+    }
+
+    .tippy-content {
+        padding: 8px 9px;
+    }
+
+    .tippy-arrow {
+        color: #545454eb;
+    }
+    .tippy-box[data-placement^='bottom'] > .tippy-arrow {
+        top: -1px;
+    }
 }

@@ -5,7 +5,7 @@
     font-size: 16px;
     font-weight: 600;
     min-width: 100px;
-    padding: 8px 16px;
+    padding: 8px 12px;
     border-radius: 4px;
     background-color: transparent;
     user-select: none;
@@ -15,7 +15,7 @@
     border: 1px solid transparent;
 
     + .wrapper {
-        margin-left: 8px;
+        margin-left: 16px;
     }
 
     &.disabled {
@@ -33,11 +33,12 @@
 }
 
 .icon {
-    width: 20px;
+    display: flex;
+    align-items: center;
 }
 
 .title {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'ProximaNova', sans-serif;
 }
 
 // Button types
