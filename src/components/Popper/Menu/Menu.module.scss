@@ -22,10 +22,17 @@
     }
 }
 
+//Menu-Items
+.items-wrapper {
+    overflow-y: auto;
+}
+
+//Header
 .header {
     height: 50px;
     position: relative;
     margin-top: -8px;
+    flex-shrink: 0;
 }
 
 .back-btn {

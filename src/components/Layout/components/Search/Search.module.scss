@@ -21,6 +21,7 @@
         color: var(--black-color);
         flex: 1;
         caret-color: var(--primary-color);
+        font-family: var(--font-family);
 
         &:not(:placeholder-shown) ~ .search-btn {
             color: rgba(22, 24, 35, 0.75);

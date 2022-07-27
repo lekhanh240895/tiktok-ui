@@ -10,7 +10,7 @@ import { ArrowIcon } from '~/components/Icons';
 
 const cx = classnames.bind(styles);
 
-export default function Menu({ children, items }) {
+export default function Menu({ children, items, hideOnClick = false }) {
     const [history, setHistory] = useState([{ data: items }]);
     const current = history[history.length - 1];
 
@@ -30,7 +30,6 @@ export default function Menu({ children, items }) {
                             ]);
                         } else {
                             // Handle logic here
-                            console.log(item);
                         }
                     }}
                 />
@@ -40,6 +39,7 @@ export default function Menu({ children, items }) {
     return (
         <Tippy
             onHide={() => setHistory((prevState) => prevState.slice(0, 1))}
+            hideOnClick={hideOnClick}
             delay={[0, 700]}
             offset={[15, 10]}
             render={(attrs) => (
@@ -56,7 +56,9 @@ export default function Menu({ children, items }) {
                             />
                         )}
 
-                        {renderItems()}
+                        <div className={cx('items-wrapper')}>
+                            {renderItems()}
+                        </div>
                     </PopperWrapper>
 
                     <div data-popper-arrow="" className={cx('arrow')}>
