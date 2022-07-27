@@ -1,20 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import classnames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-    faEllipsisV,
-    faSpinner,
-    faXmarkCircle,
-} from '@fortawesome/free-solid-svg-icons';
+import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 import Tippy from '@tippyjs/react';
-import HeadlessTippy from '@tippyjs/react/headless';
+
 import 'tippy.js/dist/tippy.css'; // optional
 import { Link } from 'react-router-dom';
 
-import { Wrapper as PopperWrapper } from '~/components/Popper';
 import styles from './Header.module.scss';
 import images from '~/assets/images';
-import AccountItem from '../AccountItem';
 import Button from '~/components/Button';
 import Menu from '~/components/Popper/Menu';
 import {
@@ -26,11 +20,11 @@ import {
     LogoutIcon,
     MessageIcon,
     ProfileIcon,
-    SearchIcon,
     SettingIcon,
     UploadIcon,
 } from '~/components/Icons';
 import Image from '~/components/Image';
+import Search from '../Search';
 
 const cx = classnames.bind(styles);
 const MENU_ITEMS = [
@@ -84,14 +78,7 @@ const USER_MENU = [
 ];
 
 export default function Header() {
-    const [searchResult, setSearchResult] = useState([]);
     const currentUser = true;
-
-    useEffect(() => {
-        setTimeout(() => {
-            setSearchResult([]);
-        }, 3000);
-    }, []);
 
     return (
         <header className={cx('wrapper')}>
@@ -100,56 +87,8 @@ export default function Header() {
                     <img src={images.logo} alt="Tiktok Logo" />
                 </Link>
 
-                <HeadlessTippy
-                    visible={searchResult.length > 0}
-                    render={(attrs) => (
-                        <div
-                            className={cx('search-result')}
-                            tabIndex="-1"
-                            {...attrs}
-                        >
-                            <PopperWrapper>
-                                <h4 className={cx('search-title')}>Accounts</h4>
-
-                                <ul className={cx('account-list')}>
-                                    <li>
-                                        <AccountItem />
-                                    </li>
-                                    <li>
-                                        <AccountItem />
-                                    </li>
-                                    <li>
-                                        <AccountItem />
-                                    </li>
-                                    <li>
-                                        <AccountItem />
-                                    </li>
-                                </ul>
-                            </PopperWrapper>
-                        </div>
-                    )}
-                    interactive
-                >
-                    <form className={cx('search')}>
-                        <input
-                            placeholder="Search accounts and videos"
-                            spellCheck={false}
-                            type="text"
-                        />
-
-                        <button className={cx('clear')}>
-                            <FontAwesomeIcon icon={faXmarkCircle} />
-                        </button>
-
-                        <button className={cx('loading')}>
-                            <FontAwesomeIcon icon={faSpinner} />
-                        </button>
-
-                        <button type="submit" className={cx('search-btn')}>
-                            <SearchIcon width="24" height="24" />
-                        </button>
-                    </form>
-                </HeadlessTippy>
+                {/* Search */}
+                <Search />
 
                 <div className={cx('actions')}>
                     <Button
@@ -206,7 +145,6 @@ export default function Header() {
                                 className={cx('user-avatar')}
                                 alt="Khanh Le"
                                 src="hhttps://p16-sign-sg.tiktokcdn.com/aweme/720x720/tiktok-obj/7032952352898285569.jpeg?x-expires=1659002400&x-signature=7Ztzp7ocpjswC%2BQE3V6A4o4bRi0%3D"
-                                // fallback="https://p16-sign-va.tiktokcdn.com/tos-useast2a-avt-0068-giso/3fda2cca3e9257c62e6fb3b8e9710184~c5_100x100.jpeg?x-expires=1659027600&x-signature=UJT%2F4mvNwkrDdfqItWKz%2BoydeVM%3D"
                             />
                         ) : (
                             <button className={cx('more-btn')}>
