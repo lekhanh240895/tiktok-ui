@@ -1,10 +1,11 @@
 import React from 'react';
 import classnames from 'classnames/bind';
-import styles from './AccountItem.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
-import Image from '~/components/Image';
 import { Link } from 'react-router-dom';
+
+import Image from '~/components/Image';
+import styles from './AccountItem.module.scss';
 
 export default function AccountItem({ data }) {
     const cx = classnames.bind(styles);

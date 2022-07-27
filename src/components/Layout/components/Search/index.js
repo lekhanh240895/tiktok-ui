@@ -8,6 +8,8 @@ import { Wrapper as PopperWrapper } from '~/components/Popper';
 import AccountItem from '../AccountItem';
 import { SearchIcon } from '~/components/Icons';
 import { useEffect, useRef, useState } from 'react';
+import { useDebounce } from '~/hooks/useDebounce';
+import * as searchService from '~/services/searchService';
 
 const cx = classnames.bind(styles);
 
@@ -19,30 +21,25 @@ export default function Search() {
 
     const inputRef = useRef();
 
+    const debouncedValue = useDebounce(searchValue, 500);
+
     useEffect(() => {
-        if (!searchValue.trim()) {
+        if (!debouncedValue.trim()) {
             setSearchResult([]);
             return;
         }
-        setLoading(true);
-        async function fetchData() {
-            const response = await fetch(
-                `https://tiktok.fullstack.edu.vn/api/users/search?q=${encodeURIComponent(
-                    searchValue,
-                )}&type=less`,
-            );
 
-            if (!response.ok) {
-                const message = `An error has occured: ${response.status}`;
-                throw new Error(message);
-            }
+        const fetchApi = async () => {
+            setLoading(true);
 
-            const res = await response.json();
+            const result = await searchService.search(debouncedValue);
+
             setLoading(false);
-            setSearchResult(res.data);
-        }
-        fetchData();
-    }, [searchValue]);
+            setSearchResult(result);
+        };
+
+        fetchApi();
+    }, [debouncedValue]);
 
     const handleClear = () => {
         setSearchValue('');
