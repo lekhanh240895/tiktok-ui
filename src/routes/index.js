@@ -2,9 +2,9 @@ import Following from '~/pages/Folllowing';
 import Home from '~/pages/Home';
 import Profile from '~/pages/Profile';
 import Upload from '~/pages/Upload';
-import { HeaderOnlyLayout } from '~/components/Layout';
+import { HeaderOnlyLayout } from '~/layouts';
 import Search from '~/pages/Search';
-import * as config from '~/config/routes';
+import config from '~/config';
 
 const publicRoutes = [
     {
