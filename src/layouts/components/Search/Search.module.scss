@@ -13,7 +13,7 @@
     border: 1.5px solid transparent;
 
     input {
-        padding: 12px 0;
+        padding: 12px 42px 12px 0;
         font-size: 1.6rem;
         background-color: transparent;
         border: none;
@@ -53,6 +53,10 @@
     font-size: 1.6rem;
 }
 
+.clear {
+    cursor: pointer;
+}
+
 .loading {
     animation: rotate360 1s linear infinite;
 }
@@ -64,10 +68,10 @@
         transform: translateY(-50%) rotate(360deg);
     }
 }
+
 .search-btn {
     width: var(--search-button-width);
     height: 100%;
-    font-size: 2.4rem;
     color: rgba(22, 24, 35, 0.34);
     border-top-right-radius: var(--search-border-radius);
     border-bottom-right-radius: var(--search-border-radius);
@@ -82,9 +86,40 @@
     }
 }
 
+// Keywords List
+.keyword-link {
+    display: inline-block;
+    width: 100%;
+}
+
+.keyword-item {
+    line-height: 22px;
+    padding: 8px 16px;
+
+    &:hover {
+        background-color: rgb(22 24 35 / 3%);
+    }
+}
+
+// Acoount list
 .search-title {
     padding: 5px 12px;
     font-size: 1.4rem;
     font-weight: 600;
     color: rgba(22, 24, 35, 0.5);
+}
+
+.search-footer {
+    padding: 15px 16px;
+    font-size: 1.6rem;
+    font-weight: 600;
+    line-height: 22px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: pointer;
+
+    &:hover {
+        background-color: rgb(22 24 35 / 3%);
+    }
 }

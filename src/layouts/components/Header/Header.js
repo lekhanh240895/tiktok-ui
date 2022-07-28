@@ -109,13 +109,9 @@ export default function Header() {
                             >
                                 <button
                                     to="/messages"
-                                    className={cx('action-btn')}
+                                    className={cx('action-btn', 'icon-wrapper')}
                                 >
-                                    <MessageIcon
-                                        width="26"
-                                        height="26"
-                                        style={{ paddingTop: '2px' }}
-                                    />
+                                    <MessageIcon width="26" height="26" />
                                 </button>
                             </Tippy>
                             <Tippy

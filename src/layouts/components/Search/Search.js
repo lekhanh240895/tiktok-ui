@@ -2,26 +2,73 @@ import { faSpinner, faXmarkCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import HeadlessTippy from '@tippyjs/react/headless';
 import classnames from 'classnames/bind';
-import styles from './Search.module.scss';
+import { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { routes } from '~/config/routes';
 
+import styles from './Search.module.scss';
 import { Wrapper as PopperWrapper } from '~/components/Popper';
 import AccountItem from '../AccountItem';
 import { SearchIcon } from '~/components/Icons';
-import { useEffect, useRef, useState } from 'react';
 import { useDebounce } from '~/hooks/useDebounce';
 import * as searchService from '~/services/searchService';
+import Button from '~/components/Button';
 
 const cx = classnames.bind(styles);
+
+const keywords = [
+    'korean girls',
+    'korean songs',
+    'korean studys',
+    'hoa',
+    'hoa đẹp',
+    'hoa hướng dương',
+    'hoavinhh',
+    'le bong',
+    'le khanh',
+];
 
 export default function Search() {
     const [searchResult, setSearchResult] = useState([]);
     const [searchValue, setSearchValue] = useState('');
-    const [showResult, setShowResult] = useState(true);
+    const [showResult, setShowResult] = useState(false);
     const [loading, setLoading] = useState(false);
-
     const inputRef = useRef();
 
     const debouncedValue = useDebounce(searchValue, 500);
+
+    const renderSearchKeywords = () => {
+        const searchKeywords = [
+            ...keywords,
+            ...searchResult.map((item) => item.full_name),
+        ];
+
+        return searchKeywords
+            .filter((keyword) => {
+                return keyword
+                    .toLowerCase()
+                    .includes(debouncedValue.toLowerCase());
+            })
+            .map((item, index) => (
+                <Link
+                    to={routes.search}
+                    key={index}
+                    className={cx('keyword-link')}
+                    onClick={handleHideResult}
+                >
+                    <Button
+                        className={cx('keyword-item')}
+                        leftIcon={<SearchIcon width="15" height="15" />}
+                        style={{
+                            width: '100%',
+                            justifyContent: 'start',
+                        }}
+                    >
+                        {item}
+                    </Button>
+                </Link>
+            ));
+    };
 
     useEffect(() => {
         if (!debouncedValue.trim()) {
@@ -74,15 +121,26 @@ export default function Search() {
                         {...attrs}
                     >
                         <PopperWrapper>
+                            <ul className={cx('keyword-list')}>
+                                {renderSearchKeywords()}
+                            </ul>
+
                             <h4 className={cx('search-title')}>Accounts</h4>
 
                             <ul className={cx('account-list')}>
                                 {searchResult.map((item) => (
-                                    <li key={item.id}>
+                                    <li
+                                        key={item.id}
+                                        onClick={handleHideResult}
+                                    >
                                         <AccountItem data={item} />
                                     </li>
                                 ))}
                             </ul>
+
+                            <p className={cx('search-footer')}>
+                                View all results for {debouncedValue}
+                            </p>
                         </PopperWrapper>
                     </div>
                 )}

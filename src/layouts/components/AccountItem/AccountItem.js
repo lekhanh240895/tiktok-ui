@@ -8,8 +8,9 @@ import { Link } from 'react-router-dom';
 import Image from '~/components/Image';
 import styles from './AccountItem.module.scss';
 
+const cx = classnames.bind(styles);
+
 export default function AccountItem({ data }) {
-    const cx = classnames.bind(styles);
     return (
         <Link to={`@${data.nickname}`} className={cx('wrapper')}>
             <Image
