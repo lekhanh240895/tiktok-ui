@@ -43,10 +43,16 @@
     }
 }
 
+@media (max-width: 768px) {
+    .search {
+        display: none;
+    }
+}
+
 .clear,
 .loading {
     position: absolute;
-    right: calc(var(--search-button-width) + 16px);
+    right: calc(var(--search-button-width) + 12px);
     top: 50%;
     transform: translateY(-50%);
     color: rgba(22, 24, 35, 0.34);

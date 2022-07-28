@@ -1,4 +1,4 @@
-import { faSpinner, faXmarkCircle } from '@fortawesome/free-solid-svg-icons';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import HeadlessTippy from '@tippyjs/react/headless';
 import classnames from 'classnames/bind';
@@ -9,7 +9,7 @@ import { routes } from '~/config/routes';
 import styles from './Search.module.scss';
 import { Wrapper as PopperWrapper } from '~/components/Popper';
 import AccountItem from '../AccountItem';
-import { SearchIcon } from '~/components/Icons';
+import { DeleteIcon, SearchIcon } from '~/components/Icons';
 import { useDebounce } from '~/hooks/useDebounce';
 import * as searchService from '~/services/searchService';
 import Button from '~/components/Button';
@@ -157,13 +157,16 @@ export default function Search() {
                     />
 
                     {!!searchValue && !loading && (
-                        <button className={cx('clear')} onClick={handleClear}>
-                            <FontAwesomeIcon icon={faXmarkCircle} />
+                        <button
+                            className={cx('clear', 'icon-wrapper')}
+                            onClick={handleClear}
+                        >
+                            <DeleteIcon width="16" height="16" />
                         </button>
                     )}
 
                     {loading && (
-                        <button className={cx('loading')}>
+                        <button className={cx('loading', 'icon-wrapper')}>
                             <FontAwesomeIcon icon={faSpinner} />
                         </button>
                     )}
