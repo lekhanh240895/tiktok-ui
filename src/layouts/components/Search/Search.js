@@ -4,7 +4,7 @@ import HeadlessTippy from '@tippyjs/react/headless';
 import classnames from 'classnames/bind';
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { routes } from '~/config/routes';
+import config from '~/config';
 
 import styles from './Search.module.scss';
 import { Wrapper as PopperWrapper } from '~/components/Popper';
@@ -51,7 +51,7 @@ export default function Search() {
             })
             .map((item, index) => (
                 <Link
-                    to={routes.search}
+                    to={config.routes.search}
                     key={index}
                     className={cx('keyword-link')}
                     onClick={handleHideResult}

@@ -5,6 +5,7 @@ import Upload from '~/pages/Upload';
 import HeaderOnlyLayout from '~/layouts/HeaderOnlyLayout';
 import Search from '~/pages/Search';
 import config from '~/config';
+import Live from '~/pages/Live';
 
 const publicRoutes = [
     {
@@ -28,6 +29,10 @@ const publicRoutes = [
         path: config.routes.search,
         component: Search,
         layout: null,
+    },
+    {
+        path: config.routes.live,
+        component: Live,
     },
 ];
 
