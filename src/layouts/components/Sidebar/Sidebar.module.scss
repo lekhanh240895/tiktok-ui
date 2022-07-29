@@ -1,4 +1,36 @@
 .wrapper {
     width: 356px;
     padding: 20px 0 26px;
+    margin-left: -8px;
+    overflow: hidden;
+    position: relative;
+}
+
+.content {
+    height: 85vh;
+    overflow: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+
+    &:hover ~ .scrollbar {
+        display: block;
+    }
+}
+
+.scrollbar {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: none;
+}
+
+.scrollbar-thumb {
+    width: 6px;
+    height: 100%;
+    border-radius: 3px;
+    background: rgba(22, 24, 35, 0.06);
 }

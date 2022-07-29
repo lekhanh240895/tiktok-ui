@@ -6,6 +6,9 @@ import HeaderOnlyLayout from '~/layouts/HeaderOnlyLayout';
 import Search from '~/pages/Search';
 import config from '~/config';
 import Live from '~/pages/Live';
+import Feedback from '~/pages/Feedback';
+import Music from '~/pages/Music';
+import Tag from '~/pages/Tag';
 
 const publicRoutes = [
     {
@@ -33,6 +36,18 @@ const publicRoutes = [
     {
         path: config.routes.live,
         component: Live,
+    },
+    {
+        path: config.routes.feedback,
+        component: Feedback,
+    },
+    {
+        path: config.routes.tag,
+        component: Tag,
+    },
+    {
+        path: config.routes.music,
+        component: Music,
     },
 ];
 

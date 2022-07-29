@@ -1,0 +1,82 @@
+.wrapper {
+    padding: 16px 0;
+    position: relative;
+
+    &::after {
+        content: '';
+        height: 1px;
+        background-color: rgb(22 24 35 / 12%);
+        position: absolute;
+        top: 0;
+        left: 8px;
+        right: 8px;
+    }
+}
+
+.title {
+    font-size: 1.4rem;
+    line-height: 20px;
+    margin-bottom: 8px;
+    padding: 0 8px;
+    font-weight: 600;
+    color: rgb(22 24 35 / 75%);
+}
+
+.more-btn {
+    font-size: 1.4rem;
+    line-height: 20px;
+    margin-top: 8px;
+    padding: 0 8px;
+    font-weight: 600;
+    color: var(--primary-color);
+    cursor: pointer;
+}
+
+// User Item
+.user-item {
+    display: flex;
+    align-items: center;
+    padding: 6px 8px;
+    &:hover {
+        background: rgba(22, 24, 35, 0.03);
+        cursor: pointer;
+    }
+}
+
+.avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: contain;
+}
+
+.info {
+    margin-left: 12px;
+    flex-shrink: 0;
+    overflow-x: hidden;
+}
+
+.name {
+    font-size: 1.6rem;
+    color: var(--black-color);
+    font-weight: 600;
+    line-height: 22px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.check {
+    color: rgb(32, 213, 236);
+    margin-left: 8px;
+}
+
+.description {
+    color: rgba(22, 24, 35, 0.5);
+    line-height: 15px;
+    font-weight: 400;
+    font-size: 1.2rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

@@ -1,17 +1,15 @@
 import PropTypes from 'prop-types';
-import React from 'react';
-import classnames from 'classnames/bind';
 import { Link } from 'react-router-dom';
-
+import styles from './UserList.module.scss';
+import classnames from 'classnames/bind';
 import Image from '~/components/Image';
-import styles from './AccountItem.module.scss';
 import { CheckedIcon } from '~/components/Icons';
 
 const cx = classnames.bind(styles);
 
-export default function AccountItem({ data }) {
+export default function UserList({ data }) {
     return (
-        <Link to={`@${data.nickname}`} className={cx('wrapper')}>
+        <Link to={`@${data.nickname}`} className={cx('user-item')}>
             <Image
                 className={cx('avatar')}
                 alt={data.full_name}
@@ -36,6 +34,6 @@ export default function AccountItem({ data }) {
     );
 }
 
-AccountItem.propTypes = {
-    data: PropTypes.object,
+UserList.propTypes = {
+    data: PropTypes.object.isRequired,
 };

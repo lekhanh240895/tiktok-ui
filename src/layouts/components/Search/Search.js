@@ -2,7 +2,7 @@ import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import HeadlessTippy from '@tippyjs/react/headless';
 import classnames from 'classnames/bind';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import config from '~/config';
 
@@ -11,25 +11,15 @@ import { Wrapper as PopperWrapper } from '~/components/Popper';
 import AccountItem from '../AccountItem';
 import { DeleteIcon, SearchIcon } from '~/components/Icons';
 import { useDebounce } from '~/hooks/useDebounce';
-import * as searchService from '~/services/searchService';
+import * as userService from '~/services/userService';
+import * as keywordService from '~/services/keywordService';
 import Button from '~/components/Button';
 
 const cx = classnames.bind(styles);
 
-const keywords = [
-    'korean girls',
-    'korean songs',
-    'korean studys',
-    'hoa',
-    'hoa đẹp',
-    'hoa hướng dương',
-    'hoavinhh',
-    'le bong',
-    'le khanh',
-];
-
 export default function Search() {
     const [searchResult, setSearchResult] = useState([]);
+    const [searchKeywords, setSearchKeywords] = useState([]);
     const [searchValue, setSearchValue] = useState('');
     const [showResult, setShowResult] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -38,18 +28,8 @@ export default function Search() {
     const debouncedValue = useDebounce(searchValue, 500);
 
     const renderSearchKeywords = () => {
-        const searchKeywords = [
-            ...keywords,
-            ...searchResult.map((item) => item.full_name),
-        ];
-
-        return searchKeywords
-            .filter((keyword) => {
-                return keyword
-                    .toLowerCase()
-                    .includes(debouncedValue.toLowerCase());
-            })
-            .map((item, index) => (
+        if (searchKeywords.length > 0) {
+            return searchKeywords.map((item, index) => (
                 <Link
                     to={config.routes.search}
                     key={index}
@@ -68,28 +48,42 @@ export default function Search() {
                     </Button>
                 </Link>
             ));
+        }
     };
 
-    useEffect(() => {
+    const handleSearch = useCallback(() => {
         if (!debouncedValue.trim()) {
             setSearchResult([]);
+            setSearchKeywords([]);
             return;
         }
 
         const fetchAPI = async () => {
             setLoading(true);
 
-            const result = await searchService.search(debouncedValue);
+            const searchUsers = await userService.search(debouncedValue);
+            const keywords = await keywordService.search(debouncedValue);
+
+            const searchKeywords = [
+                ...keywords.map((keyword) => keyword.title),
+                ...searchUsers.map((user) => user.full_name),
+            ];
 
             setLoading(false);
-            setSearchResult(result);
+            setSearchKeywords(searchKeywords.slice(0, 8));
+            setSearchResult(searchUsers.slice(0, 5));
         };
 
         fetchAPI();
     }, [debouncedValue]);
 
+    useEffect(() => {
+        handleSearch();
+    }, [handleSearch]);
+
     const handleClear = () => {
         setSearchValue('');
+        setSearchKeywords([]);
         setSearchResult([]);
         inputRef.current.focus();
     };
@@ -105,13 +99,21 @@ export default function Search() {
             setSearchValue(searchValue);
         }
     };
+
+    // Form Submit
+    const handleSubmit = (e) => {
+        e.preventDefault();
+    };
     return (
         // Tippy.js
         // Using a wrapper <div> or <span> tag around the reference element
         // solves this by creating a new parentNode context.
         <div>
             <HeadlessTippy
-                visible={showResult && searchResult.length > 0}
+                visible={
+                    showResult &&
+                    (searchResult.length > 0 || searchKeywords.length > 0)
+                }
                 interactive
                 onClickOutside={handleHideResult}
                 render={(attrs) => (
@@ -138,14 +140,16 @@ export default function Search() {
                                 ))}
                             </ul>
 
-                            <p className={cx('search-footer')}>
-                                View all results for {debouncedValue}
-                            </p>
+                            {debouncedValue && (
+                                <p className={cx('search-footer')}>
+                                    View all results for {debouncedValue}
+                                </p>
+                            )}
                         </PopperWrapper>
                     </div>
                 )}
             >
-                <form className={cx('search')}>
+                <form className={cx('search')} onSubmit={handleSubmit}>
                     <input
                         placeholder="Search accounts and videos"
                         spellCheck={false}
