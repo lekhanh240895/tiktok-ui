@@ -1,10 +1,10 @@
-import styles from './Discover.module.scss';
 import classnames from 'classnames/bind';
 import { useEffect, useState } from 'react';
-import * as keywordService from '~/services/keywordService';
 import { Link } from 'react-router-dom';
+
+import * as keywordService from '~/services/keywordService';
+import styles from './Discover.module.scss';
 import { MusicIcon, TagIcon } from '~/components/Icons';
-import config from '~/config';
 
 const cx = classnames.bind(styles);
 
@@ -33,7 +33,8 @@ export default function Discover() {
                 {keywords.map((keyword, index) => {
                     return (
                         <Link
-                            to={config.routes[keyword.type]}
+                            to={`/${keyword.type}/${keyword.title}`}
+                            replace
                             key={index}
                             className={cx('keyword-item')}
                         >

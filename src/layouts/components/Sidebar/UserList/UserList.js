@@ -3,10 +3,13 @@ import classnames from 'classnames/bind';
 
 import styles from './UserList.module.scss';
 import { UserItem } from './index';
+import { useState } from 'react';
 
 const cx = classnames.bind(styles);
 
-export default function UserList({ title, users, text, onMore }) {
+export default function UserList({ title, users, text, onMore, onLess }) {
+    const [isMore, setIsMore] = useState(false);
+
     return (
         <div className={cx('wrapper')}>
             <h4 className={cx('title')}>{title}</h4>
@@ -17,9 +20,27 @@ export default function UserList({ title, users, text, onMore }) {
                 ))}
             </ul>
 
-            <p className={cx('more-btn')} onClick={() => onMore(title)}>
-                {text}
-            </p>
+            {!isMore ? (
+                <p
+                    className={cx('more-btn')}
+                    onClick={() => {
+                        setIsMore(true);
+                        onMore(title);
+                    }}
+                >
+                    {text}
+                </p>
+            ) : (
+                <p
+                    className={cx('more-btn')}
+                    onClick={() => {
+                        setIsMore(false);
+                        onLess(title);
+                    }}
+                >
+                    See less
+                </p>
+            )}
         </div>
     );
 }

@@ -11,7 +11,7 @@ const cx = classnames.bind(styles);
 
 export default function AccountItem({ data }) {
     return (
-        <Link to={`@${data.nickname}`} className={cx('wrapper')}>
+        <Link to={`/@${data.nickname}`} replace className={cx('wrapper')}>
             <Image
                 className={cx('avatar')}
                 alt={data.full_name}

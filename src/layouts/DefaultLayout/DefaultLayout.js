@@ -7,6 +7,7 @@ import classnames from 'classnames/bind';
 
 export default function DefaultLayout({ children }) {
     const cx = classnames.bind(styles);
+
     return (
         <div className={cx('wrapper')}>
             <Header />

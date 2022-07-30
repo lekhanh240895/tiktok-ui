@@ -9,7 +9,7 @@ const cx = classnames.bind(styles);
 
 export default function UserList({ data }) {
     return (
-        <Link to={`@${data.nickname}`} className={cx('user-item')}>
+        <Link to={`/@${data.nickname}`} replace className={cx('user-item')}>
             <Image
                 className={cx('avatar')}
                 alt={data.full_name}

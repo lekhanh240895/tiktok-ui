@@ -19,6 +19,11 @@ import Footer from './Footer';
 const cx = classnames.bind(styles);
 
 export default function Sidebar() {
+    const currentUserId = 8;
+
+    const [users, setUsers] = useState([]);
+    const [followingIDs, setFollowingIDs] = useState([]);
+    const [followerIDs, setFollowerIDs] = useState([]);
     const [suggestUsers, setSuggestUsers] = useState([]);
     const [followUsers, setFollowUsers] = useState([]);
     const [thumbHeight, setThumbHeight] = useState(20);
@@ -29,20 +34,30 @@ export default function Sidebar() {
 
     useEffect(() => {
         const getUserAPI = async () => {
-            const suggestUsers = await userService.search('', {
-                tick: true,
-                followers_count_gte: 100000,
-                _page: 1,
-                _limit: 5,
-            });
+            const users = await userService.get();
 
-            const followUsers = await userService.search('', {
-                _page: 1,
-                _limit: 5,
-            });
+            setUsers(users);
 
-            setSuggestUsers(suggestUsers);
-            setFollowUsers(followUsers);
+            const currentUser = users.find((user) => user.id === currentUserId);
+            const followingIDs = currentUser.followingIDs.map((id) => id);
+            const followerIDs = currentUser.followerIDs.map((id) => id);
+
+            setFollowingIDs(followingIDs);
+            setFollowerIDs(followerIDs);
+
+            const suggestUsers = users.filter(
+                (user) =>
+                    user.tick &&
+                    user.followers_count > 10000 &&
+                    !followingIDs.includes(user.id),
+            );
+
+            const followers = users.filter((user) =>
+                followerIDs.includes(user.id),
+            );
+
+            setSuggestUsers(suggestUsers.slice(0, 2));
+            setFollowUsers(followers.slice(0, 5));
         };
 
         getUserAPI();
@@ -50,15 +65,39 @@ export default function Sidebar() {
 
     const handleMore = async (title) => {
         if (title === 'Suggested accounts') {
-            const suggestUsers = await userService.search('', {
-                tick: true,
-                followers_count_gte: 100000,
-            });
+            const suggestUsers = users.filter(
+                (user) =>
+                    user.tick &&
+                    user.followers_count > 10000 &&
+                    !followingIDs.includes(user.id) &&
+                    user.id !== currentUserId,
+            );
 
             setSuggestUsers(suggestUsers);
         } else {
-            const followUsers = await userService.search('', {});
-            setFollowUsers(followUsers);
+            const followers = users.filter((user) =>
+                followerIDs.includes(user.id),
+            );
+            setFollowUsers(followers);
+        }
+    };
+
+    const handleLess = async (title) => {
+        if (title === 'Suggested accounts') {
+            const suggestUsers = users.filter(
+                (user) =>
+                    user.tick &&
+                    user.followers_count > 10000 &&
+                    !followingIDs.includes(user.id) &&
+                    user.id !== currentUserId,
+            );
+
+            setSuggestUsers(suggestUsers.slice(0, 2));
+        } else {
+            const followers = users.filter((user) =>
+                followerIDs.includes(user.id),
+            );
+            setFollowUsers(followers.slice(0, 5));
         }
     };
 
@@ -135,6 +174,7 @@ export default function Sidebar() {
                         users={suggestUsers}
                         text="See all"
                         onMore={handleMore}
+                        onLess={handleLess}
                     />
                 </div>
 
@@ -144,6 +184,7 @@ export default function Sidebar() {
                         users={followUsers}
                         text="See more"
                         onMore={handleMore}
+                        onLess={handleLess}
                     />
                 </div>
 

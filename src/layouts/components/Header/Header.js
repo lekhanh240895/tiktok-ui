@@ -26,66 +26,71 @@ import {
 import Image from '~/components/Image';
 import Search from '../Search';
 import config from '~/config';
+import { useAppContext } from '~/contexts/AppContext';
 
 const cx = classnames.bind(styles);
-const MENU_ITEMS = [
-    {
-        icon: <LanguageIcon width="2rem" height="2rem" />,
-        title: 'English',
-        children: {
-            title: 'Language',
-            data: [
-                {
-                    code: 'en',
-                    title: 'English',
-                },
-                {
-                    code: 'vi',
-                    title: 'Tiếng Việt',
-                },
-            ],
-        },
-    },
-    {
-        icon: <HelpIcon width="2rem" height="2rem" />,
-        title: 'Feedback and help',
-        to: '/feedback',
-    },
-    {
-        icon: <KeyboardIcon width="2rem" height="2rem" />,
-        title: 'Keyboard shortcuts',
-    },
-];
-
-const USER_MENU = [
-    {
-        icon: <ProfileIcon width="2rem" height="2rem" />,
-        title: 'View Profile',
-    },
-    {
-        icon: <CoinIcon width="2rem" height="2rem" />,
-        title: 'Get coins',
-    },
-    {
-        icon: <SettingIcon width="2rem" height="2rem" />,
-        title: 'Settings',
-    },
-    ...MENU_ITEMS,
-    {
-        icon: <LogoutIcon width="2rem" height="2rem" />,
-        title: 'Log out',
-        separate: true,
-    },
-];
 
 export default function Header() {
-    const currentUser = true;
+    const { currentUser } = useAppContext();
+
+    if (!currentUser) return;
+
+    const MENU_ITEMS = [
+        {
+            icon: <LanguageIcon width="2rem" height="2rem" />,
+            title: 'English',
+            children: {
+                title: 'Language',
+                data: [
+                    {
+                        code: 'en',
+                        title: 'English',
+                    },
+                    {
+                        code: 'vi',
+                        title: 'Tiếng Việt',
+                    },
+                ],
+            },
+        },
+        {
+            icon: <HelpIcon width="2rem" height="2rem" />,
+            title: 'Feedback and help',
+            to: '/feedback',
+        },
+        {
+            icon: <KeyboardIcon width="2rem" height="2rem" />,
+            title: 'Keyboard shortcuts',
+        },
+    ];
+
+    const USER_MENU = [
+        {
+            icon: <ProfileIcon width="2rem" height="2rem" />,
+            title: 'View Profile',
+            to: `/@${currentUser.nickname}`,
+        },
+        {
+            icon: <CoinIcon width="2rem" height="2rem" />,
+            title: 'Get coins',
+        },
+        {
+            icon: <SettingIcon width="2rem" height="2rem" />,
+            title: 'Settings',
+        },
+        ...MENU_ITEMS,
+        {
+            icon: <LogoutIcon width="2rem" height="2rem" />,
+            title: 'Log out',
+            separate: true,
+        },
+    ];
 
     return (
         <header className={cx('wrapper')}>
             <div className={cx('inner')}>
                 <Link to={config.routes.home} className={cx('logo')}>
-                    <img src={images.logo} alt="Tiktok Logo" />
+                    <Image src={images.logo} alt="Tiktok Logo" />
                 </Link>
 
                 {/* Search */}
@@ -143,8 +148,8 @@ export default function Header() {
                         {currentUser ? (
                             <Image
                                 className={cx('user-avatar')}
-                                alt="Khanh Le"
-                                src="hhttps://p16-sign-sg.tiktokcdn.com/aweme/720x720/tiktok-obj/7032952352898285569.jpeg?x-expires=1659002400&x-signature=7Ztzp7ocpjswC%2BQE3V6A4o4bRi0%3D"
+                                alt={currentUser.full_name}
+                                src={currentUser.avatar || ''}
                             />
                         ) : (
                             <button className={cx('more-btn')}>

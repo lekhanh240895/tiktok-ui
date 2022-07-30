@@ -6,6 +6,6 @@ export const routes = {
     search: '/search',
     live: '/live',
     feedback: '/feedback',
-    tag: '/tag',
-    music: '/music',
+    tag: '/tag/:tagname',
+    music: '/music/:musicname',
 };
