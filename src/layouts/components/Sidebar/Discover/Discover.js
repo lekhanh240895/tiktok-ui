@@ -18,9 +18,9 @@ export default function Discover() {
     const typeKeyword = (type) => {
         switch (type) {
             case 'tag':
-                return <TagIcon width="16" height="16" />;
+                return <TagIcon width="1.6rem" height="1.6rem" />;
             case 'music':
-                return <MusicIcon width="16" height="16" />;
+                return <MusicIcon width="1.6rem" height="1.6rem" />;
             default:
                 return;
         }

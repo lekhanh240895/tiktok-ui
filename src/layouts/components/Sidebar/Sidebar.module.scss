@@ -7,7 +7,7 @@
 }
 
 .content {
-    height: 85vh;
+    max-height: min(100vh - 46px - 60px, 734px);
     overflow: auto;
     scrollbar-width: none;
     -ms-overflow-style: none;
@@ -25,7 +25,8 @@
     position: absolute;
     top: 0;
     right: 0;
-    display: none;
+    /*     display: none;
+ */
 }
 
 .scrollbar-thumb {

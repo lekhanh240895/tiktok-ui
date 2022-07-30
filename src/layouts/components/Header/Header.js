@@ -30,7 +30,7 @@ import config from '~/config';
 const cx = classnames.bind(styles);
 const MENU_ITEMS = [
     {
-        icon: <LanguageIcon width="20" height="20" />,
+        icon: <LanguageIcon width="2rem" height="2rem" />,
         title: 'English',
         children: {
             title: 'Language',
@@ -47,32 +47,32 @@ const MENU_ITEMS = [
         },
     },
     {
-        icon: <HelpIcon width="20" height="20" />,
+        icon: <HelpIcon width="2rem" height="2rem" />,
         title: 'Feedback and help',
         to: '/feedback',
     },
     {
-        icon: <KeyboardIcon width="20" height="20" />,
+        icon: <KeyboardIcon width="2rem" height="2rem" />,
         title: 'Keyboard shortcuts',
     },
 ];
 
 const USER_MENU = [
     {
-        icon: <ProfileIcon width="20" height="20" />,
+        icon: <ProfileIcon width="2rem" height="2rem" />,
         title: 'View Profile',
     },
     {
-        icon: <CoinIcon width="20" height="20" />,
+        icon: <CoinIcon width="2rem" height="2rem" />,
         title: 'Get coins',
     },
     {
-        icon: <SettingIcon width="20" height="20" />,
+        icon: <SettingIcon width="2rem" height="2rem" />,
         title: 'Settings',
     },
     ...MENU_ITEMS,
     {
-        icon: <LogoutIcon width="20" height="20" />,
+        icon: <LogoutIcon width="2rem" height="2rem" />,
         title: 'Log out',
         separate: true,
     },
@@ -95,7 +95,7 @@ export default function Header() {
                     <Button
                         secondary
                         to="/upload"
-                        leftIcon={<UploadIcon width="20" height="20" />}
+                        leftIcon={<UploadIcon width="2rem" height="2rem" />}
                     >
                         Upload
                     </Button>
@@ -111,7 +111,10 @@ export default function Header() {
                                     to="/messages"
                                     className={cx('action-btn', 'icon-wrapper')}
                                 >
-                                    <MessageIcon width="26" height="26" />
+                                    <MessageIcon
+                                        width="2.6rem"
+                                        height="2.6rem"
+                                    />
                                 </button>
                             </Tippy>
                             <Tippy

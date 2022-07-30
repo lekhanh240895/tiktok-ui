@@ -38,7 +38,7 @@ export default function Search() {
                 >
                     <Button
                         className={cx('keyword-item')}
-                        leftIcon={<SearchIcon width="15" height="15" />}
+                        leftIcon={<SearchIcon width="1.5rem" height="1.5rem" />}
                         style={{
                             width: '100%',
                             justifyContent: 'start',
@@ -165,7 +165,7 @@ export default function Search() {
                             className={cx('clear', 'icon-wrapper')}
                             onClick={handleClear}
                         >
-                            <DeleteIcon width="16" height="16" />
+                            <DeleteIcon width="1.6rem" height="1.6rem" />
                         </button>
                     )}
 
@@ -180,7 +180,7 @@ export default function Search() {
                         className={cx('search-btn', 'icon-wrapper')}
                         onMouseDown={(e) => e.preventDefault()}
                     >
-                        <SearchIcon width="24" height="24" />
+                        <SearchIcon width="2.4rem" height="2.4rem" />
                     </button>
                 </form>
             </HeadlessTippy>
