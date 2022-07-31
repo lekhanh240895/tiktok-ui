@@ -9,8 +9,14 @@
     display: flex;
     padding: 0 var(--default-layout-horizontal-spacer);
     max-width: 100%;
+    justify-content: space-between;
 }
 
 .content {
-    flex: 1;
+    margin-right: 16px;
+    margin-left: 16px;
+    width: calc(696px - (var(--default-layout-horizontal-spacer) * 2));
+    max-width: calc(696px - (var(--default-layout-horizontal-spacer) * 2));
+    padding: 24px 0;
+    position: relative;
 }

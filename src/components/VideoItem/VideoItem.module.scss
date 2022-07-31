@@ -1,0 +1,260 @@
+.wrapper {
+    display: flex;
+    padding: 20px 0;
+}
+
+//VideoItem Header
+.avatar {
+    flex: 0 0 auto;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+}
+
+.content {
+    margin-left: 13px;
+    flex: 1;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    height: 28px;
+}
+
+.styleAuthor {
+    display: block;
+    height: 100%;
+}
+
+.info {
+    position: relative;
+}
+
+.name {
+    font-weight: 700;
+    font-size: 1.8rem;
+    margin-right: 4px;
+    line-height: 25px;
+    display: inline-block;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+.nickname {
+    font-weight: 400;
+    font-size: 1.4rem;
+    font-family: var(--font-family);
+    line-height: 28px;
+    display: inline-block;
+}
+
+.follow-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.video-desc {
+    line-height: 22px;
+    font-size: 1.6rem;
+}
+.video-tag {
+    font-weight: 600;
+}
+
+.video-music {
+    line-height: 22px;
+    margin: 6px 0 12px;
+
+    & > a {
+        padding: 0;
+    }
+}
+
+//Video
+.video-wrapper {
+    display: flex;
+    align-items: flex-end;
+}
+
+.video-card-container {
+    height: calc(450px + (100vw - 768px) / 1152 * 100);
+    margin-right: 20px;
+}
+
+.video-player-container {
+    height: 100%;
+    width: 100%;
+    position: relative;
+}
+
+.video {
+    max-height: 100%;
+    max-width: 100%;
+}
+.action-item-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: rgb(22 24 35 / 6%);
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 8px 0;
+    cursor: pointer;
+}
+
+.video-stat {
+    font-size: 1.2rem;
+    font-weight: 700;
+    display: inline-block;
+    text-align: center;
+    width: 100%;
+    line-height: 17px;
+}
+
+.play-icon {
+    position: absolute;
+    bottom: 26px;
+    left: 12px;
+    color: var(--white-color);
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+
+    svg {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+.volume-icon {
+    position: absolute;
+    bottom: 26px;
+    right: 12px;
+    color: var(--white-color);
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+
+    svg {
+        width: 24px;
+        height: 24px;
+    }
+}
+
+.report-icon {
+    position: absolute;
+    top: 24px;
+    right: 20px;
+    color: var(--white-color);
+    line-height: 22px;
+    cursor: pointer;
+
+    svg {
+        width: 16px;
+        height: 14px;
+        margin-right: 6px;
+    }
+}
+
+input.volumn-input[type='range'] {
+    width: 48px;
+    height: 2px;
+    transform: rotate(-90deg);
+}
+
+input.volumn-input[type='range']::-ms-track {
+    width: 100%;
+}
+
+input.volumn-input[type='range']::-webkit-slider-runnable-track {
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 4px;
+    width: 100%;
+    height: 100%;
+}
+
+.volume-wrapper {
+    width: 24px;
+    height: 64px;
+    cursor: initial;
+    background: rgb(255 255 255 / 34%);
+    border-radius: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.video-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    padding: 0 16px;
+
+    &:hover {
+        input.video-progress-bar[type='range']::-webkit-slider-thumb {
+            opacity: 1;
+        }
+        .video-progress-bar-wrapper {
+            height: 6px;
+        }
+    }
+}
+
+.video-progress-bar-wrapper {
+    position: relative;
+    height: 4px;
+    flex: 1 0 auto;
+    transition: all 0.2s ease-in-out;
+}
+
+.video-progress-bar {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 1;
+}
+
+input.video-progress-bar[type='range']::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    margin-top: -3px;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+}
+
+input.video-progress-bar[type='range']::-webkit-slider-runnable-track {
+    cursor: pointer;
+    background-color: rgb(255 255 255 / 20%);
+    width: 100%;
+    height: 100%;
+}
+
+.video-progress {
+    height: 100%;
+    background-color: var(--white-color);
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.timer-progress {
+    margin-left: 8px;
+    color: var(--white-color);
+    height: 24px;
+    min-width: 80px;
+    font-size: 1.4rem;
+    line-height: 24px;
+    text-align: right;
+}

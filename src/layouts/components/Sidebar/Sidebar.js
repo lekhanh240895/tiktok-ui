@@ -23,9 +23,8 @@ export default function Sidebar() {
 
     const [users, setUsers] = useState([]);
     const [followingIDs, setFollowingIDs] = useState([]);
-    const [followerIDs, setFollowerIDs] = useState([]);
     const [suggestUsers, setSuggestUsers] = useState([]);
-    const [followUsers, setFollowUsers] = useState([]);
+    const [followings, setFollowings] = useState([]);
     const [thumbHeight, setThumbHeight] = useState(20);
 
     const contentRef = useRef(null);
@@ -40,24 +39,23 @@ export default function Sidebar() {
 
             const currentUser = users.find((user) => user.id === currentUserId);
             const followingIDs = currentUser.followingIDs.map((id) => id);
-            const followerIDs = currentUser.followerIDs.map((id) => id);
 
             setFollowingIDs(followingIDs);
-            setFollowerIDs(followerIDs);
 
             const suggestUsers = users.filter(
                 (user) =>
                     user.tick &&
                     user.followers_count > 10000 &&
-                    !followingIDs.includes(user.id),
+                    !followingIDs.includes(user.id) &&
+                    user.id !== currentUserId,
             );
 
-            const followers = users.filter((user) =>
-                followerIDs.includes(user.id),
+            const followings = users.filter((user) =>
+                followingIDs.includes(user.id),
             );
 
             setSuggestUsers(suggestUsers.slice(0, 2));
-            setFollowUsers(followers.slice(0, 5));
+            setFollowings(followings.slice(0, 5));
         };
 
         getUserAPI();
@@ -75,10 +73,10 @@ export default function Sidebar() {
 
             setSuggestUsers(suggestUsers);
         } else {
-            const followers = users.filter((user) =>
-                followerIDs.includes(user.id),
+            const followings = users.filter((user) =>
+                followingIDs.includes(user.id),
             );
-            setFollowUsers(followers);
+            setFollowings(followings);
         }
     };
 
@@ -94,10 +92,10 @@ export default function Sidebar() {
 
             setSuggestUsers(suggestUsers.slice(0, 2));
         } else {
-            const followers = users.filter((user) =>
-                followerIDs.includes(user.id),
+            const followings = users.filter((user) =>
+                followingIDs.includes(user.id),
             );
-            setFollowUsers(followers.slice(0, 5));
+            setFollowings(followings.slice(0, 5));
         }
     };
 
@@ -181,7 +179,7 @@ export default function Sidebar() {
                 <div className={cx('following')}>
                     <UserList
                         title="Following accounts"
-                        users={followUsers}
+                        users={followings}
                         text="See more"
                         onMore={handleMore}
                         onLess={handleLess}

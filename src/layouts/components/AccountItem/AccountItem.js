@@ -20,7 +20,7 @@ export default function AccountItem({ data }) {
 
             <div className={cx('info')}>
                 <h4 className={cx('name')}>
-                    {data.full_name}
+                    {data.nickname}
 
                     {data.tick && (
                         <CheckedIcon
@@ -30,7 +30,7 @@ export default function AccountItem({ data }) {
                         />
                     )}
                 </h4>
-                <p className={cx('description')}>{data.nickname}</p>
+                <p className={cx('description')}>{data.full_name}</p>
             </div>
         </Link>
     );

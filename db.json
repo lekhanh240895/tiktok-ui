@@ -173,8 +173,17 @@
             "instagram_url": "",
             "created_at": "2022-05-05 16:17:39",
             "updated_at": "2022-05-05 16:19:13",
-            "followingIDs": [6],
-            "followerIDs": [5, 6, 7, 1, 9, 2, 3, 4, 10]
+            "followingIDs": [7, 1, 9, 3, 10, 4],
+            "followerIDs": [5, 6, 7, 1, 9, 2, 3, 4, 10],
+            "videos": [
+                {
+                    "title": "",
+                    "src": "https://v16-webapp.tiktok.com/7c282466ab9c6f1e0c372f3f7e377d31/62e6dfff/video/tos/useast2a/tos-useast2a-pve-0037-aiso/2f3d1955397f429e8b7e83d764ba8627/?a=1988&ch=0&cr=0&dr=0&lr=tiktok&cd=0%7C0%7C1%7C0&cv=1&br=2140&bt=1070&btag=80000&cs=0&ds=3&ft=z_piDPWT2NvjVMNWROzfuaYQFAe4nRQjlUBHneOB&mime_type=video_mp4&qs=0&rc=ZztoOzVkO2dkZmlkN2czO0BpanJvaGk6ZnlvZTMzZjgzM0A2NDVeLjNiXl8xY140NF8wYSNfNm9kcjRfcDVgLS1kL2Nzcw%3D%3D&l=20220731140251010245242104234C8845",
+                    "like": 1,
+                    "share": 1,
+                    "comment": 1
+                }
+            ]
         },
         {
             "id": 9,
