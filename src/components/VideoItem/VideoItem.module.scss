@@ -80,21 +80,39 @@
     align-items: flex-end;
 }
 
+.canvas-video-card-player {
+    display: block;
+    visibility: hidden;
+    height: 100%;
+}
+
 .video-card-container {
     height: calc(450px + (100vw - 768px) / 1152 * 100);
     margin-right: 20px;
+    position: relative;
+
+    &:hover .buttons-in-video {
+        display: block;
+    }
+}
+
+.buttons-in-video {
+    display: none;
 }
 
 .video-player-container {
-    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
     width: 100%;
-    position: relative;
+    height: 100%;
 }
 
 .video {
     max-height: 100%;
     max-width: 100%;
 }
+
 .action-item-btn {
     width: 48px;
     height: 48px;

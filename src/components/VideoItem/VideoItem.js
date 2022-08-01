@@ -138,6 +138,12 @@ export default function VideoItem({ src }) {
 
                 <div className={cx('video-wrapper')}>
                     <div className={cx('video-card-container')}>
+                        <canvas
+                            width="56.25"
+                            height="100"
+                            className={cx('canvas-video-card-player')}
+                        ></canvas>
+
                         <div className={cx('video-player-container')}>
                             <video
                                 ref={videoRef}
@@ -146,100 +152,111 @@ export default function VideoItem({ src }) {
                                 muted={isMuted}
                                 volume={volume}
                                 onTimeUpdate={handleTimeUpdate}
-                                src={src}
-                            />
-
-                            <span
-                                className={cx('play-icon', 'icon-wrapper')}
-                                onClick={handlePlay}
                             >
-                                {isPlaying ? (
-                                    <PauseIcon />
-                                ) : (
-                                    <FontAwesomeIcon icon={faPlay} />
-                                )}
-                            </span>
+                                <source src={src} type="video/mp4"></source>
+                            </video>
 
-                            <div>
-                                <HeadlessTippy
-                                    placement="top"
-                                    offset={[0, 5]}
-                                    interactive
-                                    trigger="click"
-                                    render={(attrs) => (
-                                        <div
-                                            tabIndex="-1"
-                                            {...attrs}
-                                            className={cx('volume-wrapper')}
-                                        >
-                                            <input
-                                                type="range"
-                                                min={0}
-                                                max={1}
-                                                step={0.02}
-                                                className={cx('volumn-input')}
-                                                value={volume}
-                                                onChange={handleVolumeChange}
-                                            />
-                                        </div>
+                            <div className={cx('buttons-in-video')}>
+                                <span
+                                    className={cx('play-icon', 'icon-wrapper')}
+                                    onClick={handlePlay}
+                                >
+                                    {isPlaying ? (
+                                        <PauseIcon />
+                                    ) : (
+                                        <FontAwesomeIcon icon={faPlay} />
                                     )}
-                                >
-                                    <span
-                                        className={cx(
-                                            'volume-icon',
-                                            'icon-wrapper',
+                                </span>
+
+                                <div>
+                                    <HeadlessTippy
+                                        placement="top"
+                                        offset={[0, 5]}
+                                        interactive
+                                        render={(attrs) => (
+                                            <div
+                                                tabIndex="-1"
+                                                {...attrs}
+                                                className={cx('volume-wrapper')}
+                                            >
+                                                <input
+                                                    type="range"
+                                                    min={0}
+                                                    max={1}
+                                                    step={0.02}
+                                                    className={cx(
+                                                        'volumn-input',
+                                                    )}
+                                                    value={volume}
+                                                    onChange={
+                                                        handleVolumeChange
+                                                    }
+                                                />
+                                            </div>
                                         )}
-                                        onClick={handleMuteVolume}
                                     >
-                                        {isMuted ? (
-                                            <MutedVolumeIcon />
-                                        ) : (
-                                            <VolumeIcon />
-                                        )}
-                                    </span>
-                                </HeadlessTippy>
-                            </div>
-
-                            <div className={cx('video-footer')}>
-                                <div
-                                    className={cx('video-progress-bar-wrapper')}
-                                >
-                                    <input
-                                        type="range"
-                                        className={cx('video-progress-bar')}
-                                        min={0}
-                                        max={100}
-                                        step={1}
-                                        value={progress}
-                                        onChange={handleProgressChange}
-                                    />
-
-                                    <div
-                                        className={cx('video-progress')}
-                                        style={{ width: `${progress}%` }}
-                                    />
+                                        <span
+                                            className={cx(
+                                                'volume-icon',
+                                                'icon-wrapper',
+                                            )}
+                                            onClick={handleMuteVolume}
+                                        >
+                                            {isMuted ? (
+                                                <MutedVolumeIcon />
+                                            ) : (
+                                                <VolumeIcon />
+                                            )}
+                                        </span>
+                                    </HeadlessTippy>
                                 </div>
 
-                                {videoRef.current && (
-                                    <div className={cx('timer-progress')}>
-                                        {handleFormatTime(
-                                            videoRef.current.currentTime,
+                                <div className={cx('video-footer')}>
+                                    <div
+                                        className={cx(
+                                            'video-progress-bar-wrapper',
                                         )}
-                                        /
-                                        {handleFormatTime(
-                                            videoRef.current.duration,
-                                        )}
-                                    </div>
-                                )}
-                            </div>
+                                    >
+                                        <input
+                                            type="range"
+                                            className={cx('video-progress-bar')}
+                                            min={0}
+                                            max={100}
+                                            step={1}
+                                            value={progress}
+                                            onChange={handleProgressChange}
+                                        />
 
-                            <p
-                                className={cx('report-icon', 'icon-wrapper')}
-                                onClick={handleReport}
-                            >
-                                <FontAwesomeIcon icon={faFlag} />
-                                Report
-                            </p>
+                                        <div
+                                            className={cx('video-progress')}
+                                            style={{ width: `${progress}%` }}
+                                        />
+                                    </div>
+
+                                    {videoRef.current && (
+                                        <div className={cx('timer-progress')}>
+                                            {handleFormatTime(
+                                                videoRef.current.currentTime,
+                                            )}
+                                            /
+                                            {handleFormatTime(
+                                                videoRef.current.duration,
+                                            )}
+                                        </div>
+                                    )}
+                                </div>
+
+                                <p
+                                    className={cx(
+                                        'report-icon',
+                                        'icon-wrapper',
+                                    )}
+                                    onClick={handleReport}
+                                >
+                                    <FontAwesomeIcon icon={faFlag} />
+                                    Report
+                                </p>
+                            </div>
                         </div>
                     </div>
 
@@ -288,3 +305,16 @@ export default function VideoItem({ src }) {
         </div>
     );
 }
+
+// import React from 'react';
+
+// export default function VideoItem({ src }) {
+//     return (
+//         <div>
+//             <video
+//                 src="https://v16-webapp.tiktok.com/ecf38ac19969387c733d66de6684d48d/62e87b71/video/tos/useast2a/tos-useast2a-ve-0068c001/e13fe13811584c7eb25475b91f3bec86/?a=1988&ch=0&cr=0&dr=0&lr=tiktok_m&cd=0%7C0%7C1%7C0&cv=1&br=944&bt=472&btag=80000&cs=0&ds=3&ft=z_piDPWT2NvjVYu9-OzfuCYQFAe4nRQjlKP.YtOB&mime_type=video_mp4&qs=0&rc=OGc8aDs8OWQ6ZGY8PGY6Z0BpajNkNzw6Zmx5ZTMzNzczM0AuNDA0NjAyNTIxYi42YDUvYSMyXmlqcjRvZS1gLS1kMTZzcw%3D%3D&l=20220801191833010245244195264FF989"
+//                 controls
+//             />
+//         </div>
+//     );
+// }

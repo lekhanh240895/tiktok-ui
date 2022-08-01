@@ -15,8 +15,13 @@
 .content {
     margin-right: 16px;
     margin-left: 16px;
-    width: calc(696px - (var(--default-layout-horizontal-spacer) * 2));
-    max-width: calc(696px - (var(--default-layout-horizontal-spacer) * 2));
+    width: calc(700px - (var(--default-layout-horizontal-spacer) * 2));
+    max-width: calc(700px - (var(--default-layout-horizontal-spacer) * 2));
     padding: 24px 0;
+    position: relative;
+}
+
+.sidebar {
+    min-width: 356px;
     position: relative;
 }

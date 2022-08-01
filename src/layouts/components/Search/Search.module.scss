@@ -122,9 +122,6 @@
     line-height: 22px;
     cursor: pointer;
     max-width: 100%;
-    overflow-x: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
 
     &:hover {
         background-color: rgb(22 24 35 / 3%);
