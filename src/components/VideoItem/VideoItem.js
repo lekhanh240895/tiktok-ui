@@ -19,10 +19,8 @@ import { MusicIcon } from '~/components/Icons';
 
 const cx = classnames.bind(styles);
 
-export default function VideoItem({ src }) {
-    const [isPlaying, setIsPlaying] = useState(false);
-    const [isMuted, setIsMuted] = useState(false);
-    const [volume, setVolume] = useState(0);
+export default function VideoItem({ data }) {
+    const [isPlaying, setIsPlaying] = useState(true);
     const [progress, setProgress] = useState(0);
 
     const videoRef = useRef();
