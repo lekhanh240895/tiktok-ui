@@ -1,19 +1,7 @@
 .wrapper {
-    display: flex;
-    padding: 20px 0;
-}
-
-//VideoItem Header
-.avatar {
-    flex: 0 0 auto;
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-}
-
-.content {
     margin-left: 13px;
     flex: 1;
+    position: relative;
 }
 
 .header {
@@ -28,10 +16,11 @@
 }
 
 .info {
-    position: relative;
+    word-break: break-word;
+    margin-right: 114px;
 }
 
-.name {
+.nickname {
     font-weight: 700;
     font-size: 1.8rem;
     margin-right: 4px;
@@ -43,7 +32,7 @@
     }
 }
 
-.nickname {
+.name {
     font-weight: 400;
     font-size: 1.4rem;
     font-family: var(--font-family);
@@ -53,16 +42,21 @@
 
 .follow-btn {
     position: absolute;
-    top: 0;
+    top: 10px;
     right: 0;
 }
 
-.video-desc {
+.video-title {
     line-height: 22px;
     font-size: 1.6rem;
 }
 .video-tag {
     font-weight: 600;
+    margin-right: 3px;
+
+    &:hover {
+        text-decoration: underline;
+    }
 }
 
 .video-music {
@@ -75,7 +69,7 @@
 }
 
 //Video
-.video-wrapper {
+.video-card-wrapper {
     display: flex;
     align-items: flex-end;
 }
@@ -106,6 +100,7 @@
     top: 0;
     width: 100%;
     height: 100%;
+    cursor: pointer;
 }
 
 .video {
@@ -113,6 +108,7 @@
     max-width: 100%;
 }
 
+//Action items
 .action-item-btn {
     width: 48px;
     height: 48px;
@@ -186,16 +182,29 @@ input.volumn-input[type='range'] {
     transform: rotate(-90deg);
 }
 
-input.volumn-input[type='range']::-ms-track {
-    width: 100%;
-}
-
 input.volumn-input[type='range']::-webkit-slider-runnable-track {
     cursor: pointer;
     background: rgba(255, 255, 255, 0.5);
     border-radius: 4px;
     width: 100%;
     height: 100%;
+}
+
+input[type='range']::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 12px;
+    width: 12px;
+    border-radius: 50%;
+    background: var(--white-color);
+    cursor: pointer;
+    margin-top: -5px;
+    margin-right: 50px;
+}
+
+input[type='range']::-webkit-slider-runnable-track {
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 4px;
 }
 
 .volume-wrapper {
@@ -224,14 +233,14 @@ input.volumn-input[type='range']::-webkit-slider-runnable-track {
             opacity: 1;
         }
         .video-progress-bar-wrapper {
-            height: 6px;
+            height: 4px;
         }
     }
 }
 
 .video-progress-bar-wrapper {
     position: relative;
-    height: 4px;
+    height: 2px;
     flex: 1 0 auto;
     transition: all 0.2s ease-in-out;
 }
