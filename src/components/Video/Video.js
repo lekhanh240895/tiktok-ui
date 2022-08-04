@@ -18,8 +18,9 @@ export default function VideoItem({
     volume,
     onMutedVolume,
     onVolumeChange,
+    onPlay,
+    isPlaying,
 }) {
-    const [isPlaying, setIsPlaying] = useState(false);
     const [progress, setProgress] = useState(0);
 
     const videoRef = useRef();
@@ -33,19 +34,16 @@ export default function VideoItem({
     const handleObserve = () => {
         let options = {
             rootMargin: '0px',
-            threshold: [0.6, 1],
+            threshold: [1],
         };
 
         let handlePlay = (entries, observer) => {
             entries.forEach((entry) => {
                 if (entry.isIntersecting) {
                     const promise = videoRef.current.play();
-                    promise
-                        .then(() => setIsPlaying(true))
-                        .catch((err) => console.log(err));
+                    promise.then(() => onPlay(true));
                 } else {
                     videoRef.current.pause();
-                    setIsPlaying(false);
                 }
             });
         };
@@ -66,10 +64,10 @@ export default function VideoItem({
     const handlePlay = () => {
         if (!videoRef.current.paused) {
             videoRef.current.pause();
-            setIsPlaying(false);
+            onPlay(false);
         } else {
             videoRef.current.play();
-            setIsPlaying(true);
+            onPlay(true);
         }
     };
 

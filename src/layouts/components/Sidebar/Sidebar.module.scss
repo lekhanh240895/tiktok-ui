@@ -1,14 +1,14 @@
-.wrapper {
+.sidebar-scroll-container {
     position: fixed;
-    padding: 20px 0 26px;
     margin-left: -8px;
-    overflow: hidden;
-    width: 356px;
+    max-width: 340px;
 }
 
-.content {
-    max-height: min(100vh - 46px - 60px, 734px);
-    overflow: auto;
+.wrapper {
+    padding: 20px 0 26px;
+    max-height: calc(100vh - var(--default-layout-header-height));
+    overflow-y: auto;
+
     scrollbar-width: none;
     -ms-overflow-style: none;
 
@@ -25,8 +25,6 @@
     position: absolute;
     top: 0;
     right: 0;
-    /*     display: none;
- */
 }
 
 .scrollbar-thumb {
@@ -34,4 +32,13 @@
     height: 100%;
     border-radius: 3px;
     background: rgba(22, 24, 35, 0.06);
+}
+
+@media (max-width: 1024px) {
+    .wrapper {
+        width: 55px;
+        padding: 0 8px;
+
+        overflow: visible;
+    }
 }

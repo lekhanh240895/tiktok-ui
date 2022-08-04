@@ -1,9 +1,27 @@
+import { Fragment, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
 import { publicRoutes } from '~/routes/index';
 import DefaultLayout from '~/layouts/DefaultLayout';
-import { Fragment } from 'react';
+import { useAppContext } from '~/store/AppContext';
+import * as userService from '~/services/userService';
+import * as actions from '~/store/actions';
+import GetAppButton from './components/BottomContainer/BottomContainer';
 
 function App() {
+    const [{ currentUserID }, dispatch] = useAppContext();
+
+    useEffect(() => {
+        (async () => {
+            const users = await userService.get();
+            dispatch(actions.fetchUsers(users));
+
+            const currentUser = users.find((user) => user.id === currentUserID);
+            dispatch(actions.setCurrentUser(currentUser));
+        })();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [currentUserID]);
+
     return (
         <Router>
             <div className="App">
@@ -31,6 +49,8 @@ function App() {
                         );
                     })}
                 </Routes>
+
+                <GetAppButton />
             </div>
         </Router>
     );

@@ -12,6 +12,7 @@
     cursor: pointer;
     line-height: 18px;
     border: 1px solid transparent;
+    transition: all 0.2s ease-in;
 
     + .wrapper {
         margin-left: 16px;

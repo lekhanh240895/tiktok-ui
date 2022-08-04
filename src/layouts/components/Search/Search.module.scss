@@ -43,12 +43,6 @@
     }
 }
 
-@media (max-width: 768px) {
-    .search {
-        display: none;
-    }
-}
-
 .clear,
 .loading {
     position: absolute;
@@ -125,5 +119,18 @@
 
     &:hover {
         background-color: rgb(22 24 35 / 3%);
+    }
+}
+
+@media (max-width: 768px) {
+    .search {
+        display: none;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+    .search,
+    .search-result {
+        width: 312px;
     }
 }

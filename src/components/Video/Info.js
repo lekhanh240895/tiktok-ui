@@ -5,6 +5,7 @@ import classnames from 'classnames/bind';
 import Button from '~/components/Button';
 import { MusicIcon } from '~/components/Icons';
 import styles from './Video.module.scss';
+import Image from '../Image';
 
 const cx = classnames.bind(styles);
 
@@ -14,6 +15,14 @@ export default function Info({ data, user }) {
     return (
         <div className={cx('info')}>
             <div className={cx('header')}>
+                <Link to={`/@${user?.nickname}`}>
+                    <Image
+                        className={cx('avatar')}
+                        src={user?.avatar}
+                        alt="avatar"
+                    />
+                </Link>
+
                 <Link to={`/@${user?.nickname}`} className={cx('styleAuthor')}>
                     <h3 className={cx('nickname')}>
                         {user?.nickname}

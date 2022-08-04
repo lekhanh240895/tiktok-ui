@@ -80,3 +80,20 @@
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+
+@media (max-width: 1024px) {
+    .title,
+    .more-btn,
+    .info {
+        display: none;
+    }
+
+    .user-item {
+        padding: 8px 0 8px 4px;
+    }
+
+    .wrapper::after {
+        left: 0;
+        right: 0;
+    }
+}

@@ -26,12 +26,16 @@ import {
 import Image from '~/components/Image';
 import Search from '../Search';
 import config from '~/config';
-import { useAppContext } from '~/contexts/AppContext';
+import { useAppContext } from '~/store/AppContext';
 
 const cx = classnames.bind(styles);
 
 export default function Header() {
-    const { currentUser } = useAppContext();
+    const [state] = useAppContext();
+
+    const currentUser = state.users.find(
+        (user) => user.id === state.currentUserID,
+    );
 
     if (!currentUser) return;
 
@@ -99,6 +103,7 @@ export default function Header() {
                 <div className={cx('actions')}>
                     <Button
                         secondary
+                        className={cx('upload-btn')}
                         to="/upload"
                         leftIcon={<UploadIcon width="2rem" height="2rem" />}
                     >

@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import styles from './Sidebar.module.scss';
 import classnames from 'classnames/bind';
 import {
     HomeIcon,
@@ -9,37 +8,32 @@ import {
     UserGroupIcon,
 } from '~/components/Icons';
 
-import * as userService from '~/services/userService';
+import styles from './Sidebar.module.scss';
 import Menu, { MenuItem } from './Menu';
 import config from '~/config';
 import UserList from './UserList';
 import Discover from './Discover';
 import Footer from './Footer';
+import { useAppContext } from '~/store/AppContext';
 
 const cx = classnames.bind(styles);
 
 export default function Sidebar() {
-    const currentUserId = 8;
-
-    const [users, setUsers] = useState([]);
     const [followingIDs, setFollowingIDs] = useState([]);
     const [suggestUsers, setSuggestUsers] = useState([]);
-    const [followings, setFollowings] = useState([]);
+    const [followingUsers, setFollowingUsers] = useState([]);
     const [thumbHeight, setThumbHeight] = useState(20);
+
+    const [{ users, currentUser }] = useAppContext();
 
     const contentRef = useRef(null);
     const scrollRef = useRef(null);
     const observer = useRef(null);
 
     useEffect(() => {
-        const getUserAPI = async () => {
-            const users = await userService.get();
+        const followingIDs = currentUser?.followingIDs?.map((id) => id);
 
-            setUsers(users);
-
-            const currentUser = users.find((user) => user.id === currentUserId);
-            const followingIDs = currentUser.followingIDs.map((id) => id);
-
+        if (followingIDs) {
             setFollowingIDs(followingIDs);
 
             const suggestUsers = users.filter(
@@ -47,19 +41,46 @@ export default function Sidebar() {
                     user.tick &&
                     user.followers_count > 10000 &&
                     !followingIDs.includes(user.id) &&
-                    user.id !== currentUserId,
+                    user.id !== currentUser.id,
             );
 
-            const followings = users.filter((user) =>
+            const followingUsers = users.filter((user) =>
                 followingIDs.includes(user.id),
             );
 
-            setSuggestUsers(suggestUsers.slice(0, 2));
-            setFollowings(followings.slice(0, 5));
-        };
+            if (window.innerWidth > 1024) {
+                setSuggestUsers(suggestUsers.slice(0, 2));
+                setFollowingUsers(followingUsers.slice(0, 5));
+            } else {
+                setSuggestUsers(suggestUsers);
+                setFollowingUsers(followingUsers);
+            }
+        }
+    }, [currentUser, users]);
 
-        getUserAPI();
-    }, []);
+    useEffect(() => {
+        const suggestUsers = users.filter(
+            (user) =>
+                user.tick &&
+                user.followers_count > 10000 &&
+                !followingIDs.includes(user.id) &&
+                user.id !== currentUser.id,
+        );
+
+        const followingUsers = users.filter((user) =>
+            followingIDs.includes(user.id),
+        );
+
+        window.onresize = () => {
+            if (window.innerWidth > 1024) {
+                setSuggestUsers(suggestUsers.slice(0, 2));
+                setFollowingUsers(followingUsers.slice(0, 5));
+            } else {
+                setSuggestUsers(suggestUsers);
+                setFollowingUsers(followingUsers);
+            }
+        };
+    });
 
     const handleMore = async (title) => {
         if (title === 'Suggested accounts') {
@@ -68,15 +89,15 @@ export default function Sidebar() {
                     user.tick &&
                     user.followers_count > 10000 &&
                     !followingIDs.includes(user.id) &&
-                    user.id !== currentUserId,
+                    user.id !== currentUser.id,
             );
 
             setSuggestUsers(suggestUsers);
         } else {
-            const followings = users.filter((user) =>
+            const followingUsers = users.filter((user) =>
                 followingIDs.includes(user.id),
             );
-            setFollowings(followings);
+            setFollowingUsers(followingUsers);
         }
     };
 
@@ -87,15 +108,15 @@ export default function Sidebar() {
                     user.tick &&
                     user.followers_count > 10000 &&
                     !followingIDs.includes(user.id) &&
-                    user.id !== currentUserId,
+                    user.id !== currentUser.id,
             );
 
             setSuggestUsers(suggestUsers.slice(0, 2));
         } else {
-            const followings = users.filter((user) =>
+            const followingUsers = users.filter((user) =>
                 followingIDs.includes(user.id),
             );
-            setFollowings(followings.slice(0, 5));
+            setFollowingUsers(followingUsers.slice(0, 5));
         }
     };
 
@@ -117,7 +138,7 @@ export default function Sidebar() {
             clientHeight: trackHeight,
         } = contentRef.current;
 
-        let newTop = Math.floor(+(contentTop / contentHeight) * trackHeight);
+        let newTop = Math.floor((+contentTop / +contentHeight) * trackHeight);
 
         newTop = Math.min(newTop, trackHeight - thumbHeight);
 
@@ -143,8 +164,8 @@ export default function Sidebar() {
     });
 
     return (
-        <aside className={cx('wrapper')}>
-            <div className={cx('content')} ref={contentRef}>
+        <div className={cx('sidebar-scroll-container')}>
+            <aside className={cx('wrapper')} ref={contentRef}>
                 <Menu>
                     <MenuItem
                         title="For You"
@@ -179,7 +200,7 @@ export default function Sidebar() {
                 <div className={cx('following')}>
                     <UserList
                         title="Following accounts"
-                        users={followings}
+                        users={followingUsers}
                         text="See more"
                         onMore={handleMore}
                         onLess={handleLess}
@@ -189,7 +210,7 @@ export default function Sidebar() {
                 <Discover />
 
                 <Footer />
-            </div>
+            </aside>
 
             <div
                 className={cx('scrollbar')}
@@ -198,6 +219,6 @@ export default function Sidebar() {
             >
                 <div className={cx('scrollbar-thumb')}></div>
             </div>
-        </aside>
+        </div>
     );
 }

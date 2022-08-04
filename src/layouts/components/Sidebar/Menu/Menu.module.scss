@@ -26,3 +26,9 @@
     line-height: 25px;
     font-family: var(--font-family);
 }
+
+@media (max-width: 1024px) {
+    .title {
+        display: none;
+    }
+}

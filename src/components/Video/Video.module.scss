@@ -20,6 +20,10 @@
     margin-right: 114px;
 }
 
+.avatar {
+    display: none;
+}
+
 .nickname {
     font-weight: 700;
     font-size: 1.8rem;
@@ -78,6 +82,7 @@
     display: block;
     visibility: hidden;
     height: 100%;
+    width: 100%;
 }
 
 .video-card-container {
@@ -119,6 +124,7 @@
     align-items: center;
     justify-content: center;
     margin: 8px 0;
+    transition: color 0.1s ease-in;
     cursor: pointer;
 }
 
@@ -284,4 +290,38 @@ input.video-progress-bar[type='range']::-webkit-slider-runnable-track {
     font-size: 1.4rem;
     line-height: 24px;
     text-align: right;
+}
+
+@media screen and (max-width: 767px) {
+    .video-card-container {
+        height: calc(380px + (100vw - 480px) / 288 * 20);
+    }
+}
+
+@media screen and (max-width: 479px) {
+    .video-card-container {
+        width: calc(100vw - 32px - 60px);
+        height: auto;
+    }
+
+    .header {
+        height: 45px;
+        margin-bottom: 12px;
+    }
+
+    .avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: block;
+        margin-right: 12px;
+    }
+    .styleAuthor {
+        display: flex;
+        flex-direction: column;
+
+        .name {
+            line-height: 20px;
+        }
+    }
 }

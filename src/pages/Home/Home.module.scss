@@ -9,3 +9,9 @@
     height: 56px;
     border-radius: 50%;
 }
+
+@media (max-width: 468px) {
+    .avatar {
+        display: none;
+    }
+}
