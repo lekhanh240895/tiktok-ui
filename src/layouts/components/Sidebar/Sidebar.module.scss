@@ -1,7 +1,6 @@
 .sidebar-scroll-container {
     position: fixed;
     margin-left: -8px;
-    max-width: 340px;
 }
 
 .wrapper {
@@ -25,6 +24,7 @@
     position: absolute;
     top: 0;
     right: 0;
+    display: none;
 }
 
 .scrollbar-thumb {

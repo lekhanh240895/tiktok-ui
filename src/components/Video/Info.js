@@ -61,10 +61,6 @@ export default function Info({ data, user }) {
                     {data.music}
                 </Button>
             </h4>
-
-            <Button outline small className={cx('follow-btn')}>
-                Follow
-            </Button>
         </div>
     );
 }

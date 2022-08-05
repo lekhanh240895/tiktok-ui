@@ -1,0 +1,93 @@
+.wrapper {
+    --search-border-radius: 92px;
+    --search-height: 46px;
+    --search-button-width: 52px;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    background-color: var(--white-color);
+    height: var(--default-layout-header-height);
+    display: flex;
+    justify-content: center;
+    box-shadow: 0px 1px 1px var(--main-border-color);
+}
+
+.inner {
+    width: var(--shared-layout-width);
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 var(--default-layout-horizontal-spacer);
+}
+
+.logo {
+    display: block;
+    height: 42px;
+}
+
+.account-list {
+    max-width: 100%;
+}
+
+//Actions
+
+.actions {
+    height: 36px;
+    display: flex;
+    align-items: center;
+}
+
+.user-avatar {
+    width: 32px;
+    border-radius: 50%;
+    margin-left: 24px;
+    cursor: pointer;
+}
+
+.action-btn {
+    background-color: transparent;
+    cursor: pointer;
+    margin-left: 16px;
+    width: 32px;
+    height: 32px;
+    position: relative;
+}
+
+.more-btn {
+    font-size: 2rem;
+    margin-left: 20px;
+    background-color: transparent;
+    line-height: 20px;
+    cursor: pointer;
+    padding: 0 12px;
+}
+
+.badge {
+    position: absolute;
+    top: -8px;
+    left: 12px;
+    padding: 0px 6px;
+    font-size: 1.4rem;
+    font-family: var(--font-family);
+    background-color: var(--primary-color);
+    color: var(--white-color);
+    border-radius: 999px;
+    height: 2rem;
+    line-height: 2rem;
+}
+
+@media (max-width: 1024px) {
+    .inner {
+        min-width: 150px;
+    }
+}
+
+@media (max-width: 468px) {
+    .upload-btn {
+        display: none;
+    }
+}

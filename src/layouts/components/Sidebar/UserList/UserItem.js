@@ -27,45 +27,51 @@ export default function UserList({ data }) {
     }, []);
 
     useEffect(() => {
-        window.addEventListener('load', handlePlacement);
+        handlePlacement();
     }, []);
 
     return (
-        <HeadlessTippy
-            delay={[500, 500]}
-            placement={placement}
-            interactive
-            render={(attrs) => (
-                <div tabIndex="-1" {...attrs}>
-                    <PopperWrapper>
-                        <UserProfile data={data} />
-                    </PopperWrapper>
-                </div>
-            )}
-        >
-            <Link to={`/@${data.nickname}`} replace className={cx('user-item')}>
-                <Image
-                    className={cx('avatar')}
-                    alt={data.full_name}
-                    src={data.avatar}
-                />
+        <div>
+            <HeadlessTippy
+                delay={[500, 500]}
+                placement={placement}
+                interactive
+                render={(attrs) => (
+                    <div tabIndex="-1" {...attrs}>
+                        <PopperWrapper>
+                            <UserProfile data={data} />
+                        </PopperWrapper>
+                    </div>
+                )}
+            >
+                <Link
+                    to={`/@${data.nickname}`}
+                    replace
+                    className={cx('user-item')}
+                >
+                    <Image
+                        className={cx('avatar')}
+                        alt={data.full_name}
+                        src={data.avatar}
+                    />
 
-                <div className={cx('info')}>
-                    <h4 className={cx('name')}>
-                        {data.nickname}
+                    <div className={cx('info')}>
+                        <h4 className={cx('name')}>
+                            {data.nickname}
 
-                        {data.tick && (
-                            <CheckedIcon
-                                className={cx('check')}
-                                width="1.4rem"
-                                height="1.4rem"
-                            />
-                        )}
-                    </h4>
-                    <p className={cx('description')}>{data.full_name}</p>
-                </div>
-            </Link>
-        </HeadlessTippy>
+                            {data.tick && (
+                                <CheckedIcon
+                                    className={cx('check')}
+                                    width="1.4rem"
+                                    height="1.4rem"
+                                />
+                            )}
+                        </h4>
+                        <p className={cx('description')}>{data.full_name}</p>
+                    </div>
+                </Link>
+            </HeadlessTippy>
+        </div>
     );
 }
 

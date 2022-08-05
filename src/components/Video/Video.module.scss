@@ -44,11 +44,11 @@
     display: inline-block;
 }
 
-.follow-btn {
-    position: absolute;
-    top: 10px;
-    right: 0;
-}
+// .follow-btn {
+//     position: absolute;
+//     top: 10px;
+//     right: 0;
+// }
 
 .video-title {
     line-height: 22px;
@@ -298,7 +298,7 @@ input.video-progress-bar[type='range']::-webkit-slider-runnable-track {
     }
 }
 
-@media screen and (max-width: 479px) {
+@media screen and (max-width: 468px) {
     .video-card-container {
         width: calc(100vw - 32px - 60px);
         height: auto;

@@ -1,4 +1,4 @@
-import Following from '~/pages/Folllowing';
+import Following from '~/pages/Folllowing/Following';
 import Home from '~/pages/Home';
 import Profile from '~/pages/Profile';
 import Upload from '~/pages/Upload';
@@ -9,6 +9,7 @@ import Live from '~/pages/Live';
 import Feedback from '~/pages/Feedback';
 import Music from '~/pages/Music';
 import Tag from '~/pages/Tag';
+import SharedLayout from '~/layouts/SharedLayout';
 
 const publicRoutes = [
     {
@@ -22,6 +23,7 @@ const publicRoutes = [
     {
         path: config.routes.profile,
         component: Profile,
+        layout: SharedLayout,
     },
     {
         path: config.routes.upload,
@@ -36,6 +38,7 @@ const publicRoutes = [
     {
         path: config.routes.live,
         component: Live,
+        layout: SharedLayout,
     },
     {
         path: config.routes.feedback,
@@ -44,10 +47,12 @@ const publicRoutes = [
     {
         path: config.routes.tag,
         component: Tag,
+        layout: SharedLayout,
     },
     {
         path: config.routes.music,
         component: Music,
+        layout: SharedLayout,
     },
 ];
 

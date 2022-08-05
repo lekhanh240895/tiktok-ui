@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import styles from './Home.module.scss';
+import styles from './Following.module.scss';
 import classnames from 'classnames/bind';
 
 import Video from '~/components/Video';
 import { Link } from 'react-router-dom';
 import Image from '~/components/Image';
 import { useAppContext } from '~/store/AppContext';
-import Button from '~/components/Button';
 
 const cx = classnames.bind(styles);
 
@@ -15,8 +14,13 @@ export default function Home() {
         isMuted: true,
         volume: 1,
     });
-    const [{ users, videos }] = useAppContext();
+
+    const [{ users, videos, currentUser }] = useAppContext();
     const [isPlaying, setIsPlaying] = useState(false);
+
+    const followingUserVideos = videos.filter((video) =>
+        currentUser?.followingIDs?.includes(video.userId),
+    );
 
     useEffect(() => {
         const settings = JSON.parse(localStorage.getItem('userSettings'));
@@ -56,7 +60,7 @@ export default function Home() {
     return (
         <div className={cx('wrapper')}>
             <ul className={cx('video-list')}>
-                {videos.map((video) => {
+                {followingUserVideos.map((video) => {
                     const user = users.find(
                         (user) => user?.id === video.userId,
                     );
@@ -80,10 +84,6 @@ export default function Home() {
                                 onPlay={handlePlay}
                                 isPlaying={isPlaying}
                             />
-
-                            <Button outline small className={cx('follow-btn')}>
-                                Follow
-                            </Button>
                         </li>
                     );
                 })}

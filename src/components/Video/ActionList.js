@@ -1,28 +1,16 @@
-import { faComment, faHeart, faShare } from '@fortawesome/free-solid-svg-icons';
+import { faComment, faHeart } from '@fortawesome/free-solid-svg-icons';
 import classnames from 'classnames/bind';
 import styles from './Video.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useAppContext } from '~/store/AppContext';
 import * as actions from '~/store/actions';
+import { configNumber } from '~/services';
+import { ShareIcon } from '../Icons';
 
 const cx = classnames.bind(styles);
 
 export default function ActionList({ data }) {
     const [{ currentUserID }, dispatch] = useAppContext();
-
-    const numberConfig = (number) => {
-        if (number >= 1000000) {
-            const newNumber = (number / 1000000).toFixed(1);
-
-            return newNumber + 'M';
-        } else if ((number >= 1000) & (number < 1000000)) {
-            const newNumber = (number / 1000).toFixed(1);
-
-            return newNumber + 'K';
-        } else {
-            return number;
-        }
-    };
 
     const isLikedByUser = data.likes.includes(currentUserID);
 
@@ -48,7 +36,7 @@ export default function ActionList({ data }) {
                         />
                     </span>
                     <span className={cx('video-stat')}>
-                        {numberConfig(data.likes.length)}
+                        {configNumber(data.likes.length)}
                     </span>
                 </li>
                 <li className={cx('action-item')}>
@@ -62,21 +50,15 @@ export default function ActionList({ data }) {
                         />
                     </span>
                     <span className={cx('video-stat')}>
-                        {numberConfig(data.comments.length)}
+                        {configNumber(data.comments.length)}
                     </span>
                 </li>
                 <li className={cx('action-item')}>
                     <span className={cx('action-item-btn')}>
-                        <FontAwesomeIcon
-                            icon={faShare}
-                            style={{
-                                width: '2.4rem',
-                                height: '2.4rem',
-                            }}
-                        />
+                        <ShareIcon width="2.4rem" height="2.4rem" />
                     </span>
                     <span className={cx('video-stat')}>
-                        {numberConfig(data.shares.length)}
+                        {configNumber(data.shares.length)}
                     </span>
                 </li>
             </ul>

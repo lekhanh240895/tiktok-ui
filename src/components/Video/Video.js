@@ -11,7 +11,7 @@ import ActionList from './ActionList';
 import Info from './Info';
 
 const cx = classnames.bind(styles);
-export default function VideoItem({
+export default function Video({
     data,
     user,
     isMuted,
@@ -34,14 +34,16 @@ export default function VideoItem({
     const handleObserve = () => {
         let options = {
             rootMargin: '0px',
-            threshold: [1],
+            threshold: [0.75, 1],
         };
 
         let handlePlay = (entries, observer) => {
             entries.forEach((entry) => {
                 if (entry.isIntersecting) {
                     const promise = videoRef.current.play();
-                    promise.then(() => onPlay(true));
+                    promise
+                        .then(() => onPlay(true))
+                        .catch((err) => console.log(err));
                 } else {
                     videoRef.current.pause();
                 }
@@ -238,10 +240,12 @@ export default function VideoItem({
     );
 }
 
-VideoItem.propTypes = {
+Video.propTypes = {
     data: PropTypes.object.isRequired,
     isMuted: PropTypes.bool.isRequired,
     volume: PropTypes.number.isRequired,
     onMutedVolume: PropTypes.func.isRequired,
     onVolumeChange: PropTypes.func.isRequired,
+    onPlay: PropTypes.func.isRequired,
+    isPlaying: PropTypes.bool.isRequired,
 };

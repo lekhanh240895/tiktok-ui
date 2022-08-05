@@ -1,20 +1,20 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import Header from '../components/Header/index';
 import Sidebar from '../components/Sidebar/index';
-import styles from './DefaultLayout.module.scss';
+import styles from './SharedLayout.module.scss';
 import classnames from 'classnames/bind';
+import HeaderV2 from '../components/Header2';
 
-export default function DefaultLayout({ children }) {
+export default function SharedLayout({ children }) {
     const cx = classnames.bind(styles);
 
     return (
         <div className={cx('wrapper')}>
-            <Header />
+            <HeaderV2 />
 
             <div className={cx('container')}>
                 <div className={cx('sidebar')}>
-                    <Sidebar width={'340px'} />
+                    <Sidebar width={'240px'} />
                 </div>
                 <div className={cx('content')}>{children}</div>
             </div>
@@ -22,6 +22,6 @@ export default function DefaultLayout({ children }) {
     );
 }
 
-DefaultLayout.propTypes = {
+SharedLayout.propTypes = {
     children: PropTypes.node.isRequired,
 };

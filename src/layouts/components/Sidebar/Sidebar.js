@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import classnames from 'classnames/bind';
 import {
+    HomeActiveIcon,
     HomeIcon,
     LiveActiveIcon,
     LiveIcon,
@@ -18,7 +19,7 @@ import { useAppContext } from '~/store/AppContext';
 
 const cx = classnames.bind(styles);
 
-export default function Sidebar() {
+export default function Sidebar({ width }) {
     const [followingIDs, setFollowingIDs] = useState([]);
     const [suggestUsers, setSuggestUsers] = useState([]);
     const [followingUsers, setFollowingUsers] = useState([]);
@@ -164,13 +165,16 @@ export default function Sidebar() {
     });
 
     return (
-        <div className={cx('sidebar-scroll-container')}>
+        <div
+            className={cx('sidebar-scroll-container')}
+            style={{ maxWidth: width }}
+        >
             <aside className={cx('wrapper')} ref={contentRef}>
                 <Menu>
                     <MenuItem
                         title="For You"
                         icon={<HomeIcon />}
-                        activeIcon={<HomeIcon />}
+                        activeIcon={<HomeActiveIcon />}
                         to={config.routes.home}
                     />
                     <MenuItem
