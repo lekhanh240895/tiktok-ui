@@ -6,6 +6,7 @@
 .wrapper {
     padding: 20px 0 26px;
     max-height: calc(100vh - var(--default-layout-header-height));
+    position: relative;
     overflow-y: auto;
 
     scrollbar-width: none;
@@ -38,8 +39,6 @@
     .wrapper {
         width: 55px;
         padding: 0 8px;
-
-        overflow: visible;
     }
 
     .sidebar-scroll-container {

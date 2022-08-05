@@ -1,5 +1,11 @@
 import videos from '~/assets/videos';
-import { FETCH_USERS, SET_CURRENT_USER, LIKE_VIDEO } from '~/store/constants';
+import {
+    FETCH_USERS,
+    SET_CURRENT_USER,
+    LIKE_VIDEO,
+    SET_SELECTED_USER_ID,
+    SET_MOUSE_POSITION,
+} from '~/store/constants';
 
 function between(min, max) {
     return Math.floor(Math.random() * (max - min) + min);
@@ -8,8 +14,10 @@ function between(min, max) {
 export const initialState = {
     currentUserID: 8,
     currentUser: {},
+    mousePosition: {},
     users: [],
-    selectedVideoID: null,
+    selectedVideoId: null,
+    selectedUserId: null,
     videos: [
         {
             id: 1,
@@ -90,6 +98,10 @@ export default function reducer(state, action) {
             return { ...state, users: action.payload };
         case SET_CURRENT_USER:
             return { ...state, currentUser: action.payload };
+        case SET_SELECTED_USER_ID:
+            return { ...state, selectedUserId: action.payload };
+        case SET_MOUSE_POSITION:
+            return { ...state, mousePosition: action.payload };
         case LIKE_VIDEO:
             const newVideos = state.videos.map((video) => {
                 return video.id === action.payload

@@ -3,6 +3,8 @@ import {
     SET_CURRENT_USER,
     LIKE_VIDEO,
     SET_SELECTED_VIDEO_ID,
+    SET_SELECTED_USER_ID,
+    SET_MOUSE_POSITION,
 } from './constants';
 
 export const fetchUsers = (payload) => ({
@@ -22,5 +24,15 @@ export const likeVideo = (payload) => ({
 
 export const setSelectedVideoId = (payload) => ({
     type: SET_SELECTED_VIDEO_ID,
+    payload,
+});
+
+export const setSelectedUserId = (payload) => ({
+    type: SET_SELECTED_USER_ID,
+    payload,
+});
+
+export const setMousePosition = (payload) => ({
+    type: SET_MOUSE_POSITION,
     payload,
 });
