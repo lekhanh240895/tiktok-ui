@@ -20,7 +20,8 @@
             "created_at": "2022-05-05 15:34:44",
             "updated_at": "2022-05-05 16:12:44",
             "followingIDs": [2, 3, 4, 5, 6, 7, 8, 9, 10],
-            "followerIDs": [5, 6, 7, 8, 9, 2, 3]
+            "followerIDs": [5, 6, 7, 8, 9, 2, 3],
+            "likedVideoIds": [1, 2, 3, 4, 5, 6, 7]
         },
         {
             "id": 2,
@@ -42,7 +43,8 @@
             "created_at": "2022-05-05 16:10:05",
             "updated_at": "2022-05-05 16:11:39",
             "followingIDs": [2, 3, 4, 5, 6, 7, 8, 9, 10],
-            "followerIDs": [5, 6, 7, 8, 9, 2, 3]
+            "followerIDs": [5, 6, 7, 8, 9, 2, 3],
+            "likedVideoIds": [1, 2, 3, 4, 5, 6, 7]
         },
         {
             "id": 3,
@@ -64,7 +66,8 @@
             "created_at": "2022-05-05 16:13:28",
             "updated_at": "2022-05-05 16:14:23",
             "followingIDs": [2, 3, 4, 5, 6, 7, 8, 9, 10],
-            "followerIDs": [5, 6, 7, 8, 9, 2, 3]
+            "followerIDs": [5, 6, 7, 8, 9, 2, 3],
+            "likedVideoIds": [1, 2, 3, 4, 5, 6, 7]
         },
         {
             "id": 4,
@@ -86,7 +89,8 @@
             "created_at": "2022-05-05 16:14:57",
             "updated_at": "2022-05-05 16:15:53",
             "followingIDs": [2, 3, 4, 5, 6, 7, 8, 9, 10],
-            "followerIDs": [5, 6, 7, 8, 9, 2, 3]
+            "followerIDs": [5, 6, 7, 8, 9, 2, 3],
+            "likedVideoIds": [1, 2, 3, 4, 5, 6, 7]
         },
         {
             "id": 5,
@@ -108,7 +112,8 @@
             "created_at": "2022-05-05 16:17:39",
             "updated_at": "2022-05-05 16:19:13",
             "followingIDs": [2, 3, 4, 5, 6, 7, 8, 9, 10],
-            "followerIDs": [5, 6, 7, 8, 9, 2, 3]
+            "followerIDs": [5, 6, 7, 8, 9, 2, 3],
+            "likedVideoIds": [1, 2, 3, 4, 5, 6, 7]
         },
         {
             "id": 6,
@@ -130,7 +135,8 @@
             "created_at": "2022-05-05 16:17:39",
             "updated_at": "2022-05-05 16:19:13",
             "followingIDs": [2, 3, 4, 5, 6, 7, 8, 9, 10],
-            "followerIDs": [5, 6, 7, 8, 9, 2, 3]
+            "followerIDs": [5, 6, 7, 8, 9, 2, 3],
+            "likedVideoIds": [1, 2, 3, 4, 5, 6, 7]
         },
         {
             "id": 7,
@@ -152,7 +158,8 @@
             "created_at": "2022-05-05 16:17:39",
             "updated_at": "2022-05-05 16:19:13",
             "followingIDs": [2, 3, 4, 5, 6, 7, 8, 9, 10],
-            "followerIDs": [5, 6, 7, 8, 9, 2, 3]
+            "followerIDs": [5, 6, 7, 8, 9, 2, 3],
+            "likedVideoIds": [1, 2, 3, 4, 5, 6, 7]
         },
         {
             "id": 8,
@@ -174,7 +181,8 @@
             "created_at": "2022-05-05 16:17:39",
             "updated_at": "2022-05-05 16:19:13",
             "followingIDs": [7, 1, 9, 3, 10, 4],
-            "followerIDs": [5, 6, 7, 1, 9, 2, 3, 4, 10]
+            "followerIDs": [5, 6, 7, 1, 9, 2, 3, 4, 10],
+            "likedVideoIds": [3, 4, 5, 6, 7]
         },
         {
             "id": 9,
@@ -196,7 +204,8 @@
             "created_at": "2022-05-05 16:17:39",
             "updated_at": "2022-05-05 16:19:13",
             "followingIDs": [2, 3, 4, 5, 6, 7, 8, 9, 10],
-            "followerIDs": [5, 6, 7, 8, 9, 2, 3]
+            "followerIDs": [5, 6, 7, 8, 9, 2, 3],
+            "likedVideoIds": [1, 2, 3, 4, 5, 6, 7]
         },
         {
             "id": 10,
@@ -218,7 +227,8 @@
             "created_at": "2022-05-05 16:17:39",
             "updated_at": "2022-05-05 16:19:13",
             "followingIDs": [2, 3, 4, 5, 6, 7, 8, 9, 10],
-            "followerIDs": [5, 6, 7, 8, 9, 2, 3]
+            "followerIDs": [5, 6, 7, 8, 9, 2, 3],
+            "likedVideoIds": [1, 2, 3, 4, 5, 6, 7]
         }
     ],
     "keywords": [

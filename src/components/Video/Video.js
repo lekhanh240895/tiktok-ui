@@ -61,7 +61,8 @@ export default function Video({
         return () => {
             window.removeEventListener('scroll', handleObserve);
         };
-    });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const handlePlay = () => {
         if (!videoRef.current.paused) {

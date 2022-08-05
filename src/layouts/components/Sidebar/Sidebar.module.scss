@@ -41,4 +41,9 @@
 
         overflow: visible;
     }
+
+    .sidebar-scroll-container {
+        border-right: 1px solid rgba(22, 24, 35, 0.12);
+        box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.06);
+    }
 }
