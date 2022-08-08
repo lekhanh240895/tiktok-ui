@@ -46,6 +46,7 @@ export default function Video({
                         .catch((err) => console.log(err));
                 } else {
                     videoRef.current.pause();
+                    videoRef.current.currentTime = 0;
                 }
             });
         };

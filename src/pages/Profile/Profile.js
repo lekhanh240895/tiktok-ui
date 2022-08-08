@@ -13,6 +13,7 @@ import {
     IsFriendIcon,
     LineIcon,
     LinkedInIcon,
+    LockIcon,
     MailIcon,
     MoreIcon,
     PinterestIcon,
@@ -113,7 +114,7 @@ const MORE_MENU = [
 
 export default function Profile() {
     const [{ users, videos, currentUser }] = useAppContext();
-    const [tabName, setTabName] = useState('videos');
+    const [activeTab, setActiveTab] = useState('videos');
     const [isUser, setIsUser] = useState(false);
     const [isMore, setIsMore] = useState(false);
     const [isFollowing, setIsFollowing] = useState(false);
@@ -149,7 +150,7 @@ export default function Profile() {
     useEffect(() => {
         if (lineRef.current) {
             handleHoverNavItem('videos');
-            setTabName('videos');
+            setActiveTab('videos');
         }
     }, [user]);
 
@@ -160,6 +161,10 @@ export default function Profile() {
     const likedVideos = videos.filter((video) =>
         user.likedVideoIds?.includes(video.id),
     );
+
+    const handleClickItem = (tab) => {
+        setActiveTab(tab);
+    };
 
     return (
         <Container>
@@ -314,38 +319,76 @@ export default function Profile() {
                 </HeaderActions>
             </Header>
 
-            <NavList>
-                <NavItem
-                    onMouseEnter={() => handleHoverNavItem('videos')}
-                    onClick={() => setTabName('videos')}
-                >
-                    Videos
-                </NavItem>
-                <NavItem
-                    onMouseEnter={() => handleHoverNavItem('liked')}
-                    onClick={() => setTabName('liked')}
-                >
-                    Liked
-                </NavItem>
-                <Line ref={lineRef}></Line>
-            </NavList>
+            {activeTab === 'videos' ? (
+                <>
+                    <NavList>
+                        <NavItem
+                            active
+                            onMouseEnter={() => handleHoverNavItem('videos')}
+                            onClick={() => handleClickItem('videos')}
+                        >
+                            Videos
+                        </NavItem>
 
-            {tabName === 'videos' ? (
-                <VideoList>
-                    {userVideos.map((video) => (
-                        <VideoItem key={video.id}>
-                            <VideoComp src={video.src} title={video.title} />
-                        </VideoItem>
-                    ))}
-                </VideoList>
+                        <NavItem
+                            onMouseEnter={() => handleHoverNavItem('liked')}
+                            onClick={() => handleClickItem('liked')}
+                        >
+                            <span>
+                                <LockIcon width="1.8rem" height="1.8rem" />
+                            </span>
+                            Liked
+                        </NavItem>
+
+                        <Line ref={lineRef}></Line>
+                    </NavList>
+
+                    <VideoList>
+                        {userVideos.map((video) => (
+                            <VideoItem key={video.id}>
+                                <VideoComp
+                                    src={video.src}
+                                    title={video.title}
+                                />
+                            </VideoItem>
+                        ))}
+                    </VideoList>
+                </>
             ) : (
-                <VideoList>
-                    {likedVideos.map((video) => (
-                        <VideoItem key={video.id}>
-                            <VideoComp src={video.src} title={video.title} />
-                        </VideoItem>
-                    ))}
-                </VideoList>
+                <>
+                    <NavList>
+                        <NavItem
+                            onMouseEnter={() => handleHoverNavItem('videos')}
+                            onClick={() => handleClickItem('videos')}
+                        >
+                            Videos
+                        </NavItem>
+
+                        <NavItem
+                            active
+                            onMouseEnter={() => handleHoverNavItem('liked')}
+                            onClick={() => handleClickItem('liked')}
+                        >
+                            <span>
+                                <LockIcon width="1.8rem" height="1.8rem" />
+                            </span>
+                            Liked
+                        </NavItem>
+
+                        <Line ref={lineRef}></Line>
+                    </NavList>
+
+                    <VideoList>
+                        {likedVideos.map((video) => (
+                            <VideoItem key={video.id}>
+                                <VideoComp
+                                    src={video.src}
+                                    title={video.title}
+                                />
+                            </VideoItem>
+                        ))}
+                    </VideoList>
+                </>
             )}
         </Container>
     );

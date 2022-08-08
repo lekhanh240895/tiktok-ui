@@ -16,12 +16,45 @@ export const Header = styled.div`
 export const SharedInfo = styled.div`
     display: flex;
     margin-bottom: 22px;
+`;
+
+export const ImageWrapper = styled.div`
+    position: relative;
+    width: 120px;
+    height: 120px;
+    overflow: hidden;
 
     img {
-        width: 116px;
-        height: 116px;
-        border-radius: 50%;
+        width: 100%;
+        height: 100%;
     }
+
+    h4 {
+        position: absolute;
+        top: 10px;
+        left: 0;
+        right: 0;
+        font-size: 2.5rem;
+        font-weight: 600;
+        color: var(--white-color);
+        line-height: 25px;
+        text-align: center;
+    }
+`;
+
+export const TagnameWrapper = styled.div`
+    position: relative;
+    width: 120px;
+    height: 120px;
+    display: flex;
+    -webkit-box-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    align-items: center;
+    box-sizing: border-box;
+    border-radius: 4px;
+    border: 1px solid rgba(22, 24, 35, 0.12);
+    background-color: rgba(22, 24, 35, 0.03);
 `;
 
 export const ShareTitle = styled.div`
@@ -35,11 +68,9 @@ export const ShareTitle = styled.div`
             margin-left: 12px;
         }
     }
-    h4 {
-        font-weight: 600;
-        font-size: 1.8rem;
+    p {
+        font-size: 1.6rem;
         line-height: 25px;
-        margin-bottom: 20px;
     }
 `;
 
@@ -58,7 +89,7 @@ export const Bio = styled.p`
 
 export const HeaderActions = styled.div`
     position: absolute;
-    right: 52px;
+    right: 12px;
     top: 12px;
     display: flex;
 
@@ -118,12 +149,10 @@ export const VideoTitle = styled.p`
     font-size: 1.4rem;
 `;
 export const NavList = styled.ul`
+    display: inline-block;
     position: relative;
-    display: flex;
-    align-items: stretch;
-    width: 460px;
 
-    &::after {
+    ::after {
         content: '';
         position: absolute;
         width: 100%;
@@ -137,23 +166,11 @@ export const NavItem = styled.li`
     min-width: 230px;
     height: 44px;
     font-size: 1.8rem;
-    line-height: 25px;
+    line-height: 44px;
     font-weight: 600;
     text-align: center;
-
+    display: inline-block;
     cursor: pointer;
-    color: ${(props) =>
-        props.active ? 'var(--text-color) ' : 'rgb(18 18 18 / 50%)'};
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    span {
-        margin-right: 8px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
 `;
 
 export const Line = styled.div`
@@ -269,8 +286,5 @@ export const MoreShareItemButton = styled.div`
 export const MoreMenuItem = styled(ShareMenuItem)`
     &:last-child {
         margin-bottom: 8px;
-        button {
-            border-top: 1px solid rgb(22 24 35 / 12%);
-        }
     }
 `;

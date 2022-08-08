@@ -5,6 +5,8 @@ import {
     SET_SELECTED_VIDEO_ID,
     SET_SELECTED_USER_ID,
     SET_MOUSE_POSITION,
+    SET_TAGS,
+    SET_MUSICS,
 } from './constants';
 
 export const fetchUsers = (payload) => ({
@@ -34,5 +36,15 @@ export const setSelectedUserId = (payload) => ({
 
 export const setMousePosition = (payload) => ({
     type: SET_MOUSE_POSITION,
+    payload,
+});
+
+export const setTags = (payload) => ({
+    type: SET_TAGS,
+    payload,
+});
+
+export const setMusics = (payload) => ({
+    type: SET_MUSICS,
     payload,
 });

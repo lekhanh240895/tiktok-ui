@@ -1,5 +1,1 @@
-import React from 'react';
-
-export default function Tag() {
-    return <div>Tag</div>;
-}
+export { default } from './Tag';

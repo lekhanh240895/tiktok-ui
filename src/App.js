@@ -9,7 +9,17 @@ import * as actions from '~/store/actions';
 import GetAppButton from './components/BottomContainer/BottomContainer';
 
 function App() {
-    const [{ currentUserID }, dispatch] = useAppContext();
+    const [{ currentUserID, videos }, dispatch] = useAppContext();
+
+    function unique(arr) {
+        var newArr = [];
+        for (var i = 0; i < arr.length; i++) {
+            if (!newArr.includes(arr[i])) {
+                newArr.push(arr[i]);
+            }
+        }
+        return newArr;
+    }
 
     useEffect(() => {
         (async () => {
@@ -18,6 +28,19 @@ function App() {
 
             const currentUser = users.find((user) => user.id === currentUserID);
             dispatch(actions.setCurrentUser(currentUser));
+
+            const tags = videos.reduce((cur, video) => {
+                return cur.concat(video.tags.map((tag) => tag));
+            }, []);
+
+            const filterTags = unique(tags);
+
+            const musics = videos.reduce((cur, video) => {
+                return cur.includes(video.music) ? cur : [...cur, video.music];
+            }, []);
+
+            dispatch(actions.setTags(filterTags));
+            dispatch(actions.setMusics(musics));
         })();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentUserID]);

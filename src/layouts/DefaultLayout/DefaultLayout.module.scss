@@ -20,10 +20,32 @@
     padding: 24px 0;
     position: relative;
 }
+.sidebar-nav-mask {
+    position: fixed;
+    inset: 59px 0 0;
+    z-index: 99;
+    background-color: rgba(0, 0, 0, 0.6);
+    opacity: 0;
+    pointer-events: none;
+}
+.sidenav-container {
+    width: 72px;
+    flex: 0 0 72px;
+    z-index: 99;
+    position: relative;
+}
+
+.user-profile-container {
+    z-index: 100;
+    position: absolute;
+    display: none;
+    top: 0;
+    left: 0;
+    transition: all 0.2s ease-in-out;
+}
 
 .sidebar {
     min-width: 340px;
-    position: relative;
 }
 
 @media (max-width: 1024px) {

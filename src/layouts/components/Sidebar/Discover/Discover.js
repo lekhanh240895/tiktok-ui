@@ -1,19 +1,15 @@
+import { memo } from 'react';
 import classnames from 'classnames/bind';
-import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import * as keywordService from '~/services/keywordService';
 import styles from './Discover.module.scss';
 import { MusicIcon, TagIcon } from '~/components/Icons';
+import { useAppContext } from '~/store/AppContext';
 
 const cx = classnames.bind(styles);
 
-export default function Discover() {
-    const [keywords, setKeywords] = useState([]);
-
-    useEffect(() => {
-        keywordService.get().then((res) => setKeywords(res.slice(0, 15)));
-    }, []);
+function Discover() {
+    const [{ tags, musics }] = useAppContext();
 
     const typeKeyword = (type) => {
         switch (type) {
@@ -25,6 +21,42 @@ export default function Discover() {
                 return;
         }
     };
+
+    const shuffle = (array) => {
+        var currentIndex = array.length,
+            temporaryValue,
+            randomIndex;
+
+        // While there remain elements to shuffle...
+        while (0 !== currentIndex) {
+            // Pick a remaining element...
+            randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex -= 1;
+
+            // And swap it with the current element.
+            temporaryValue = array[currentIndex];
+            array[currentIndex] = array[randomIndex];
+            array[randomIndex] = temporaryValue;
+        }
+
+        return array;
+    };
+
+    const keywords = [
+        ...tags.map((tag) => {
+            return {
+                type: 'tag',
+                name: tag,
+            };
+        }),
+        ...musics.map((music) => {
+            return {
+                type: 'music',
+                name: music,
+            };
+        }),
+    ];
+
     return (
         <div className={cx('wrapper')}>
             <h4 className={cx('title')}>Discover</h4>
@@ -33,7 +65,7 @@ export default function Discover() {
                 {keywords.map((keyword, index) => {
                     return (
                         <Link
-                            to={`/${keyword.type}/${keyword.title}`}
+                            to={`/${keyword.type}/${keyword.name}`}
                             replace
                             key={index}
                             className={cx('keyword-item')}
@@ -42,9 +74,7 @@ export default function Discover() {
                                 {typeKeyword(keyword.type)}
                             </span>
 
-                            <p className={cx('keyword-text')}>
-                                {keyword.title}
-                            </p>
+                            <p className={cx('keyword-text')}>{keyword.name}</p>
                         </Link>
                     );
                 })}
@@ -52,3 +82,5 @@ export default function Discover() {
         </div>
     );
 }
+
+export default memo(Discover);

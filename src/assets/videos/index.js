@@ -6,6 +6,8 @@ const videos = {
     video5: require('~/assets/videos/video5.mp4'),
     video6: require('~/assets/videos/video6.mp4'),
     video7: require('~/assets/videos/video7.mp4'),
+    video8: require('~/assets/videos/video8.mp4'),
+    video9: require('~/assets/videos/video9.mp4'),
 };
 
 export default videos;

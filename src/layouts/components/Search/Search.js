@@ -12,8 +12,8 @@ import AccountItem from '../AccountItem';
 import { DeleteIcon, SearchIcon } from '~/components/Icons';
 import { useDebounce } from '~/hooks/useDebounce';
 import * as userService from '~/services/userService';
-import * as keywordService from '~/services/keywordService';
 import Button from '~/components/Button';
+import { useAppContext } from '~/store/AppContext';
 
 const cx = classnames.bind(styles);
 
@@ -24,6 +24,7 @@ export default function Search() {
     const [showResult, setShowResult] = useState(false);
     const [loading, setLoading] = useState(false);
     const inputRef = useRef();
+    const [{ tags, musics }] = useAppContext();
 
     const debouncedValue = useDebounce(searchValue, 500);
 
@@ -62,20 +63,24 @@ export default function Search() {
             setLoading(true);
 
             const searchUsers = await userService.search(debouncedValue);
-            const keywords = await keywordService.search(debouncedValue);
 
             const searchKeywords = [
-                ...keywords.map((keyword) => keyword.title),
+                ...tags.map((tag) => tag),
+                ...musics.map((music) => music),
                 ...searchUsers.map((user) => user.full_name),
             ];
 
+            const filteredSearchKeywords = searchKeywords.filter((keyword) =>
+                keyword.toLowerCase().includes(debouncedValue.toLowerCase()),
+            );
+
             setLoading(false);
-            setSearchKeywords(searchKeywords.slice(0, 8));
+            setSearchKeywords(filteredSearchKeywords.slice(0, 8));
             setSearchResult(searchUsers.slice(0, 5));
         };
 
         fetchAPI();
-    }, [debouncedValue]);
+    }, [debouncedValue, tags, musics]);
 
     useEffect(() => {
         handleSearch();

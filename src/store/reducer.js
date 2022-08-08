@@ -5,6 +5,8 @@ import {
     LIKE_VIDEO,
     SET_SELECTED_USER_ID,
     SET_MOUSE_POSITION,
+    SET_TAGS,
+    SET_MUSICS,
 } from '~/store/constants';
 
 function between(min, max) {
@@ -28,6 +30,14 @@ export const initialState = {
             shares: [1, 4, 3, ...new Array(between(1, 10000))],
             comments: 121,
             music: 'Anh Sẽ Đợi Remix - Air Media & Tô Minh & TLong',
+            tags: [
+                'korean songs',
+                'ca koi',
+                'hoa',
+                'hoavinhh',
+                'cay canh viet',
+            ],
+            views: between(1, 1000000000),
         },
         {
             id: 2,
@@ -38,6 +48,8 @@ export const initialState = {
             shares: [1, 4, 3, ...new Array(between(1, 10000))],
             comments: 1123,
             music: 'Thuyền Quyền x AM Ri mic - nhac cua bet ♪',
+            tags: ['korean songs', 'ca koi', 'hoa hướng dương'],
+            views: between(1, 1000000000),
         },
         {
             id: 3,
@@ -48,6 +60,8 @@ export const initialState = {
             shares: [1, 4, 3, 8, ...new Array(between(1, 10000))],
             comments: 1134,
             music: 'Anh Sẽ Đợi Remix - Air Media & Tô Minh & TLong',
+            tags: ['korean songs', 'ca koi'],
+            views: between(1, 1000000000),
         },
         {
             id: 4,
@@ -58,6 +72,8 @@ export const initialState = {
             shares: [1, 4, 3, ...new Array(between(1, 10000))],
             comments: 1134,
             music: 'Anh Sẽ Đợi Remix - Air Media & Tô Minh & TLong',
+            tags: ['korean songs', 'ca koi', 'korean girls'],
+            views: between(1, 1000000000),
         },
         {
             id: 5,
@@ -68,6 +84,8 @@ export const initialState = {
             shares: [1, 4, 3, 8, ...new Array(between(1, 10000))],
             comments: 1134,
             music: 'Thuyền Quyền x AM Ri mic - nhac cua bet ♪',
+            tags: ['korean songs', 'ca koi', 'korean girls'],
+            views: between(1, 1000000000),
         },
         {
             id: 6,
@@ -78,6 +96,8 @@ export const initialState = {
             shares: [1, 4, 3, 8, ...new Array(between(1, 10000))],
             comments: 1134,
             music: 'nhạc nền - Gia Huy Singer 92',
+            tags: ['korean songs', 'ca koi', 'korean girls'],
+            views: between(1, 1000000000),
         },
         {
             id: 7,
@@ -88,14 +108,46 @@ export const initialState = {
             shares: [1, 4, 3, 8, ...new Array(between(1, 10000))],
             comments: 11,
             music: 'nhạc nền - 🍉Min Min🍉',
+            tags: ['korean songs', 'ca koi', 'korean girls'],
+            views: between(1, 1000000000),
+        },
+        {
+            id: 8,
+            userId: 5,
+            title: 'Bạn nào hôm qua đang đi tự dưng bị quạt rơi trúng thì cho mình xin lỗi nhé 😂 #anhsedoi #fandance #dcgr',
+            src: videos.video8,
+            likes: [1, 4, 3, 5, 9, 8, ...new Array(between(100, 1000000))],
+            shares: [1, 4, 3, ...new Array(between(1, 10000))],
+            comments: 121,
+            music: 'Anh Sẽ Đợi Remix - Air Media & Tô Minh & TLong',
+            tags: ['korean songs', 'hoa', 'hoavinhh', 'cay canh viet'],
+            views: between(1, 1000000000),
+        },
+        {
+            id: 9,
+            userId: 10,
+            title: 'Muối ớt hay xào thì được mọi người ơi #phaohong #remix #nhachayminmin #xuhuong',
+            src: videos.video9,
+            likes: [1, 4, 3, 5, 9, 8, ...new Array(between(100, 1000000))],
+            shares: [1, 4, 3, ...new Array(between(1, 10000))],
+            comments: 121,
+            music: 'Anh Sẽ Đợi Remix - Air Media & Tô Minh & TLong',
+            tags: ['korean songs', 'hoavinhh', 'cay canh viet'],
+            views: between(1, 1000000000),
         },
     ],
+    tags: [],
+    musics: [],
 };
 
 export default function reducer(state, action) {
     switch (action.type) {
         case FETCH_USERS:
             return { ...state, users: action.payload };
+        case SET_TAGS:
+            return { ...state, tags: action.payload };
+        case SET_MUSICS:
+            return { ...state, musics: action.payload };
         case SET_CURRENT_USER:
             return { ...state, currentUser: action.payload };
         case SET_SELECTED_USER_ID:
