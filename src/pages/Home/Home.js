@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import Image from '~/components/Image';
 import { useAppContext } from '~/store/AppContext';
 import Button from '~/components/Button';
+import { useElementOnScreen } from '~/hooks/useElementOnScreen';
 
 const cx = classnames.bind(styles);
 
@@ -17,6 +18,7 @@ export default function Home() {
     });
     const [{ users, videos }] = useAppContext();
     const [isPlaying, setIsPlaying] = useState(false);
+    const [videoCount, setVideoCount] = useState(1);
 
     useEffect(() => {
         const settings = JSON.parse(localStorage.getItem('userSettings'));
@@ -53,10 +55,22 @@ export default function Home() {
         setIsPlaying(bool);
     };
 
+    const [containerRef, isVisible] = useElementOnScreen({
+        threshold: 0,
+    });
+
+    useEffect(() => {
+        if (isVisible) {
+            if (videoCount < videos.length)
+                setVideoCount((prevState) => prevState + 1);
+            else setVideoCount(videos.length);
+        }
+    }, [isVisible, videoCount, videos]);
+
     return (
         <div className={cx('wrapper')}>
             <ul className={cx('video-list')}>
-                {videos.map((video) => {
+                {videos.slice(0, videoCount).map((video) => {
                     const user = users.find(
                         (user) => user?.id === video.userId,
                     );
@@ -88,6 +102,7 @@ export default function Home() {
                     );
                 })}
             </ul>
+            <div id="list-end" ref={containerRef}></div>
         </div>
     );
 }

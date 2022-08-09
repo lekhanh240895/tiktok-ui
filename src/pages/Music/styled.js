@@ -24,11 +24,68 @@ export const ImageWrapper = styled.div`
     height: 120px;
     overflow: hidden;
     flex-shrink: 0;
+    border-radius: 2px;
 
-    img {
+    video {
         width: 100%;
         height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 1;
         object-fit: cover;
+    }
+
+    canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 2;
+        width: 100%;
+        height: 100%;
+        filter: brightness(50%);
+    }
+
+    .circle {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 3;
+
+        svg {
+            color: #fff;
+            transform: rotate(-90deg);
+        }
+        .circle1 {
+            --stroke-length: 225.8292694091797;
+            --strokeIncrement: 0;
+            --strokeCalc: 225.8292694091797;
+            stroke-dasharray: var(--stroke-length);
+            stroke-dashoffset: 0;
+            transition: stroke-dashoffset 1s linear 0s;
+        }
+
+        .circle2 {
+            --stroke-length: 225.8292694091797;
+            --strokeIncrement: 0;
+            --strokeCalc: 225.8292694091797;
+
+            stroke-dasharray: var(--stroke-length);
+            stroke-dashoffset: var(--strokeCalc);
+            transition: stroke-dashoffset 1s linear 0s;
+        }
+    }
+
+    .play-btn {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: #fff;
+        cursor: pointer;
+        padding: 8px;
+        z-index: 3;
     }
 `;
 

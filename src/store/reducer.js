@@ -41,7 +41,7 @@ export const initialState = {
         },
         {
             id: 2,
-            userId: 8,
+            userId: 2,
             title: 'Nghe nó cứ đã và sang sao á. Không thể nào sai được #lacchonhongtran #itnhungdailau #khongbang #remix #nhachayminmin',
             src: videos.video6,
             likes: [1, 4, 3, 2, 6, ...new Array(between(100, 1000000))],

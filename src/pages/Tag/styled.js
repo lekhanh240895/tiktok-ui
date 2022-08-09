@@ -23,6 +23,7 @@ export const ImageWrapper = styled.div`
     width: 120px;
     height: 120px;
     overflow: hidden;
+    border-radius: 2px;
 
     img {
         width: 100%;
@@ -46,6 +47,8 @@ export const TagnameWrapper = styled.div`
     position: relative;
     width: 120px;
     height: 120px;
+    border-radius: 2px;
+
     display: flex;
     -webkit-box-pack: center;
     justify-content: center;

@@ -9,6 +9,7 @@ import styles from './Video.module.scss';
 import { MutedVolumeIcon, PauseIcon, VolumeIcon } from '~/components/Icons';
 import ActionList from './ActionList';
 import Info from './Info';
+import { useElementOnScreen } from '~/hooks/useElementOnScreen';
 
 const cx = classnames.bind(styles);
 export default function Video({
@@ -22,6 +23,9 @@ export default function Video({
     isPlaying,
 }) {
     const [progress, setProgress] = useState(0);
+    const [containerRef, isVisible] = useElementOnScreen({
+        threshold: 0.75,
+    });
 
     const videoRef = useRef();
 
@@ -29,41 +33,18 @@ export default function Video({
         if (videoRef.current) {
             videoRef.current.volume = volume;
         }
-    }, [volume]);
-
-    const handleObserve = () => {
-        let options = {
-            rootMargin: '0px',
-            threshold: [0.75, 1],
-        };
-
-        let handlePlay = (entries, observer) => {
-            entries.forEach((entry) => {
-                if (entry.isIntersecting) {
-                    const promise = videoRef.current.play();
-                    promise
-                        .then(() => onPlay(true))
-                        .catch((err) => console.log(err));
-                } else {
-                    videoRef.current.pause();
-                    videoRef.current.currentTime = 0;
-                }
-            });
-        };
-
-        let observer = new IntersectionObserver(handlePlay, options);
-
-        observer.observe(videoRef.current);
-    };
+    }, [videoRef, volume]);
 
     useEffect(() => {
-        window.addEventListener('scroll', handleObserve);
-
-        return () => {
-            window.removeEventListener('scroll', handleObserve);
-        };
+        if (isVisible) {
+            const promise = videoRef.current.play();
+            promise.then(() => onPlay(true)).catch((err) => console.log(err));
+        } else {
+            videoRef.current.pause();
+            videoRef.current.currentTime = 0;
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [videoRef, isVisible]);
 
     const handlePlay = () => {
         if (!videoRef.current.paused) {
@@ -122,7 +103,10 @@ export default function Video({
                         className={cx('canvas-video-card-player')}
                     ></canvas>
 
-                    <div className={cx('video-player-container')}>
+                    <div
+                        className={cx('video-player-container')}
+                        ref={containerRef}
+                    >
                         <video
                             ref={videoRef}
                             loop

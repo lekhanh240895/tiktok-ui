@@ -11,14 +11,15 @@ import {
     LinkedInIcon,
     MailIcon,
     MoreIcon,
+    PauseIcon,
     PinterestIcon,
+    PlayIcon,
     RedditIcon,
     ShareIcon,
     TelegramIcon,
     TwitterIcon,
     WhatsappIcon,
 } from '~/components/Icons';
-import Image from '~/components/Image';
 import Button from '~/components/Button';
 import { useAppContext } from '~/store/AppContext';
 import {
@@ -37,7 +38,7 @@ import {
     MoreMenuItem,
     MoreShareItemButton,
 } from './styled';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import VideoComp from './VideoComp';
 import { configNumber } from '~/services';
 
@@ -96,12 +97,76 @@ const MORE_MENU = [
     },
 ];
 
-export default function Tag() {
+export default function Music() {
     const [{ videos }] = useAppContext();
     const [isMore, setIsMore] = useState(false);
+    const [isPlaying, setIsPLaying] = useState(false);
     const { musicname } = useParams();
+    const [progress, setProgress] = useState(0);
+
+    const handleTimeUpdate = () => {
+        const { currentTime, duration } = videoRef.current;
+
+        const progress = Math.floor((currentTime / duration) * 100);
+
+        setProgress(progress);
+    };
+
+    useEffect(() => {
+        setIsPLaying(false);
+    }, [musicname]);
 
     const musicVideos = videos?.filter((video) => video.music === musicname);
+    const videoRef = useRef();
+    const canvasRef = useRef();
+    const circleRef = useRef();
+
+    const handlePlay = () => {
+        if (!videoRef.current.paused) {
+            videoRef.current.pause();
+            setIsPLaying(false);
+        } else {
+            videoRef.current.play();
+            setIsPLaying(true);
+        }
+    };
+
+    useEffect(() => {
+        if (circleRef.current && videoRef.current) {
+            const ref = circleRef.current;
+            const strokeLength = ref.getTotalLength();
+            ref.style.setProperty('--strokeLength', strokeLength);
+
+            const strokeIncrement = (strokeLength * progress) / 100;
+
+            ref.style.setProperty('--strokeIncrement', strokeIncrement);
+            if (progress < 100) {
+                ref.style.setProperty(
+                    '--strokeCalc',
+                    strokeLength - strokeIncrement,
+                );
+            } else {
+                ref.style.setProperty('--strokeCalc', 0);
+            }
+        }
+    }, [progress]);
+
+    const handleEnded = () => {
+        setIsPLaying(false);
+        setProgress(0);
+    };
+
+    // const grabScreen = () => {
+    //     console.log('Grab');
+    //     const video = videoRef.current;
+    //     const canvas = canvasRef.current;
+    //     const ctx = canvas.getContext('2d');
+
+    //     canvas.width = video.videoWidth;
+    //     canvas.height = video.videoHeight;
+
+    //     ctx.drawImage(video, 0, 0);
+    // };
 
     if (!musicname) return;
 
@@ -110,11 +175,51 @@ export default function Tag() {
             <Header>
                 <SharedInfo>
                     <ImageWrapper>
-                        <Image
-                            src="https://picsum.photos/500/500"
-                            alt={'Tag Image'}
+                        <video
+                            src={musicVideos[0].src}
+                            ref={videoRef}
+                            onTimeUpdate={handleTimeUpdate}
+                            onEnded={handleEnded}
                         />
+
+                        <canvas id="canvas" ref={canvasRef}></canvas>
+
+                        {progress > 0 && (
+                            <span className="circle">
+                                <svg height="7.8rem" width="7.8rem">
+                                    <circle
+                                        className="circle1"
+                                        strokeWidth="3"
+                                        stroke="rgba(22, 24, 35, 0.12)"
+                                        r="36"
+                                        cx="39"
+                                        cy="39"
+                                        fill="transparent"
+                                    ></circle>
+
+                                    <circle
+                                        className="circle2"
+                                        cx="39"
+                                        cy="39"
+                                        r="36"
+                                        stroke="currentColor"
+                                        strokeWidth="3"
+                                        fill="transparent"
+                                        ref={circleRef}
+                                    />
+                                </svg>
+                            </span>
+                        )}
+
+                        <span onClick={handlePlay} className="play-btn">
+                            {isPlaying ? (
+                                <PauseIcon width="3.2rem" height="3.2rem" />
+                            ) : (
+                                <PlayIcon width="3.2rem" height="3.2rem" />
+                            )}
+                        </span>
                     </ImageWrapper>
+
                     <ShareTitle>
                         <h2>{musicname}</h2>
                         <p>{configNumber(musicVideos.length)} videos</p>
