@@ -17,7 +17,6 @@ export default function Home() {
         volume: 1,
     });
     const [{ users, videos }] = useAppContext();
-    const [isPlaying, setIsPlaying] = useState(false);
     const [videoCount, setVideoCount] = useState(1);
 
     useEffect(() => {
@@ -49,10 +48,6 @@ export default function Home() {
         });
 
         setConfig('volume', newVolume);
-    };
-
-    const handlePlay = (bool) => {
-        setIsPlaying(bool);
     };
 
     const [containerRef, isVisible] = useElementOnScreen({
@@ -91,8 +86,6 @@ export default function Home() {
                                 volume={settings.volume}
                                 onMutedVolume={handleMuteVolume}
                                 onVolumeChange={handleVolumeChange}
-                                onPlay={handlePlay}
-                                isPlaying={isPlaying}
                             />
 
                             <Button outline small className={cx('follow-btn')}>

@@ -19,10 +19,10 @@ export default function Video({
     volume,
     onMutedVolume,
     onVolumeChange,
-    onPlay,
-    isPlaying,
 }) {
     const [progress, setProgress] = useState(0);
+    const [isPlaying, setIsPlaying] = useState(false);
+
     const [containerRef, isVisible] = useElementOnScreen({
         threshold: 0.75,
     });
@@ -38,7 +38,9 @@ export default function Video({
     useEffect(() => {
         if (isVisible) {
             const promise = videoRef.current.play();
-            promise.then(() => onPlay(true)).catch((err) => console.log(err));
+            promise
+                .then(() => setIsPlaying(true))
+                .catch((err) => console.log(err));
         } else {
             videoRef.current.pause();
             videoRef.current.currentTime = 0;
@@ -49,10 +51,10 @@ export default function Video({
     const handlePlay = () => {
         if (!videoRef.current.paused) {
             videoRef.current.pause();
-            onPlay(false);
+            setIsPlaying(false);
         } else {
             videoRef.current.play();
-            onPlay(true);
+            setIsPlaying(true);
         }
     };
 
@@ -232,6 +234,4 @@ Video.propTypes = {
     volume: PropTypes.number.isRequired,
     onMutedVolume: PropTypes.func.isRequired,
     onVolumeChange: PropTypes.func.isRequired,
-    onPlay: PropTypes.func.isRequired,
-    isPlaying: PropTypes.bool.isRequired,
 };
