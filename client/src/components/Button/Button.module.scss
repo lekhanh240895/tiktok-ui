@@ -1,0 +1,107 @@
+.wrapper {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.6rem;
+    font-weight: 600;
+    min-width: 100px;
+    padding: 7px 16px;
+    border-radius: 4px;
+    background-color: transparent;
+    user-select: none;
+    cursor: pointer;
+    line-height: 18px;
+    border: 1px solid transparent;
+    transition: all 0.2s ease-in;
+
+    + .wrapper {
+        margin-left: 16px;
+    }
+
+    &.disabled {
+        color: rgba(22, 24, 35, 0.34);
+        background-color: rgba(22, 24, 35, 0.06);
+        pointer-events: none;
+    }
+}
+
+.icon + .title,
+.title + .icon {
+    margin-left: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon {
+    display: flex;
+    align-items: center;
+}
+
+.title {
+    font-family: var(--font-family);
+}
+
+// Button types
+.rounded {
+    box-shadow: 0 2px 8px rgb(0 0 0 / 6%);
+    border-radius: 52px;
+    color: rgba(22, 24, 35, 0.75);
+    border-color: rgba(22, 24, 35, 0.12);
+    font-size: 1.4rem;
+
+    &:hover {
+        border-color: rgba(22, 24, 35, 0.2);
+        background-color: rgba(22, 24, 35, 0.03);
+    }
+}
+
+.text {
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+.primary {
+    background-color: var(--primary-color);
+    color: var(--white-color);
+
+    &:hover {
+        border-color: var(--primary-color);
+        background: linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.06),
+                rgba(0, 0, 0, 0.06)
+            ),
+            #fe2c55;
+    }
+}
+
+.outline {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+
+    &:hover {
+        border-color: var(--primary-color);
+        background-color: rgba(254, 44, 85, 0.06);
+    }
+}
+
+.secondary {
+    border-color: rgba(22, 24, 35, 0.12);
+
+    &:hover {
+        background-color: rgba(22, 24, 35, 0.03);
+    }
+}
+
+// Button sizes
+.small {
+    min-width: 88px;
+    padding: 4px 16px;
+}
+
+.large {
+    min-width: 148px;
+    padding: 11px 16px;
+}
