@@ -5,9 +5,8 @@ import classnames from 'classnames/bind';
 import Video from '~/components/Video';
 import { Link } from 'react-router-dom';
 import Image from '~/components/Image';
-import { useAppContext } from '~/store/AppContext';
 import { useSelector } from 'react-redux';
-import { videosSelector } from '~/redux/selectors';
+import { appSelector, usersSelector, videosSelector } from '~/redux/selectors';
 
 const cx = classnames.bind(styles);
 
@@ -17,8 +16,8 @@ export default function Following() {
         volume: 1,
     });
 
-    const [{ users, currentUser }] = useAppContext();
-
+    const { users } = useSelector(usersSelector);
+    const { currentUser } = useSelector(appSelector);
     const videos = useSelector(videosSelector);
 
     const [isPlaying, setIsPlaying] = useState(false);

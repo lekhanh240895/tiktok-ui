@@ -13,7 +13,8 @@ import { DeleteCircleIcon, SearchIcon } from '~/components/Icons';
 import { useDebounce } from '~/hooks/useDebounce';
 import * as userService from '~/services/userService';
 import Button from '~/components/Button';
-import { useAppContext } from '~/store/AppContext';
+import { useSelector } from 'react-redux';
+import { appSelector } from '~/redux/selectors';
 
 const cx = classnames.bind(styles);
 
@@ -24,7 +25,7 @@ export default function Search() {
     const [showResult, setShowResult] = useState(false);
     const [loading, setLoading] = useState(false);
     const inputRef = useRef();
-    const [{ tags, musics }] = useAppContext();
+    const { tags, musics } = useSelector(appSelector);
 
     const navigate = useNavigate();
 
@@ -112,8 +113,6 @@ export default function Search() {
         e.preventDefault();
 
         navigate(`/search?q=${searchValue}`);
-
-        console.log('Form submit');
     };
 
     return (

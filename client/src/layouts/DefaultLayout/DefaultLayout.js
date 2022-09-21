@@ -4,25 +4,27 @@ import Header from '../components/Header/index';
 import Sidebar from '../components/Sidebar/index';
 import styles from './DefaultLayout.module.scss';
 import classnames from 'classnames/bind';
-import { useAppContext } from '~/store/AppContext';
 import UserProfile from '../components/UserProfile';
-import * as actions from '~/store/actions';
+import appSlice from '~/redux/slices/appSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { appSelector, usersSelector } from '~/redux/selectors';
 
 const cx = classnames.bind(styles);
 
 export default function DefaultLayout({ children }) {
-    const [{ users, selectedUserId, mousePosition }, dispatch] =
-        useAppContext();
+    const { selectedUserId, mousePosition } = useSelector(appSelector);
+    const { users } = useSelector(usersSelector);
+    const dispatch = useDispatch();
 
     const tooltipRef = useRef(null);
 
     const selectedUser = users.find((user) => user.id === selectedUserId);
 
     const handleHover = () =>
-        dispatch(actions.setSelectedUserId(selectedUserId));
+        dispatch(appSlice.actions.setSelectedUserId(selectedUserId));
 
     const handleLeave = (e) => {
-        dispatch(actions.setSelectedUserId(null));
+        dispatch(appSlice.actions.setSelectedUserId(null));
     };
 
     useEffect(() => {

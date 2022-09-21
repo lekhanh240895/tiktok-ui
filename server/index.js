@@ -1,20 +1,35 @@
 const express = require("express");
 const app = express();
-const port = 5000;
+const port = 3004;
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const posts = require("./routers/posts");
+const users = require("./routers/users");
+const videos = require("./routers/videos");
+const path = require("path");
 
 // Connect to DB
-const db = require("./config/db/index");
+const db = require("./config/db");
 db.connect();
 
-app.use(bodyParser.json({ limit: "30mb" }));
-app.use(bodyParser.urlencoded({ extended: false, limit: "30mb" }));
+// Static files
+app.use(express.static(path.join(__dirname, "public")));
+
+app.use(
+  express.urlencoded({
+    extended: true,
+    litmit: "30mb",
+  })
+);
+app.use(
+  express.json({
+    limit: "30mb",
+  })
+);
 
 app.use(cors());
 
-app.use("/posts", posts);
+app.use("/users", users);
+app.use("/videos", videos);
 
 app.listen(port, () => {
   console.log(`Example app listening on port http://localhost:${port}`);

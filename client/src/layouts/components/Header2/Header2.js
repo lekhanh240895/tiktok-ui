@@ -26,17 +26,13 @@ import {
 import Image from '~/components/Image';
 import Search from '../Search';
 import config from '~/config';
-import { useAppContext } from '~/store/AppContext';
+import { useSelector } from 'react-redux';
+import { appSelector } from '~/redux/selectors';
 
 const cx = classnames.bind(styles);
 
 export default function Header2() {
-    const [state] = useAppContext();
-
-    const currentUser = state.users.find(
-        (user) => user.id === state.currentUserID,
-    );
-
+    const { currentUser } = useSelector(appSelector);
     if (!currentUser) return;
 
     const MENU_ITEMS = [

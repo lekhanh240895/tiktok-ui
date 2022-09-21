@@ -28,3 +28,13 @@ export const get = async () => {
         console.log(err);
     }
 };
+
+export const edit = async (url) => {
+    try {
+        const response = await httpRequest.post(url);
+
+        return response.data;
+    } catch (err) {
+        console.log(err);
+    }
+};

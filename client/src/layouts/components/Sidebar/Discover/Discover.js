@@ -4,12 +4,13 @@ import { Link } from 'react-router-dom';
 
 import styles from './Discover.module.scss';
 import { MusicIcon, TagIcon } from '~/components/Icons';
-import { useAppContext } from '~/store/AppContext';
+import { useSelector } from 'react-redux';
+import { appSelector } from '~/redux/selectors';
 
 const cx = classnames.bind(styles);
 
 function Discover() {
-    const [{ tags, musics }] = useAppContext();
+    const { tags, musics } = useSelector(appSelector);
 
     const typeKeyword = (type) => {
         switch (type) {

@@ -6,21 +6,22 @@ import Button from '~/components/Button';
 import { CheckedIcon } from '~/components/Icons';
 import Image from '~/components/Image';
 import { Link } from 'react-router-dom';
-import { useAppContext } from '~/store/AppContext';
-import * as actions from '~/store/actions';
 import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { appSelector } from '~/redux/selectors';
+import { updateUser } from '~/redux/slices/usersSlice';
 
 const cx = classnames.bind(styles);
 
 export const UserProfile = ({ data }) => {
-    const [{ currentUser }, dispatch] = useAppContext();
-
+    const { currentUser } = useSelector(appSelector);
     const [isFollow, setIsFollow] = useState(
-        currentUser.followingIDs.includes(data.id),
+        currentUser?.followingIDs.includes(data.id),
     );
+    const dispatch = useDispatch();
 
     useEffect(() => {
-        if (currentUser.followingIDs.includes(data.id)) {
+        if (currentUser?.followingIDs.includes(data.id)) {
             setIsFollow(true);
         } else {
             setIsFollow(false);
@@ -28,11 +29,11 @@ export const UserProfile = ({ data }) => {
     }, [currentUser, data]);
 
     const handleFollow = () => {
-        dispatch(actions.followUser(data.id));
+        dispatch(updateUser(data.id));
     };
 
     const handleUnFollow = () => {
-        dispatch(actions.unFollowUser(data.id));
+        dispatch(updateUser(data.id));
     };
 
     return (

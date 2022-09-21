@@ -15,7 +15,8 @@ import config from '~/config';
 import UserList from './UserList';
 import Discover from './Discover';
 import Footer from './Footer';
-import { useAppContext } from '~/store/AppContext';
+import { useSelector } from 'react-redux';
+import { appSelector, usersSelector } from '~/redux/selectors';
 
 const cx = classnames.bind(styles);
 
@@ -25,7 +26,8 @@ export default function Sidebar({ width }) {
     const [followingUsers, setFollowingUsers] = useState([]);
     const [thumbHeight, setThumbHeight] = useState(20);
 
-    const [{ users, currentUser }] = useAppContext();
+    const { users } = useSelector(usersSelector);
+    const { currentUser } = useSelector(appSelector);
 
     const contentRef = useRef(null);
     const scrollRef = useRef(null);
@@ -42,7 +44,7 @@ export default function Sidebar({ width }) {
                     user.tick &&
                     user.followers_count > 10000 &&
                     !followingIDs.includes(user.id) &&
-                    user.id !== currentUser.id,
+                    user.id !== currentUser?.id,
             );
 
             const followingUsers = users.filter((user) =>
@@ -65,7 +67,7 @@ export default function Sidebar({ width }) {
                 user.tick &&
                 user.followers_count > 10000 &&
                 !followingIDs.includes(user.id) &&
-                user.id !== currentUser.id,
+                user.id !== currentUser?.id,
         );
 
         const followingUsers = users.filter((user) =>
@@ -90,7 +92,7 @@ export default function Sidebar({ width }) {
                     user.tick &&
                     user.followers_count > 10000 &&
                     !followingIDs.includes(user.id) &&
-                    user.id !== currentUser.id,
+                    user.id !== currentUser?.id,
             );
 
             setSuggestUsers(suggestUsers);
@@ -109,7 +111,7 @@ export default function Sidebar({ width }) {
                     user.tick &&
                     user.followers_count > 10000 &&
                     !followingIDs.includes(user.id) &&
-                    user.id !== currentUser.id,
+                    user.id !== currentUser?.id,
             );
 
             setSuggestUsers(suggestUsers.slice(0, 2));

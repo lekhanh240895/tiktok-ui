@@ -4,25 +4,26 @@ import styles from './UserList.module.scss';
 import classnames from 'classnames/bind';
 import Image from '~/components/Image';
 import { CheckedIcon } from '~/components/Icons';
-import * as actions from '~/store/actions';
-import { useAppContext } from '~/store/AppContext';
+
+import { useDispatch } from 'react-redux';
+import appSlice from '~/redux/slices/appSlice';
 
 const cx = classnames.bind(styles);
 
 export default function UserItem({ data, showUser }) {
-    const [, dispatch] = useAppContext();
+    const dispatch = useDispatch();
 
     const handleHover = (e) => {
         if (showUser) {
             const rect = e.target.getBoundingClientRect();
-            dispatch(actions.setSelectedUserId(data.id));
-            dispatch(actions.setMousePosition(rect));
+            dispatch(appSlice.actions.setSelectedUserId(data.id));
+            dispatch(appSlice.actions.setMousePosition(rect));
         }
     };
 
     const handleLeave = (e) => {
         if (showUser) {
-            dispatch(actions.setSelectedUserId(null));
+            dispatch(appSlice.actions.setSelectedUserId(null));
         }
     };
 

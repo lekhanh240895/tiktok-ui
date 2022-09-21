@@ -3,18 +3,24 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import { publicRoutes } from '~/routes/index';
 import DefaultLayout from '~/layouts/DefaultLayout';
-import { useAppContext } from '~/store/AppContext';
-import * as userService from '~/services/userService';
-import * as actions from '~/store/actions';
 import GetAppButton from './components/BottomContainer/BottomContainer';
 import EditProfileModal from './components/modals/EditProfileModal';
-import { useSelector } from 'react-redux';
-import { videosSelector } from './redux/selectors';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+    appSelector,
+    editModalSelector,
+    usersSelector,
+    videosSelector,
+} from './redux/selectors';
+import { fetchUsers } from './redux/slices/usersSlice';
+import appSlice from './redux/slices/appSlice';
 
 function App() {
-    const [{ currentUserID, isEditModalShow }, dispatch] = useAppContext();
-
     const videos = useSelector(videosSelector);
+    const { currentUserID } = useSelector(appSelector);
+    const userList = useSelector(usersSelector);
+    const { isShow } = useSelector(editModalSelector);
+    const dispatch = useDispatch();
 
     function unique(arr) {
         var newArr = [];
@@ -27,28 +33,34 @@ function App() {
     }
 
     useEffect(() => {
+        // Fetch Users
+        dispatch(fetchUsers());
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    useEffect(() => {
+        const currentUser = userList.users.find(
+            (user) => user.id === currentUserID,
+        );
+        dispatch(appSlice.actions.setCurrentUser(currentUser));
+    }, [currentUserID, dispatch, userList]);
+
+    useEffect(() => {
         (async () => {
-            const users = await userService.get();
-            dispatch(actions.fetchUsers(users));
-
-            const currentUser = users.find((user) => user.id === currentUserID);
-            dispatch(actions.setCurrentUser(currentUser));
-
             const tags = videos.reduce((cur, video) => {
                 return cur.concat(video.tags.map((tag) => tag));
             }, []);
 
             const filterTags = unique(tags);
-
             const musics = videos.reduce((cur, video) => {
                 return cur.includes(video.music) ? cur : [...cur, video.music];
             }, []);
 
-            dispatch(actions.setTags(filterTags));
-            dispatch(actions.setMusics(musics));
+            dispatch(appSlice.actions.setTags(filterTags));
+            dispatch(appSlice.actions.setMusics(musics));
         })();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [currentUserID]);
+    }, [videos]);
 
     return (
         <Router>
@@ -78,7 +90,7 @@ function App() {
                     })}
                 </Routes>
                 <GetAppButton />
-                {isEditModalShow && <EditProfileModal />}
+                {isShow && <EditProfileModal />}
             </div>
         </Router>
     );

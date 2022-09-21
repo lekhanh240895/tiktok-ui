@@ -25,7 +25,6 @@ import {
 } from '~/components/Icons';
 import Image from '~/components/Image';
 import Button from '~/components/Button';
-import { useAppContext } from '~/store/AppContext';
 import { configNumber } from '~/services';
 import {
     Container,
@@ -53,9 +52,10 @@ import {
 import { useEffect, useRef, useState } from 'react';
 import VideoComp from './VideoComp';
 import Tippy from '@tippyjs/react';
-import * as actions from '~/store/actions';
-import { useSelector } from 'react-redux';
-import { videosSelector } from '~/redux/selectors';
+import { useDispatch, useSelector } from 'react-redux';
+import { appSelector, usersSelector, videosSelector } from '~/redux/selectors';
+import editModalSlice from '~/redux/slices/editModalSlice';
+import { updateUser } from '~/redux/slices/usersSlice';
 
 const SHARE_MENU = [
     {
@@ -117,18 +117,20 @@ const MORE_MENU = [
 ];
 
 export default function Profile() {
-    const [{ users, currentUser }, dispatch] = useAppContext();
+    const { users } = useSelector(usersSelector);
+    const { currentUser } = useSelector(appSelector);
     const videos = useSelector(videosSelector);
+
     const [activeTab, setActiveTab] = useState('videos');
     const [isUser, setIsUser] = useState(false);
     const [isMore, setIsMore] = useState(false);
     const [isFollowing, setIsFollowing] = useState(false);
+    const dispatch = useDispatch();
 
     const lineRef = useRef(null);
 
     const { nickname } = useParams();
-
-    const user = users.find((user) => user.nickname === nickname);
+    const user = users?.find((user) => user.nickname === nickname);
 
     useEffect(() => {
         if (user?.id === currentUser?.id) {
@@ -136,13 +138,20 @@ export default function Profile() {
         } else {
             setIsUser(false);
 
-            if (currentUser?.followingIDs?.includes(user.id)) {
+            if (currentUser?.followingIDs?.includes(user?.id)) {
                 setIsFollowing(true);
             } else {
                 setIsFollowing(false);
             }
         }
     }, [user, currentUser]);
+
+    useEffect(() => {
+        if (lineRef.current) {
+            handleHoverNavItem('videos');
+            setActiveTab('videos');
+        }
+    }, [user]);
 
     const handleHoverNavItem = (name) => {
         if (name === 'liked') {
@@ -152,19 +161,10 @@ export default function Profile() {
         }
     };
 
-    useEffect(() => {
-        if (lineRef.current) {
-            handleHoverNavItem('videos');
-            setActiveTab('videos');
-        }
-    }, [user]);
-
-    if (!user) return;
-
-    const userVideos = videos.filter((video) => video.userId === user.id);
+    const userVideos = videos.filter((video) => video.userId === user?.id);
 
     const likedVideos = videos.filter((video) =>
-        user.likedVideoIds?.includes(video.id),
+        user?.likedVideoIds?.includes(video.id),
     );
 
     const handleClickItem = (tab) => {
@@ -172,13 +172,14 @@ export default function Profile() {
     };
 
     const handleFollow = () => {
-        dispatch(actions.followUser(user.id));
+        dispatch(updateUser(user?.id));
     };
 
     const handleUnFollow = () => {
-        dispatch(actions.unFollowUser(user.id));
+        dispatch(updateUser(user?.id));
     };
 
+    if (!user) return;
     return (
         <Container>
             <Header>
@@ -200,7 +201,9 @@ export default function Profile() {
                                     <EditIcon width="2rem" height="2rem" />
                                 }
                                 onClick={() =>
-                                    dispatch(actions.openEditModal(true))
+                                    dispatch(
+                                        editModalSlice.actions.showEditModal(),
+                                    )
                                 }
                             >
                                 Edit profile

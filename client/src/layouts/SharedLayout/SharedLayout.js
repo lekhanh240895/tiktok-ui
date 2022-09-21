@@ -5,24 +5,26 @@ import styles from './SharedLayout.module.scss';
 import classnames from 'classnames/bind';
 import HeaderV2 from '../components/Header2';
 import UserProfile from '../components/UserProfile';
-import { useAppContext } from '~/store/AppContext';
-import * as actions from '~/store/actions';
+import { useDispatch, useSelector } from 'react-redux';
+import { appSelector, usersSelector } from '~/redux/selectors';
+import appSlice from '~/redux/slices/appSlice';
 
 const cx = classnames.bind(styles);
 
 export default function SharedLayout({ children }) {
-    const [{ users, selectedUserId, mousePosition }, dispatch] =
-        useAppContext();
+    const { selectedUserId, mousePosition } = useSelector(appSelector);
+    const { users } = useSelector(usersSelector);
+    const dispatch = useDispatch();
 
     const tooltipRef = useRef(null);
 
     const selectedUser = users.find((user) => user.id === selectedUserId);
 
     const handleHover = () =>
-        dispatch(actions.setSelectedUserId(selectedUserId));
+        dispatch(appSlice.actions.setSelectedUserId(selectedUserId));
 
     const handleLeave = (e) => {
-        dispatch(actions.setSelectedUserId(null));
+        dispatch(appSlice.actions.setSelectedUserId(null));
     };
 
     useEffect(() => {
