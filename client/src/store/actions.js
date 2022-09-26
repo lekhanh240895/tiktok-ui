@@ -13,7 +13,7 @@ import {
     UPDATE_PROFILE,
 } from './constants';
 
-export const fetchUsers = (payload) => ({
+export const getUsers = (payload) => ({
     type: FETCH_USERS,
     payload,
 });
@@ -33,7 +33,7 @@ export const setSelectedVideoId = (payload) => ({
     payload,
 });
 
-export const setSelectedUserId = (payload) => ({
+export const setSelectedUserID = (payload) => ({
     type: SET_SELECTED_USER_ID,
     payload,
 });

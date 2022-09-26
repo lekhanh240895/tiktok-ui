@@ -99,7 +99,7 @@ const MORE_MENU = [
 ];
 
 export default function Music() {
-    const videos = useSelector(videosSelector);
+    const { videos } = useSelector(videosSelector);
     const [isMore, setIsMore] = useState(false);
     const [isPlaying, setIsPLaying] = useState(false);
     const { musicname } = useParams();
@@ -316,7 +316,7 @@ export default function Music() {
 
             <VideoList>
                 {musicVideos.map((video) => (
-                    <VideoItem key={video.id}>
+                    <VideoItem key={video._id}>
                         <VideoComp src={video.src} title={video.title} />
                     </VideoItem>
                 ))}

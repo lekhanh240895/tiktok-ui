@@ -1,19 +1,23 @@
 import PropTypes from 'prop-types';
 import React, { useEffect, useRef, useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFlag, faPlay } from '@fortawesome/free-solid-svg-icons';
 import classnames from 'classnames/bind';
 import HeadlessTippy from '@tippyjs/react/headless';
 
 import styles from './Video.module.scss';
-import { MutedVolumeIcon, PauseIcon, VolumeIcon } from '~/components/Icons';
+import {
+    FlagIcon,
+    MutedVolumeIcon,
+    PauseIcon,
+    PlayIcon,
+    VolumeIcon,
+} from '~/components/Icons';
 import ActionList from './ActionList';
 import Info from './Info';
 import { useElementOnScreen } from '~/hooks/useElementOnScreen';
 
 const cx = classnames.bind(styles);
 export default function Video({
-    data,
+    video,
     user,
     isMuted,
     volume,
@@ -95,7 +99,7 @@ export default function Video({
 
     return (
         <div className={cx('wrapper')}>
-            <Info data={data} user={user} />
+            <Info video={video} user={user} />
 
             <div className={cx('video-card-wrapper')}>
                 <div className={cx('video-card-container')}>
@@ -118,7 +122,7 @@ export default function Video({
                             id="targetVideo"
                             volume={volume}
                         >
-                            <source src={data.src} type="video/mp4"></source>
+                            <source src={video.src} type="video/mp4"></source>
                         </video>
 
                         <div className={cx('buttons-in-video')}>
@@ -126,11 +130,7 @@ export default function Video({
                                 className={cx('play-icon', 'icon-wrapper')}
                                 onClick={handlePlay}
                             >
-                                {isPlaying ? (
-                                    <PauseIcon />
-                                ) : (
-                                    <FontAwesomeIcon icon={faPlay} />
-                                )}
+                                {isPlaying ? <PauseIcon /> : <PlayIcon />}
                             </span>
 
                             <div>
@@ -176,7 +176,7 @@ export default function Video({
                                 className={cx('report-icon', 'icon-wrapper')}
                                 onClick={handleReport}
                             >
-                                <FontAwesomeIcon icon={faFlag} />
+                                <FlagIcon />
                                 Report
                             </p>
 
@@ -222,14 +222,14 @@ export default function Video({
                     </div>
                 </div>
 
-                <ActionList data={data} />
+                <ActionList video={video} />
             </div>
         </div>
     );
 }
 
 Video.propTypes = {
-    data: PropTypes.object.isRequired,
+    video: PropTypes.object.isRequired,
     isMuted: PropTypes.bool.isRequired,
     volume: PropTypes.number.isRequired,
     onMutedVolume: PropTypes.func.isRequired,

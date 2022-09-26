@@ -41,12 +41,14 @@
     background-color: transparent;
     height: 100%;
     cursor: pointer;
+    margin-left: 5px;
 }
 
 .header-title {
     font-size: 1.6rem;
     font-weight: 600;
     line-height: 22px;
+    font-family: var(--font-family);
     position: absolute;
     top: 50%;
     left: 50%;

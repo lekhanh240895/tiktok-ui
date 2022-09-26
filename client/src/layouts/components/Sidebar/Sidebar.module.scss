@@ -21,6 +21,33 @@
     }
 }
 
+.login {
+    padding: 16px 12px 16px 8px;
+    position: relative;
+
+    p {
+        font-size: 1.6rem;
+        line-height: 22px;
+        color: rgb(22 24 35 / 50%);
+    }
+
+    &:after {
+        content: '';
+        height: 1px;
+        background-color: rgba(22, 24, 35, 0.12);
+        position: absolute;
+        top: 0;
+        left: 8px;
+        right: 8px;
+    }
+}
+
+.login-btn {
+    width: 100%;
+    padding: 14px 18px;
+    margin-top: 20px;
+}
+
 .scrollbar {
     position: absolute;
     top: 0;
@@ -39,6 +66,10 @@
     .wrapper {
         width: 55px;
         padding: 0 8px;
+    }
+
+    .login {
+        display: none;
     }
 
     .sidebar-scroll-container {

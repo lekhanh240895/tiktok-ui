@@ -2,18 +2,25 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames/bind';
 import styles from './Menu.module.scss';
 import Tippy from '@tippyjs/react/headless';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Wrapper as PopperWrapper } from '~/components/Popper';
 import MenuItem from './MenuItem';
 import Header from './Header';
 import { ArrowIcon } from '~/components/Icons';
+import { useDispatch } from 'react-redux';
+import authSlice from '~/redux/slices/authSlice';
 
 const cx = classnames.bind(styles);
 
 export default function Menu({ children, items, hideOnClick = false }) {
     const [history, setHistory] = useState([{ data: items }]);
     const current = history[history.length - 1];
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        setHistory([{ data: items }]);
+    }, [items]);
 
     const renderItems = () => {
         return current.data.map((item, index) => {
@@ -30,7 +37,12 @@ export default function Menu({ children, items, hideOnClick = false }) {
                                 item.children,
                             ]);
                         } else {
-                            // Handle logic here
+                            if (item.title === 'Log out') {
+                                localStorage.removeItem('token');
+                                dispatch(
+                                    authSlice.actions.setCurrentUser(null),
+                                );
+                            }
                         }
                     }}
                 />

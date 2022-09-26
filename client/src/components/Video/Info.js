@@ -9,13 +9,13 @@ import Image from '../Image';
 
 const cx = classnames.bind(styles);
 
-export default function Info({ data, user }) {
-    const tags = data.title.trim().slice(data.title.indexOf('#')).split(' ');
+export default function Info({ video, user }) {
+    const tags = video.title.trim().slice(video.title.indexOf('#')).split(' ');
 
     return (
         <div className={cx('info')}>
             <div className={cx('header')}>
-                <Link to={`/@${user?.nickname}`}>
+                <Link to={`/@${user?.username}`}>
                     <Image
                         className={cx('avatar')}
                         src={user?.avatar}
@@ -23,9 +23,9 @@ export default function Info({ data, user }) {
                     />
                 </Link>
 
-                <Link to={`/@${user?.nickname}`} className={cx('styleAuthor')}>
-                    <h3 className={cx('nickname')}>
-                        {user?.nickname}
+                <Link to={`/@${user?.username}`} className={cx('styleAuthor')}>
+                    <h3 className={cx('username')}>
+                        {user?.username}
                         {user?.tick && (
                             <CheckedIcon
                                 width="1.4rem"
@@ -40,7 +40,7 @@ export default function Info({ data, user }) {
             </div>
 
             <p className={cx('video-title')}>
-                {data.title.slice(0, data.title.indexOf('#'))}
+                {video.title.slice(0, video.title.indexOf('#'))}
                 {/* Keywords */}
 
                 {tags.map((tag, index) => (
@@ -56,9 +56,9 @@ export default function Info({ data, user }) {
                 <Button
                     leftIcon={<MusicIcon width="1.6rem" height="1.6rem" />}
                     text={true}
-                    to={`/music/${data.music}`}
+                    to={`/music/${video.music}`}
                 >
-                    {data.music}
+                    {video.music}
                 </Button>
             </h4>
         </div>

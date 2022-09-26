@@ -65,9 +65,9 @@
 .primary {
     background-color: var(--primary-color);
     color: var(--white-color);
+    padding: 8px 16px;
 
     &:hover {
-        border-color: var(--primary-color);
         background: linear-gradient(
                 0deg,
                 rgba(0, 0, 0, 0.06),

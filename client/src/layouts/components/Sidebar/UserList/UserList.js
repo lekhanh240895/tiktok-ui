@@ -23,7 +23,7 @@ export default function UserList({
 
             <ul className={cx('user-list')}>
                 {users.map((user) => (
-                    <UserItem key={user.id} data={user} showUser={showUser} />
+                    <UserItem key={user._id} user={user} showUser={showUser} />
                 ))}
             </ul>
 

@@ -6,7 +6,7 @@ import Video from '~/components/Video';
 import { Link } from 'react-router-dom';
 import Image from '~/components/Image';
 import { useSelector } from 'react-redux';
-import { appSelector, usersSelector, videosSelector } from '~/redux/selectors';
+import { authSelector, usersSelector, videosSelector } from '~/redux/selectors';
 
 const cx = classnames.bind(styles);
 
@@ -17,13 +17,13 @@ export default function Following() {
     });
 
     const { users } = useSelector(usersSelector);
-    const { currentUser } = useSelector(appSelector);
-    const videos = useSelector(videosSelector);
+    const { currentUser } = useSelector(authSelector);
+    const { videos } = useSelector(videosSelector);
 
     const [isPlaying, setIsPlaying] = useState(false);
 
     const followingUserVideos = videos.filter((video) =>
-        currentUser?.followingIDs?.includes(video.userId),
+        currentUser?.followingIDs?.includes(video.userID),
     );
 
     useEffect(() => {
@@ -66,11 +66,11 @@ export default function Following() {
             <ul className={cx('video-list')}>
                 {followingUserVideos.map((video) => {
                     const user = users.find(
-                        (user) => user?.id === video.userId,
+                        (user) => user?._id === video.userID,
                     );
                     return (
-                        <li key={video.id} className={cx('video-item')}>
-                            <Link to={`/@${user?.nickname}`}>
+                        <li key={video._id} className={cx('video-item')}>
+                            <Link to={`/@${user?.username}`}>
                                 <Image
                                     className={cx('avatar')}
                                     src={user?.avatar}
@@ -79,7 +79,7 @@ export default function Following() {
                             </Link>
 
                             <Video
-                                data={video}
+                                video={video}
                                 user={user}
                                 isMuted={settings.isMuted}
                                 volume={settings.volume}

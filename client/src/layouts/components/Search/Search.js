@@ -1,5 +1,3 @@
-import { faSpinner } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import HeadlessTippy from '@tippyjs/react/headless';
 import classnames from 'classnames/bind';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -9,13 +7,12 @@ import config from '~/config';
 import styles from './Search.module.scss';
 import { Wrapper as PopperWrapper } from '~/components/Popper';
 import AccountItem from '../AccountItem';
-import { DeleteCircleIcon, SearchIcon } from '~/components/Icons';
+import { DeleteCircleIcon, SearchIcon, SpinnerIcon } from '~/components/Icons';
 import { useDebounce } from '~/hooks/useDebounce';
 import * as userService from '~/services/userService';
 import Button from '~/components/Button';
 import { useSelector } from 'react-redux';
 import { appSelector } from '~/redux/selectors';
-
 const cx = classnames.bind(styles);
 
 export default function Search() {
@@ -146,7 +143,7 @@ export default function Search() {
                                         key={item.id}
                                         onClick={handleHideResult}
                                     >
-                                        <AccountItem data={item} />
+                                        <AccountItem user={item} />
                                     </li>
                                 ))}
                             </ul>
@@ -186,7 +183,7 @@ export default function Search() {
                             className={cx('loading', 'icon-wrapper')}
                             type="button"
                         >
-                            <FontAwesomeIcon icon={faSpinner} />
+                            <SpinnerIcon width="1.6rem" height="1.6rem" />
                         </button>
                     )}
 

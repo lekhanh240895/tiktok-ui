@@ -53,9 +53,10 @@ import { useEffect, useRef, useState } from 'react';
 import VideoComp from './VideoComp';
 import Tippy from '@tippyjs/react';
 import { useDispatch, useSelector } from 'react-redux';
-import { appSelector, usersSelector, videosSelector } from '~/redux/selectors';
+import { authSelector, usersSelector, videosSelector } from '~/redux/selectors';
 import editModalSlice from '~/redux/slices/editModalSlice';
-import { updateUser } from '~/redux/slices/usersSlice';
+import { followUser, unfollowUser } from '~/redux/slices/usersSlice';
+import authSlice from '~/redux/slices/authSlice';
 
 const SHARE_MENU = [
     {
@@ -118,8 +119,8 @@ const MORE_MENU = [
 
 export default function Profile() {
     const { users } = useSelector(usersSelector);
-    const { currentUser } = useSelector(appSelector);
-    const videos = useSelector(videosSelector);
+    const { currentUser } = useSelector(authSelector);
+    const { videos } = useSelector(videosSelector);
 
     const [activeTab, setActiveTab] = useState('videos');
     const [isUser, setIsUser] = useState(false);
@@ -129,22 +130,22 @@ export default function Profile() {
 
     const lineRef = useRef(null);
 
-    const { nickname } = useParams();
-    const user = users?.find((user) => user.nickname === nickname);
+    const { username } = useParams();
+    const user = users?.find((user) => user.username === username);
 
     useEffect(() => {
-        if (user?.id === currentUser?.id) {
+        if (user?._id === currentUser?._id) {
             setIsUser(true);
         } else {
             setIsUser(false);
 
-            if (currentUser?.followingIDs?.includes(user?.id)) {
+            if (currentUser?.followingIDs?.includes(user?._id)) {
                 setIsFollowing(true);
             } else {
                 setIsFollowing(false);
             }
         }
-    }, [user, currentUser]);
+    }, [users, user, currentUser]);
 
     useEffect(() => {
         if (lineRef.current) {
@@ -161,10 +162,10 @@ export default function Profile() {
         }
     };
 
-    const userVideos = videos.filter((video) => video.userId === user?.id);
+    const userVideos = videos.filter((video) => video.userID === user?._id);
 
     const likedVideos = videos.filter((video) =>
-        user?.likedVideoIds?.includes(video.id),
+        user?.likedVideoIDs?.includes(video._id),
     );
 
     const handleClickItem = (tab) => {
@@ -172,11 +173,23 @@ export default function Profile() {
     };
 
     const handleFollow = () => {
-        dispatch(updateUser(user?.id));
+        const updatedUser = {
+            ...currentUser,
+            followingIDs: currentUser.followingIDs.concat(user._id),
+        };
+        dispatch(authSlice.actions.setCurrentUser(updatedUser));
+        dispatch(followUser(user._id));
     };
 
     const handleUnFollow = () => {
-        dispatch(updateUser(user?.id));
+        const updatedUser = {
+            ...currentUser,
+            followingIDs: currentUser.followingIDs.filter(
+                (id) => id !== user._id,
+            ),
+        };
+        dispatch(authSlice.actions.setCurrentUser(updatedUser));
+        dispatch(unfollowUser(user._id));
     };
 
     if (!user) return;
@@ -187,7 +200,7 @@ export default function Profile() {
                     <Image src={user.avatar} alt={user.full_name} />
                     <ShareTitle>
                         <h2>
-                            {user.nickname}
+                            {user.username}
                             {user.tick && (
                                 <CheckedIcon width="2rem" height="2rem" />
                             )}
@@ -201,9 +214,7 @@ export default function Profile() {
                                     <EditIcon width="2rem" height="2rem" />
                                 }
                                 onClick={() =>
-                                    dispatch(
-                                        editModalSlice.actions.showEditModal(),
-                                    )
+                                    dispatch(editModalSlice.actions.show())
                                 }
                             >
                                 Edit profile
@@ -347,77 +358,37 @@ export default function Profile() {
                 </HeaderActions>
             </Header>
 
-            {activeTab === 'videos' ? (
-                <>
-                    <NavList>
-                        <NavItem
-                            active
-                            onMouseEnter={() => handleHoverNavItem('videos')}
-                            onClick={() => handleClickItem('videos')}
-                        >
-                            Videos
-                        </NavItem>
+            <NavList>
+                <NavItem
+                    active
+                    onMouseEnter={() => handleHoverNavItem('videos')}
+                    onClick={() => handleClickItem('videos')}
+                >
+                    Videos
+                </NavItem>
 
-                        <NavItem
-                            onMouseEnter={() => handleHoverNavItem('liked')}
-                            onClick={() => handleClickItem('liked')}
-                        >
-                            <span>
-                                <LockIcon width="1.8rem" height="1.8rem" />
-                            </span>
-                            Liked
-                        </NavItem>
+                <NavItem
+                    onMouseEnter={() => handleHoverNavItem('liked')}
+                    onClick={() => handleClickItem('liked')}
+                >
+                    <span>
+                        <LockIcon width="1.8rem" height="1.8rem" />
+                    </span>
+                    Liked
+                </NavItem>
 
-                        <Line ref={lineRef}></Line>
-                    </NavList>
+                <Line ref={lineRef}></Line>
+            </NavList>
 
-                    <VideoList>
-                        {userVideos.map((video) => (
-                            <VideoItem key={video.id}>
-                                <VideoComp
-                                    src={video.src}
-                                    title={video.title}
-                                />
-                            </VideoItem>
-                        ))}
-                    </VideoList>
-                </>
-            ) : (
-                <>
-                    <NavList>
-                        <NavItem
-                            onMouseEnter={() => handleHoverNavItem('videos')}
-                            onClick={() => handleClickItem('videos')}
-                        >
-                            Videos
-                        </NavItem>
-
-                        <NavItem
-                            active
-                            onMouseEnter={() => handleHoverNavItem('liked')}
-                            onClick={() => handleClickItem('liked')}
-                        >
-                            <span>
-                                <LockIcon width="1.8rem" height="1.8rem" />
-                            </span>
-                            Liked
-                        </NavItem>
-
-                        <Line ref={lineRef}></Line>
-                    </NavList>
-
-                    <VideoList>
-                        {likedVideos.map((video) => (
-                            <VideoItem key={video.id}>
-                                <VideoComp
-                                    src={video.src}
-                                    title={video.title}
-                                />
-                            </VideoItem>
-                        ))}
-                    </VideoList>
-                </>
-            )}
+            <VideoList>
+                {(activeTab === 'videos' ? userVideos : likedVideos).map(
+                    (video) => (
+                        <VideoItem key={video._id}>
+                            <VideoComp src={video.src} title={video.title} />
+                        </VideoItem>
+                    ),
+                )}
+            </VideoList>
         </Container>
     );
 }

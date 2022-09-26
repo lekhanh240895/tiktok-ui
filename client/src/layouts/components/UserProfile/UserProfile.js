@@ -8,41 +8,56 @@ import Image from '~/components/Image';
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { appSelector } from '~/redux/selectors';
-import { updateUser } from '~/redux/slices/usersSlice';
+import { authSelector } from '~/redux/selectors';
+import { unfollowUser, followUser } from '~/redux/slices/usersSlice';
+import loginModalSlice from '~/redux/slices/loginModalSlice';
+import authSlice from '~/redux/slices/authSlice';
 
 const cx = classnames.bind(styles);
 
-export const UserProfile = ({ data }) => {
-    const { currentUser } = useSelector(appSelector);
+export const UserProfile = ({ user }) => {
+    const { currentUser } = useSelector(authSelector);
     const [isFollow, setIsFollow] = useState(
-        currentUser?.followingIDs.includes(data.id),
+        currentUser?.followingIDs.includes(user._id),
     );
     const dispatch = useDispatch();
 
     useEffect(() => {
-        if (currentUser?.followingIDs.includes(data.id)) {
+        if (currentUser?.followingIDs.includes(user._id)) {
             setIsFollow(true);
         } else {
             setIsFollow(false);
         }
-    }, [currentUser, data]);
+    }, [currentUser, user]);
 
     const handleFollow = () => {
-        dispatch(updateUser(data.id));
+        if (!currentUser) dispatch(loginModalSlice.actions.show());
+        const updatedUser = {
+            ...currentUser,
+            followingIDs: currentUser.followingIDs.concat(user._id),
+        };
+        dispatch(authSlice.actions.setCurrentUser(updatedUser));
+        dispatch(followUser(user._id));
     };
 
     const handleUnFollow = () => {
-        dispatch(updateUser(data.id));
+        const updatedUser = {
+            ...currentUser,
+            followingIDs: currentUser.followingIDs.filter(
+                (id) => id !== user._id,
+            ),
+        };
+        dispatch(authSlice.actions.setCurrentUser(updatedUser));
+        dispatch(unfollowUser(user._id));
     };
 
     return (
         <div className={cx('wrapper')}>
             <div className={cx('header')}>
-                <Link to={`/@${data.nickname}`} replace>
+                <Link to={`/@${user.username}`} replace>
                     <Image
-                        src={data.avatar}
-                        alt={data.full_name}
+                        src={user.avatar}
+                        alt={user.full_name}
                         className={cx('avatar')}
                     />
                 </Link>
@@ -67,10 +82,10 @@ export const UserProfile = ({ data }) => {
             </div>
 
             <div className={cx('info')}>
-                <Link to={`/@${data.nickname}`} replace>
+                <Link to={`/@${user.username}`} replace>
                     <h4 className={cx('name')}>
-                        {data.full_name}
-                        {data.tick && (
+                        {user.full_name}
+                        {user.tick && (
                             <CheckedIcon
                                 width="1.4rem"
                                 height="1.4rem"
@@ -80,8 +95,8 @@ export const UserProfile = ({ data }) => {
                     </h4>
                 </Link>
 
-                <Link to={`/@${data.nickname}`} replace>
-                    <p className={cx('desc')}>{data.nickname}</p>
+                <Link to={`/@${user.username}`} replace>
+                    <p className={cx('desc')}>{user.username}</p>
                 </Link>
 
                 <p className={cx('user-stat')}>
@@ -100,6 +115,6 @@ export const UserProfile = ({ data }) => {
 };
 
 UserProfile.propTypes = {
-    data: PropTypes.object.isRequired,
+    user: PropTypes.object.isRequired,
 };
 export default UserProfile;

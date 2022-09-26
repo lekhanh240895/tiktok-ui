@@ -90,6 +90,8 @@ input,
 [tabindex] {
     border: none;
     outline: none;
+    font-family: var(--font-family);
+    color: var(--text-color);
 }
 
 ul {
@@ -130,7 +132,6 @@ body {
 }
 
 //Custom scrollbar
-
 html *::-webkit-scrollbar {
     border-radius: 0;
     width: 8px;

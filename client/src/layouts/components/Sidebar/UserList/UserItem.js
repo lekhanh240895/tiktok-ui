@@ -10,26 +10,26 @@ import appSlice from '~/redux/slices/appSlice';
 
 const cx = classnames.bind(styles);
 
-export default function UserItem({ data, showUser }) {
+export default function UserItem({ user, showUser }) {
     const dispatch = useDispatch();
 
     const handleHover = (e) => {
         if (showUser) {
             const rect = e.target.getBoundingClientRect();
-            dispatch(appSlice.actions.setSelectedUserId(data.id));
+            dispatch(appSlice.actions.setSelectedUserID(user._id));
             dispatch(appSlice.actions.setMousePosition(rect));
         }
     };
 
     const handleLeave = (e) => {
         if (showUser) {
-            dispatch(appSlice.actions.setSelectedUserId(null));
+            dispatch(appSlice.actions.setSelectedUserID(null));
         }
     };
 
     return (
         <Link
-            to={`/@${data.nickname}`}
+            to={`/@${user.username}`}
             replace
             className={cx('user-item')}
             onMouseEnter={handleHover}
@@ -37,15 +37,15 @@ export default function UserItem({ data, showUser }) {
         >
             <Image
                 className={cx('avatar')}
-                alt={data.full_name}
-                src={data.avatar}
+                alt={user.full_name}
+                src={user.avatar}
             />
 
             <div className={cx('info')}>
                 <h4 className={cx('name')}>
-                    {data.nickname}
+                    {user.username}
 
-                    {data.tick && (
+                    {user.tick && (
                         <CheckedIcon
                             className={cx('check')}
                             width="1.4rem"
@@ -53,12 +53,12 @@ export default function UserItem({ data, showUser }) {
                         />
                     )}
                 </h4>
-                <p className={cx('description')}>{data.full_name}</p>
+                <p className={cx('description')}>{user.full_name}</p>
             </div>
         </Link>
     );
 }
 
 UserItem.propTypes = {
-    data: PropTypes.object.isRequired,
+    user: PropTypes.object.isRequired,
 };

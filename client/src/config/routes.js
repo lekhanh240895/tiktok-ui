@@ -1,11 +1,12 @@
 export const routes = {
     home: '/',
     following: '/following',
-    profile: '/@:nickname',
+    profile: '/@:username',
     upload: '/upload',
     search: '/search',
     live: '/live',
     feedback: '/feedback',
     tag: '/tag/:tagname',
     music: '/music/:musicname',
+    notFound: '*',
 };

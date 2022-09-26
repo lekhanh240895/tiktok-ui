@@ -1,8 +1,7 @@
 import PropTypes from 'prop-types';
-import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classnames from 'classnames/bind';
 import styles from './Menu.module.scss';
+import { LeftArrowIcon } from '~/components/Icons';
 
 const cx = classnames.bind(styles);
 
@@ -10,7 +9,7 @@ export default function Header({ title, onBack }) {
     return (
         <div className={cx('header')}>
             <button className={cx('back-btn')} onClick={onBack}>
-                <FontAwesomeIcon icon={faChevronLeft} />
+                <LeftArrowIcon width="2rem" height="2rem" />
             </button>
             <h4 className={cx('header-title')}>{title}</h4>
 

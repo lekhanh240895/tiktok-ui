@@ -37,7 +37,6 @@ export default function Button({
 
     const props = {
         onClick,
-
         ...passProps,
     };
 

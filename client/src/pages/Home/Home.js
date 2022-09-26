@@ -7,8 +7,9 @@ import { Link } from 'react-router-dom';
 import Image from '~/components/Image';
 import Button from '~/components/Button';
 import { useElementOnScreen } from '~/hooks/useElementOnScreen';
-import { useSelector } from 'react-redux';
-import { usersSelector, videosSelector } from '~/redux/selectors';
+import { useDispatch, useSelector } from 'react-redux';
+import { authSelector, usersSelector, videosSelector } from '~/redux/selectors';
+import loginModalSlice from '~/redux/slices/loginModalSlice';
 
 const cx = classnames.bind(styles);
 
@@ -18,8 +19,22 @@ export default function Home() {
         volume: 1,
     });
     const { users } = useSelector(usersSelector);
-    const videos = useSelector(videosSelector);
+    const { videos } = useSelector(videosSelector);
     const [videoCount, setVideoCount] = useState(1);
+
+    const [containerRef, isVisible] = useElementOnScreen({
+        threshold: 0,
+    });
+    const { currentUser } = useSelector(authSelector);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        if (isVisible) {
+            if (videoCount < videos.length)
+                setVideoCount((prevState) => prevState + 1);
+            else setVideoCount(videos.length);
+        }
+    }, [isVisible, videoCount, videos]);
 
     useEffect(() => {
         const settings = JSON.parse(localStorage.getItem('userSettings'));
@@ -52,28 +67,20 @@ export default function Home() {
         setConfig('volume', newVolume);
     };
 
-    const [containerRef, isVisible] = useElementOnScreen({
-        threshold: 0,
-    });
-
-    useEffect(() => {
-        if (isVisible) {
-            if (videoCount < videos.length)
-                setVideoCount((prevState) => prevState + 1);
-            else setVideoCount(videos.length);
-        }
-    }, [isVisible, videoCount, videos]);
+    const handleFollow = () => {
+        if (!currentUser) dispatch(loginModalSlice.actions.show());
+    };
 
     return (
         <div className={cx('wrapper')}>
             <ul className={cx('video-list')}>
                 {videos.slice(0, videoCount).map((video) => {
                     const user = users.find(
-                        (user) => user?.id === video.userId,
+                        (user) => user?._id === video.userID,
                     );
                     return (
-                        <li key={video.id} className={cx('video-item')}>
-                            <Link to={`/@${user?.nickname}`}>
+                        <li key={video._id} className={cx('video-item')}>
+                            <Link to={`/@${user?.username}`}>
                                 <Image
                                     className={cx('avatar')}
                                     src={user?.avatar}
@@ -82,7 +89,7 @@ export default function Home() {
                             </Link>
 
                             <Video
-                                data={video}
+                                video={video}
                                 user={user}
                                 isMuted={settings.isMuted}
                                 volume={settings.volume}
@@ -90,7 +97,12 @@ export default function Home() {
                                 onVolumeChange={handleVolumeChange}
                             />
 
-                            <Button outline small className={cx('follow-btn')}>
+                            <Button
+                                outline
+                                small
+                                className={cx('follow-btn')}
+                                onClick={handleFollow}
+                            >
                                 Follow
                             </Button>
                         </li>

@@ -12,23 +12,23 @@ import { appSelector, usersSelector } from '~/redux/selectors';
 const cx = classnames.bind(styles);
 
 export default function DefaultLayout({ children }) {
-    const { selectedUserId, mousePosition } = useSelector(appSelector);
+    const { selectedUserID, mousePosition } = useSelector(appSelector);
     const { users } = useSelector(usersSelector);
     const dispatch = useDispatch();
 
     const tooltipRef = useRef(null);
 
-    const selectedUser = users.find((user) => user.id === selectedUserId);
+    const selectedUser = users.find((user) => user._id === selectedUserID);
 
     const handleHover = () =>
-        dispatch(appSlice.actions.setSelectedUserId(selectedUserId));
+        dispatch(appSlice.actions.setSelectedUserID(selectedUserID));
 
     const handleLeave = (e) => {
-        dispatch(appSlice.actions.setSelectedUserId(null));
+        dispatch(appSlice.actions.setSelectedUserID(null));
     };
 
     useEffect(() => {
-        if (selectedUserId) {
+        if (selectedUserID) {
             if (window.innerWidth > 1024) {
                 tooltipRef.current.style.top =
                     mousePosition.top + window.scrollY + 'px';
@@ -41,7 +41,7 @@ export default function DefaultLayout({ children }) {
                 tooltipRef.current.style.display = 'block';
             }
         }
-    }, [mousePosition, selectedUserId]);
+    }, [mousePosition, selectedUserID]);
 
     return (
         <div className={cx('wrapper')}>
@@ -61,7 +61,7 @@ export default function DefaultLayout({ children }) {
                                 onMouseEnter={handleHover}
                                 onMouseLeave={handleLeave}
                             >
-                                <UserProfile data={selectedUser} />
+                                <UserProfile user={selectedUser} />
                             </div>
                         )}
                     </div>

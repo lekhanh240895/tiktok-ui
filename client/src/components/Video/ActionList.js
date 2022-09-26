@@ -5,24 +5,36 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { configNumber } from '~/services';
 import { ShareIcon } from '../Icons';
 import { useDispatch, useSelector } from 'react-redux';
-import videosSlice from '~/redux/slices/videosSlice';
-import { appSelector } from '~/redux/selectors';
+import { authSelector } from '~/redux/selectors';
+import { updateVideo } from '~/redux/slices/videosSlice';
+import loginModalSlice from '~/redux/slices/loginModalSlice';
 
 const cx = classnames.bind(styles);
 
-export default function ActionList({ data }) {
-    const { currentUserID } = useSelector(appSelector);
+export default function ActionList({ video }) {
+    const { currentUser } = useSelector(authSelector);
     const dispatch = useDispatch();
 
-    const isLikedByUser = data.likes.includes(currentUserID);
+    const isLikedByUser = video.likes.includes(currentUser?._id);
 
-    const handleLike = () => {
-        dispatch(
-            videosSlice.actions.likeVideo({
-                id: data.id,
-                currentUserID,
-            }),
-        );
+    const handleLike = (e) => {
+        if (!currentUser) {
+            dispatch(loginModalSlice.actions.show());
+        } else {
+            if (isLikedByUser) {
+                const updatedVideo = {
+                    ...video,
+                    likes: video.likes.filter((id) => id !== currentUser?._id),
+                };
+                dispatch(updateVideo({ id: video._id, updatedVideo }));
+            } else {
+                const updatedVideo = {
+                    ...video,
+                    likes: video.likes.concat(currentUser?._id),
+                };
+                dispatch(updateVideo({ id: video._id, updatedVideo }));
+            }
+        }
     };
 
     return (
@@ -43,7 +55,7 @@ export default function ActionList({ data }) {
                         />
                     </span>
                     <span className={cx('video-stat')}>
-                        {configNumber(data.likes.length)}
+                        {configNumber(video.likes.length)}
                     </span>
                 </li>
                 <li className={cx('action-item')}>
@@ -57,7 +69,7 @@ export default function ActionList({ data }) {
                         />
                     </span>
                     <span className={cx('video-stat')}>
-                        {configNumber(data.comments.length)}
+                        {configNumber(video.comments.length)}
                     </span>
                 </li>
                 <li className={cx('action-item')}>
@@ -65,7 +77,7 @@ export default function ActionList({ data }) {
                         <ShareIcon width="2.4rem" height="2.4rem" />
                     </span>
                     <span className={cx('video-stat')}>
-                        {configNumber(data.shares.length)}
+                        {configNumber(video.shares.length)}
                     </span>
                 </li>
             </ul>

@@ -9,20 +9,20 @@ import { CheckedIcon } from '~/components/Icons';
 
 const cx = classnames.bind(styles);
 
-export default function AccountItem({ data }) {
+export default function AccountItem({ user }) {
     return (
-        <Link to={`/@${data.nickname}`} replace className={cx('wrapper')}>
+        <Link to={`/@${user.username}`} replace className={cx('wrapper')}>
             <Image
                 className={cx('avatar')}
-                alt={data.full_name}
-                src={data.avatar}
+                alt={user.full_name}
+                src={user.avatar}
             />
 
             <div className={cx('info')}>
                 <h4 className={cx('name')}>
-                    {data.nickname}
+                    {user.username}
 
-                    {data.tick && (
+                    {user.tick && (
                         <CheckedIcon
                             className={cx('check')}
                             width="1.4rem"
@@ -30,12 +30,12 @@ export default function AccountItem({ data }) {
                         />
                     )}
                 </h4>
-                <p className={cx('description')}>{data.full_name}</p>
+                <p className={cx('description')}>{user.full_name}</p>
             </div>
         </Link>
     );
 }
 
 AccountItem.propTypes = {
-    data: PropTypes.object,
+    user: PropTypes.object,
 };

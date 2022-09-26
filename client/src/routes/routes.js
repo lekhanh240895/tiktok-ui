@@ -10,8 +10,14 @@ import Feedback from '~/pages/Feedback';
 import Music from '~/pages/Music';
 import Tag from '~/pages/Tag';
 import SharedLayout from '~/layouts/SharedLayout';
+import NotFound from '~/pages/NotFound';
 
 const publicRoutes = [
+    {
+        path: config.routes.notFound,
+        component: NotFound,
+        layout: HeaderOnlyLayout,
+    },
     {
         path: config.routes.home,
         component: Home,
@@ -24,11 +30,6 @@ const publicRoutes = [
         path: config.routes.profile,
         component: Profile,
         layout: SharedLayout,
-    },
-    {
-        path: config.routes.upload,
-        component: Upload,
-        layout: HeaderOnlyLayout,
     },
     {
         path: config.routes.search,
@@ -52,6 +53,11 @@ const publicRoutes = [
         path: config.routes.music,
         component: Music,
         layout: SharedLayout,
+    },
+    {
+        path: config.routes.upload,
+        component: Upload,
+        layout: HeaderOnlyLayout,
     },
 ];
 

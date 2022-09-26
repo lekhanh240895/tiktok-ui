@@ -1,7 +1,5 @@
 import React from 'react';
 import classnames from 'classnames/bind';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 import Tippy from '@tippyjs/react';
 
 import 'tippy.js/dist/tippy.css'; // optional
@@ -19,6 +17,7 @@ import {
     LanguageIcon,
     LogoutIcon,
     MessageIcon,
+    OptionIcon,
     ProfileIcon,
     SettingIcon,
     UploadIcon,
@@ -26,15 +25,16 @@ import {
 import Image from '~/components/Image';
 import Search from '../Search';
 import config from '~/config';
-import { useSelector } from 'react-redux';
-import { appSelector } from '~/redux/selectors';
+import { useDispatch, useSelector } from 'react-redux';
+import loginModalSlice from '~/redux/slices/loginModalSlice';
+import { authSelector } from '~/redux/selectors';
 
 const cx = classnames.bind(styles);
 
 export default function Header() {
-    const { currentUser } = useSelector(appSelector);
-
-    if (!currentUser) return;
+    const { currentUser } = useSelector(authSelector);
+    console.log({ currentUser });
+    const dispatch = useDispatch();
 
     const MENU_ITEMS = [
         {
@@ -69,7 +69,7 @@ export default function Header() {
         {
             icon: <ProfileIcon width="2rem" height="2rem" />,
             title: 'View Profile',
-            to: `/@${currentUser.nickname}`,
+            to: `/@${currentUser?.username}`,
         },
         {
             icon: <CoinIcon width="2rem" height="2rem" />,
@@ -87,6 +87,12 @@ export default function Header() {
         },
     ];
 
+    const handleclick = (e) => {
+        if (!currentUser) {
+            e.preventDefault();
+            dispatch(loginModalSlice.actions.show());
+        }
+    };
     return (
         <header className={cx('wrapper')}>
             <div className={cx('inner')}>
@@ -102,6 +108,7 @@ export default function Header() {
                         secondary
                         className={cx('upload-btn')}
                         to="/upload"
+                        onClick={handleclick}
                         leftIcon={<UploadIcon width="2rem" height="2rem" />}
                     >
                         Upload
@@ -140,8 +147,14 @@ export default function Header() {
                         </>
                     ) : (
                         <>
-                            <Button primary style={{ fontWeight: 700 }}>
-                                Login
+                            <Button
+                                primary
+                                style={{ fontWeight: 700 }}
+                                onClick={() =>
+                                    dispatch(loginModalSlice.actions.show())
+                                }
+                            >
+                                Log in
                             </Button>
                         </>
                     )}
@@ -154,8 +167,8 @@ export default function Header() {
                                 src={currentUser.avatar || ''}
                             />
                         ) : (
-                            <button className={cx('more-btn')}>
-                                <FontAwesomeIcon icon={faEllipsisV} />
+                            <button className={cx('more-btn', 'icon-wrapper')}>
+                                <OptionIcon width="2rem" height="2rem" />
                             </button>
                         )}
                     </Menu>

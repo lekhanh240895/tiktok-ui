@@ -3,14 +3,14 @@ import { createSlice } from '@reduxjs/toolkit';
 const editModalSlice = createSlice({
     name: 'editModal',
     initialState: {
-        isShow: false,
+        isEditModalShow: false,
     },
     reducers: {
-        showEditModal: (state, action) => {
-            state.isShow = true;
+        show: (state, action) => {
+            state.isEditModalShow = true;
         },
-        hideEditModal: (state, action) => {
-            state.isShow = false;
+        hide: (state, action) => {
+            state.isEditModalShow = false;
         },
     },
 });

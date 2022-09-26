@@ -101,7 +101,7 @@ const MORE_MENU = [
 ];
 
 export default function Tag() {
-    const videos = useSelector(videosSelector);
+    const { videos } = useSelector(videosSelector);
     const [isMore, setIsMore] = useState(false);
     const { tagname } = useParams();
     const [tagWidth, setTagWidth] = useState();
@@ -248,7 +248,7 @@ export default function Tag() {
 
             <VideoList>
                 {tagVideos.map((video) => (
-                    <VideoItem key={video.id}>
+                    <VideoItem key={video._id}>
                         <VideoComp src={video.src} title={video.title} />
                     </VideoItem>
                 ))}

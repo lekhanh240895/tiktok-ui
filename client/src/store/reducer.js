@@ -17,7 +17,7 @@ export const initialState = {
     mousePosition: {},
     users: [],
     selectedVideoId: null,
-    selectedUserId: null,
+    selectedUserID: null,
     tags: [],
     musics: [],
     isEditModalShow: false,
@@ -36,7 +36,7 @@ export default function reducer(state, action) {
         case SET_CURRENT_USER:
             return { ...state, currentUser: action.payload };
         case SET_SELECTED_USER_ID:
-            return { ...state, selectedUserId: action.payload };
+            return { ...state, selectedUserID: action.payload };
         case SET_MOUSE_POSITION:
             return { ...state, mousePosition: action.payload };
         case UPDATE_PROFILE:

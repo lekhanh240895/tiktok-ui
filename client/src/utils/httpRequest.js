@@ -1,7 +1,14 @@
 import axios from 'axios';
 
-const httpRequest = axios.create({
+const token = localStorage.getItem('token');
+
+export const httpRequest = axios.create({
     baseURL: process.env.REACT_APP_BASE_URL,
+    timeout: 1000,
 });
 
-export default httpRequest;
+export const authRequest = axios.create({
+    baseURL: process.env.REACT_APP_BASE_URL,
+    timeout: 1000,
+    headers: { Authorization: 'Bearer ' + token },
+});
