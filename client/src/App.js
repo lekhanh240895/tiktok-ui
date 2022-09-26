@@ -1,25 +1,29 @@
 import { Fragment, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-import { publicRoutes } from '~/routes/index';
+import { publicRoutes, privateRoutes } from '~/routes/index';
 import DefaultLayout from '~/layouts/DefaultLayout';
 import GetAppButton from './components/BottomContainer/BottomContainer';
 import EditProfileModal from './components/modals/EditProfileModal';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-    appSelector,
     editModalSelector,
-    usersSelector,
+    loginModalSelector,
     videosSelector,
 } from './redux/selectors';
-import { fetchUsers } from './redux/slices/usersSlice';
+import { getUsers } from './redux/slices/usersSlice';
 import appSlice from './redux/slices/appSlice';
+import { getVideos } from './redux/slices/videosSlice';
+import LoginModal from './components/modals/LoginModal';
+import PrivateOutlet from './components/PrivateRouteOutlet';
+import * as userService from '~/services/userService';
+import authSlice from './redux/slices/authSlice';
 
 function App() {
-    const videos = useSelector(videosSelector);
-    const { currentUserID } = useSelector(appSelector);
-    const userList = useSelector(usersSelector);
-    const { isShow } = useSelector(editModalSelector);
+    const { videos } = useSelector(videosSelector);
+    const { isEditModalShow } = useSelector(editModalSelector);
+    const { isLoginModalShow } = useSelector(loginModalSelector);
+
     const dispatch = useDispatch();
 
     function unique(arr) {
@@ -34,16 +38,18 @@ function App() {
 
     useEffect(() => {
         // Fetch Users
-        dispatch(fetchUsers());
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+        dispatch(getUsers());
+
+        // Fetch Videos
+        dispatch(getVideos());
+    }, [dispatch]);
 
     useEffect(() => {
-        const currentUser = userList.users.find(
-            (user) => user.id === currentUserID,
-        );
-        dispatch(appSlice.actions.setCurrentUser(currentUser));
-    }, [currentUserID, dispatch, userList]);
+        (async () => {
+            const user = await userService.getMe();
+            dispatch(authSlice.actions.setCurrentUser(user));
+        })();
+    }, [dispatch]);
 
     useEffect(() => {
         (async () => {
@@ -59,12 +65,11 @@ function App() {
             dispatch(appSlice.actions.setTags(filterTags));
             dispatch(appSlice.actions.setMusics(musics));
         })();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [videos]);
+    }, [dispatch, videos]);
 
     return (
-        <Router>
-            <div className="App">
+        <div className="App">
+            <Router>
                 <Routes>
                     {publicRoutes.map((route, index) => {
                         let Layout = DefaultLayout;
@@ -88,11 +93,40 @@ function App() {
                             />
                         );
                     })}
+
+                    {privateRoutes.map((route, index) => {
+                        let Layout = DefaultLayout;
+                        const Page = route.component;
+
+                        if (route.layout) {
+                            Layout = route.layout;
+                        } else if (route.layout === null) {
+                            Layout = Fragment;
+                        }
+
+                        return (
+                            <Route
+                                path={route.path}
+                                key={index}
+                                element={<PrivateOutlet />}
+                            >
+                                <Route
+                                    element={
+                                        <Layout>
+                                            <Page />
+                                        </Layout>
+                                    }
+                                />
+                            </Route>
+                        );
+                    })}
                 </Routes>
+
                 <GetAppButton />
-                {isShow && <EditProfileModal />}
-            </div>
-        </Router>
+                {isEditModalShow && <EditProfileModal />}
+                {isLoginModalShow && <LoginModal />}
+            </Router>
+        </div>
     );
 }
 
