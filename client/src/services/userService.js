@@ -9,8 +9,10 @@ export const search = async (query, options) => {
             },
         });
 
-        const users = response.data.filter((user) =>
-            user.full_name.toLowerCase().includes(query.toLowerCase()),
+        const users = response.data.filter(
+            (user) =>
+                user.full_name.toLowerCase().includes(query.toLowerCase()) ||
+                user.username.toLowerCase().includes(query.toLowerCase()),
         );
 
         return users;

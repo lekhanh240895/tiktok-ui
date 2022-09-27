@@ -25,7 +25,6 @@ export default function Search() {
     const { tags, musics } = useSelector(appSelector);
 
     const navigate = useNavigate();
-
     const debouncedValue = useDebounce(searchValue, 500);
 
     const renderSearchKeywords = () => {
@@ -138,12 +137,12 @@ export default function Search() {
                             <h4 className={cx('search-title')}>Accounts</h4>
 
                             <ul className={cx('account-list')}>
-                                {searchResult.map((item) => (
+                                {searchResult.map((user) => (
                                     <li
-                                        key={item.id}
+                                        key={user._id}
                                         onClick={handleHideResult}
                                     >
-                                        <AccountItem user={item} />
+                                        <AccountItem user={user} />
                                     </li>
                                 ))}
                             </ul>

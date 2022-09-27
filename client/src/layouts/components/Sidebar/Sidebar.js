@@ -23,9 +23,6 @@ import loginModalSlice from '~/redux/slices/loginModalSlice';
 const cx = classnames.bind(styles);
 
 export default function Sidebar({ width }) {
-    const [followingIDs, setFollowingIDs] = useState([]);
-    const [suggestUsers, setSuggestUsers] = useState([]);
-    const [followingUsers, setFollowingUsers] = useState([]);
     const [thumbHeight, setThumbHeight] = useState(20);
     const { users } = useSelector(usersSelector);
     const { currentUser } = useSelector(authSelector);
@@ -35,104 +32,17 @@ export default function Sidebar({ width }) {
     const scrollRef = useRef(null);
     const observer = useRef(null);
 
-    useEffect(() => {
-        const followingIDs = currentUser?.followingIDs?.map((id) => id);
+    const suggestUsers = users.filter(
+        (user) =>
+            user.tick &&
+            user.followers_count > 100000 &&
+            !currentUser?.followingIDs.includes(user._id) &&
+            user._id !== currentUser?._id,
+    );
 
-        if (followingIDs) {
-            setFollowingIDs(followingIDs);
-
-            const suggestUsers = users.filter(
-                (user) =>
-                    user.tick &&
-                    user.followers_count > 10000 &&
-                    !followingIDs.includes(user._id) &&
-                    user._id !== currentUser?._id,
-            );
-
-            const followingUsers = users.filter((user) =>
-                followingIDs.includes(user._id),
-            );
-
-            if (window.innerWidth > 1024) {
-                setSuggestUsers(suggestUsers.slice(0, 2));
-                setFollowingUsers(followingUsers.slice(0, 5));
-            } else {
-                setSuggestUsers(suggestUsers);
-                setFollowingUsers(followingUsers);
-            }
-        } else {
-            const suggestUsers = users.filter(
-                (user) => user.tick && user.followers_count > 100000,
-            );
-            setSuggestUsers(suggestUsers.slice(0, 5));
-        }
-    }, [currentUser, users]);
-
-    useEffect(() => {
-        const suggestUsers = users.filter(
-            (user) =>
-                user.tick &&
-                user.followers_count > 10000 &&
-                !followingIDs.includes(user._id) &&
-                user._id !== currentUser?._id,
-        );
-
-        const followingUsers = users.filter((user) =>
-            followingIDs.includes(user._id),
-        );
-
-        window.onresize = () => {
-            if (window.innerWidth > 1024) {
-                setSuggestUsers(suggestUsers.slice(0, 2));
-                setFollowingUsers(followingUsers.slice(0, 5));
-            } else {
-                setSuggestUsers(suggestUsers);
-                setFollowingUsers(followingUsers);
-            }
-        };
-    });
-
-    const handleMore = async (title) => {
-        if (title === 'Suggested accounts') {
-            const suggestUsers = users.filter(
-                (user) =>
-                    user.tick &&
-                    user.followers_count > 10000 &&
-                    !followingIDs.includes(user._id) &&
-                    user._id !== currentUser?._id,
-            );
-
-            setSuggestUsers(suggestUsers);
-        } else {
-            const followingUsers = users.filter((user) =>
-                followingIDs.includes(user._id),
-            );
-            setFollowingUsers(followingUsers);
-        }
-    };
-
-    const handleLess = async (title) => {
-        if (title === 'Suggested accounts') {
-            const suggestUsers = users.filter(
-                (user) =>
-                    user.tick &&
-                    user.followers_count > 10000 &&
-                    !followingIDs.includes(user._id) &&
-                    user._id !== currentUser?._id,
-            );
-
-            if (currentUser) {
-                setSuggestUsers(suggestUsers.slice(0, 2));
-            } else {
-                setSuggestUsers(suggestUsers.slice(0, 5));
-            }
-        } else {
-            const followingUsers = users.filter((user) =>
-                followingIDs.includes(user._id),
-            );
-            setFollowingUsers(followingUsers.slice(0, 5));
-        }
-    };
+    const followingUsers = users.filter((user) =>
+        currentUser?.followingIDs.includes(user._id),
+    );
 
     const handleResize = (ref) => {
         const { scrollHeight, clientHeight } = ref;
@@ -228,8 +138,6 @@ export default function Sidebar({ width }) {
                         title="Suggested accounts"
                         users={suggestUsers}
                         text="See all"
-                        onMore={handleMore}
-                        onLess={handleLess}
                         showUser={true}
                     />
                 </div>
@@ -240,8 +148,6 @@ export default function Sidebar({ width }) {
                             title="Following accounts"
                             users={followingUsers}
                             text="See more"
-                            onMore={handleMore}
-                            onLess={handleLess}
                             showUser={false}
                         />
                     </div>

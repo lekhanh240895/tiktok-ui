@@ -33,7 +33,6 @@ const cx = classnames.bind(styles);
 
 export default function Header() {
     const { currentUser } = useSelector(authSelector);
-    console.log({ currentUser });
     const dispatch = useDispatch();
 
     const MENU_ITEMS = [

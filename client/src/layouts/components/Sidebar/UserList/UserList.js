@@ -7,14 +7,7 @@ import { useState } from 'react';
 
 const cx = classnames.bind(styles);
 
-export default function UserList({
-    title,
-    users,
-    text,
-    onMore,
-    onLess,
-    showUser,
-}) {
+export default function UserList({ title, users, text, showUser }) {
     const [isMore, setIsMore] = useState(false);
 
     return (
@@ -22,7 +15,12 @@ export default function UserList({
             <h4 className={cx('title')}>{title}</h4>
 
             <ul className={cx('user-list')}>
-                {users.map((user) => (
+                {(isMore
+                    ? users
+                    : title === 'Suggested accounts'
+                    ? users.slice(0, 2)
+                    : users.slice(0, 5)
+                ).map((user) => (
                     <UserItem key={user._id} user={user} showUser={showUser} />
                 ))}
             </ul>
@@ -32,7 +30,7 @@ export default function UserList({
                     className={cx('more-btn')}
                     onClick={() => {
                         setIsMore(true);
-                        onMore(title);
+                        // onMore(title);
                     }}
                 >
                     {text}
@@ -42,7 +40,7 @@ export default function UserList({
                     className={cx('more-btn')}
                     onClick={() => {
                         setIsMore(false);
-                        onLess(title);
+                        // onLess(title);
                     }}
                 >
                     See less
@@ -56,5 +54,4 @@ UserList.propTypes = {
     title: PropTypes.string,
     users: PropTypes.array.isRequired,
     text: PropTypes.string.isRequired,
-    onMore: PropTypes.func.isRequired,
 };

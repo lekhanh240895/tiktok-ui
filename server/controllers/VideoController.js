@@ -11,6 +11,16 @@ class VideosController {
     }
   }
 
+  // [GET] /videos/:id
+  async getVideo(req, res, next) {
+    try {
+      const videos = await VideoModel.findById(req.params.id);
+      res.status(200).json(videos);
+    } catch (err) {
+      res.status(500).json({ error: err });
+    }
+  }
+
   // [POST] /videos
   async createVideo(req, res) {
     try {

@@ -121,15 +121,12 @@ export default function Profile() {
     const { users } = useSelector(usersSelector);
     const { currentUser } = useSelector(authSelector);
     const { videos } = useSelector(videosSelector);
-
     const [activeTab, setActiveTab] = useState('videos');
     const [isUser, setIsUser] = useState(false);
     const [isMore, setIsMore] = useState(false);
     const [isFollowing, setIsFollowing] = useState(false);
     const dispatch = useDispatch();
-
     const lineRef = useRef(null);
-
     const { username } = useParams();
     const user = users?.find((user) => user.username === username);
 
@@ -163,9 +160,12 @@ export default function Profile() {
     };
 
     const userVideos = videos.filter((video) => video.userID === user?._id);
+    const likeCount = userVideos.reduce((total, cur) => {
+        return (total += cur.likes.length);
+    }, 0);
 
     const likedVideos = videos.filter((video) =>
-        user?.likedVideoIDs?.includes(video._id),
+        video.likes.includes(user._id),
     );
 
     const handleClickItem = (tab) => {
@@ -260,7 +260,7 @@ export default function Profile() {
                         Followers
                     </UserStats>
                     <UserStats>
-                        <span>{configNumber(user.likes_count)}</span>Likes
+                        <span>{configNumber(likeCount)}</span>Likes
                     </UserStats>
                 </div>
 

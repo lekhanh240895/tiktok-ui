@@ -6,6 +6,7 @@ const UserModel = new Schema(
     username: {
       type: String,
       required: [true, "Please add a username!"],
+      unique: true,
     },
     email: {
       type: String,

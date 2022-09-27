@@ -7,7 +7,11 @@ const usersSlice = createSlice({
         status: 'idle',
         users: [],
     },
-    reducers: {},
+    reducers: {
+        setUsers: (state, action) => {
+            state.users = action.payload;
+        },
+    },
     extraReducers: (builder) => {
         builder
             .addCase(getUsers.pending, (state, action) => {
