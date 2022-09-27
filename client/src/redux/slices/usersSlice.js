@@ -21,9 +21,6 @@ const usersSlice = createSlice({
                 state.users = action.payload;
                 state.status = 'idle';
             })
-            .addCase(createUser.fulfilled, (state, action) => {
-                state.users.push(action.payload);
-            })
             .addCase(updateUser.fulfilled, (state, action) => {
                 const currentUserIndex = state.users.findIndex(
                     (user) => user._id === action.payload.id,
@@ -46,7 +43,7 @@ const usersSlice = createSlice({
                 );
 
                 state.users[followedIndex].followerIDs.push(currentUserID);
-                state.users[userIndex].followingIDs.push(currentUserID);
+                state.users[userIndex].followingIDs.push(followedUserID);
             })
             .addCase(unfollowUser.fulfilled, (state, action) => {
                 const { unfollowedUserID, currentUserID } = action.payload;
@@ -64,25 +61,20 @@ const usersSlice = createSlice({
 
                 state.users[userIndex].followingIDs = state.users[
                     userIndex
-                ].followingIDs.filter((id) => id !== currentUserID);
+                ].followingIDs.filter((id) => id !== unfollowedUserID);
             });
     },
 });
 
 export const getUsers = createAsyncThunk('usersList/getUsers', async () => {
-    const data = await userService.get();
+    const data = await userService.getUsers();
     return data;
-});
-
-export const createUser = createAsyncThunk('userList/addUser', async (user) => {
-    const newUser = await userService.post(user);
-    return newUser;
 });
 
 export const updateUser = createAsyncThunk(
     'userList/updateUser',
     async ({ _id, updatedData }) => {
-        const data = await userService.put(_id, updatedData);
+        const data = await userService.update(_id, updatedData);
         console.log(data);
         return data;
     },

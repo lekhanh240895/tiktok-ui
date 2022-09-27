@@ -3,13 +3,12 @@ import classnames from 'classnames/bind';
 import styles from './Menu.module.scss';
 import Tippy from '@tippyjs/react/headless';
 import { useEffect, useState } from 'react';
-
 import { Wrapper as PopperWrapper } from '~/components/Popper';
 import MenuItem from './MenuItem';
 import Header from './Header';
 import { ArrowIcon } from '~/components/Icons';
 import { useDispatch } from 'react-redux';
-import authSlice from '~/redux/slices/authSlice';
+import authSlice, { logout } from '~/redux/slices/authSlice';
 
 const cx = classnames.bind(styles);
 
@@ -38,10 +37,8 @@ export default function Menu({ children, items, hideOnClick = false }) {
                             ]);
                         } else {
                             if (item.title === 'Log out') {
-                                localStorage.removeItem('token');
-                                dispatch(
-                                    authSlice.actions.setCurrentUser(null),
-                                );
+                                dispatch(logout());
+                                dispatch(authSlice.actions.reset());
                             }
                         }
                     }}

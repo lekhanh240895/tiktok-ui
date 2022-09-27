@@ -21,34 +21,16 @@ export const search = async (query, options) => {
     }
 };
 
-export const get = async () => {
+export const getUsers = async () => {
     try {
-        const response = await httpRequest.get('/users');
+        const response = await httpRequest.get('users');
         return response.data;
     } catch (err) {
         console.log(err);
     }
 };
 
-export const getMe = async () => {
-    try {
-        const response = await authRequest.get('/users/me');
-        return response.data;
-    } catch (err) {
-        console.log(err);
-    }
-};
-
-export const post = async (user) => {
-    try {
-        const response = await httpRequest.post('/users', user);
-        return response.data;
-    } catch (err) {
-        console.log(err);
-    }
-};
-
-export const put = async (_id, updatedData) => {
+export const update = async (_id, updatedData) => {
     try {
         const response = await authRequest.put(
             `/users/${_id}/update`,
@@ -62,7 +44,7 @@ export const put = async (_id, updatedData) => {
 
 export const remove = async (_id) => {
     try {
-        const response = await httpRequest.delete(`/users/${_id}/delete`, {
+        const response = await httpRequest.delete(`users/${_id}/delete`, {
             _id,
         });
         return response.data;
@@ -73,7 +55,7 @@ export const remove = async (_id) => {
 
 export const follow = async (_id) => {
     try {
-        const response = await authRequest.put('/users/follow', { _id });
+        const response = await authRequest.put('users/follow', { _id });
         return response.data;
     } catch (err) {
         console.log(err);
@@ -82,13 +64,9 @@ export const follow = async (_id) => {
 
 export const unfollow = async (_id) => {
     try {
-        const response = await authRequest.put('/users/unfollow', { _id });
+        const response = await authRequest.put('users/unfollow', { _id });
         return response.data;
     } catch (err) {
         console.log(err);
     }
 };
-
-// const userService = {};
-
-// export default userService;

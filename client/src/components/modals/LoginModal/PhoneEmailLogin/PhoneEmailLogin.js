@@ -1,8 +1,10 @@
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Button from '~/components/Button';
-import { login } from '~/redux/slices/authSlice';
+import Spinner from '~/components/Spinner/Spinner';
+import { authSelector } from '~/redux/selectors';
+import authSlice, { login } from '~/redux/slices/authSlice';
 import loginModalSlice from '~/redux/slices/loginModalSlice';
 import { Wrapper } from './styled';
 
@@ -10,16 +12,8 @@ export default function PhoneEmailLogin() {
     const [emailUsername, setEmailUsername] = useState('');
     const [password, setPassword] = useState('');
     const isEmail = ValidateEmail(emailUsername);
-
-    const data = isEmail
-        ? {
-              email: emailUsername,
-              password,
-          }
-        : {
-              username: emailUsername,
-              password,
-          };
+    const { currentUser, isLoading, isError, isSuccess } =
+        useSelector(authSelector);
 
     const dispatch = useDispatch();
 
@@ -35,10 +29,34 @@ export default function PhoneEmailLogin() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-
-        dispatch(login(data));
-        dispatch(loginModalSlice.actions.hide());
+        const formData = isEmail
+            ? {
+                  email: emailUsername,
+                  password,
+              }
+            : {
+                  username: emailUsername,
+                  password,
+              };
+        dispatch(login(formData));
     };
+
+    useEffect(() => {
+        if (isError) {
+            console.log('Error');
+        }
+
+        if (isSuccess || currentUser) {
+            dispatch(loginModalSlice.actions.hide());
+        }
+
+        return () => {
+            authSlice.actions.reset();
+        };
+    }, [dispatch, isError, isSuccess, currentUser]);
+
+    if (isLoading) return <Spinner />;
+
     return (
         <Wrapper>
             <div className="description">

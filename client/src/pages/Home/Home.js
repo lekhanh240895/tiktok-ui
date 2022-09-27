@@ -10,6 +10,8 @@ import { useElementOnScreen } from '~/hooks/useElementOnScreen';
 import { useDispatch, useSelector } from 'react-redux';
 import { authSelector, usersSelector, videosSelector } from '~/redux/selectors';
 import loginModalSlice from '~/redux/slices/loginModalSlice';
+import { followUser, unfollowUser } from '~/redux/slices/usersSlice';
+import authSlice from '~/redux/slices/authSlice';
 
 const cx = classnames.bind(styles);
 
@@ -67,8 +69,24 @@ export default function Home() {
         setConfig('volume', newVolume);
     };
 
-    const handleFollow = () => {
+    const handleFollow = (_id) => {
         if (!currentUser) dispatch(loginModalSlice.actions.show());
+        const updatedUser = {
+            ...currentUser,
+            followingIDs: currentUser.followingIDs?.concat(_id),
+        };
+        dispatch(authSlice.actions.setCurrentUser(updatedUser));
+        dispatch(followUser(_id));
+    };
+
+    const handleUnfollow = (_id) => {
+        if (!currentUser) dispatch(loginModalSlice.actions.show());
+        const updatedUser = {
+            ...currentUser,
+            followingIDs: currentUser.followingIDs?.filter((id) => id !== _id),
+        };
+        dispatch(authSlice.actions.setCurrentUser(updatedUser));
+        dispatch(unfollowUser(_id));
     };
 
     return (
@@ -77,6 +95,9 @@ export default function Home() {
                 {videos.slice(0, videoCount).map((video) => {
                     const user = users.find(
                         (user) => user?._id === video.userID,
+                    );
+                    const isFollowed = currentUser?.followingIDs?.includes(
+                        user._id,
                     );
                     return (
                         <li key={video._id} className={cx('video-item')}>
@@ -96,15 +117,25 @@ export default function Home() {
                                 onMutedVolume={handleMuteVolume}
                                 onVolumeChange={handleVolumeChange}
                             />
-
-                            <Button
-                                outline
-                                small
-                                className={cx('follow-btn')}
-                                onClick={handleFollow}
-                            >
-                                Follow
-                            </Button>
+                            {isFollowed ? (
+                                <Button
+                                    secondary
+                                    small
+                                    className={cx('follow-btn')}
+                                    onClick={() => handleUnfollow(user._id)}
+                                >
+                                    Following
+                                </Button>
+                            ) : (
+                                <Button
+                                    outline
+                                    small
+                                    className={cx('follow-btn')}
+                                    onClick={() => handleFollow(user._id)}
+                                >
+                                    Follow
+                                </Button>
+                            )}
                         </li>
                     );
                 })}

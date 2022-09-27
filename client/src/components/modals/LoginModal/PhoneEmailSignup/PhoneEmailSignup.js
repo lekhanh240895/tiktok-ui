@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Button from '~/components/Button';
 import { SolidDownArrowIcon } from '~/components/Icons';
-import { register } from '~/redux/slices/authSlice';
+import Spinner from '~/components/Spinner/Spinner';
+import { authSelector } from '~/redux/selectors';
+import authSlice, { register } from '~/redux/slices/authSlice';
 import loginModalSlice from '~/redux/slices/loginModalSlice';
 import { Wrapper } from './styled';
 
@@ -22,6 +24,8 @@ export default function PhoneEmailSignup() {
     const monthIconRef = useRef(null);
     const dayIconRef = useRef(null);
     const yearIconRef = useRef(null);
+    const { currentUser, isLoading, isError, isSuccess } =
+        useSelector(authSelector);
 
     const months = [
         'January',
@@ -113,6 +117,7 @@ export default function PhoneEmailSignup() {
     };
 
     const handleSubmit = (e) => {
+        e.preventDefault();
         const formData = {
             username,
             email,
@@ -120,12 +125,21 @@ export default function PhoneEmailSignup() {
             birthday: formatDate(year, month, day),
         };
 
-        console.log(formData);
-        e.preventDefault();
-
         dispatch(register(formData));
-        dispatch(loginModalSlice.actions.hide());
     };
+
+    useEffect(() => {
+        if (isError) {
+            console.log('Error');
+        }
+
+        if (isSuccess || currentUser) {
+            dispatch(loginModalSlice.actions.hide());
+            dispatch(authSlice.actions.reset());
+        }
+    }, [dispatch, isError, isSuccess, currentUser]);
+
+    if (isLoading) return <Spinner />;
 
     return (
         <Wrapper>

@@ -12,7 +12,7 @@ function generateToken(id) {
 
 class AuthController {
   // [POST] /auth/login
-  async loginUser(req, res, next) {
+  async login(req, res, next) {
     try {
       const { email, username, password } = req.body;
 
@@ -38,7 +38,7 @@ class AuthController {
   }
 
   // [POST] /auth/register
-  async registerUser(req, res, next) {
+  async register(req, res, next) {
     try {
       const { username, email, password } = req.body;
       if (!username || !email || !password) {

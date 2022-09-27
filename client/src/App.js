@@ -16,14 +16,12 @@ import appSlice from './redux/slices/appSlice';
 import { getVideos } from './redux/slices/videosSlice';
 import LoginModal from './components/modals/LoginModal';
 import PrivateOutlet from './components/PrivateRouteOutlet';
-import * as userService from '~/services/userService';
-import authSlice from './redux/slices/authSlice';
+import { getMe } from './redux/slices/authSlice';
 
 function App() {
     const { videos } = useSelector(videosSelector);
     const { isEditModalShow } = useSelector(editModalSelector);
     const { isLoginModalShow } = useSelector(loginModalSelector);
-
     const dispatch = useDispatch();
 
     function unique(arr) {
@@ -37,18 +35,15 @@ function App() {
     }
 
     useEffect(() => {
+        const token = localStorage.getItem('token');
         // Fetch Users
         dispatch(getUsers());
 
         // Fetch Videos
         dispatch(getVideos());
-    }, [dispatch]);
 
-    useEffect(() => {
-        (async () => {
-            const user = await userService.getMe();
-            dispatch(authSlice.actions.setCurrentUser(user));
-        })();
+        // Get currentUser
+        if (token) dispatch(getMe());
     }, [dispatch]);
 
     useEffect(() => {

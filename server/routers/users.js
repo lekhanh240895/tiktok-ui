@@ -3,8 +3,8 @@ const router = express.Router();
 const UsersController = require("../controllers/UsersController");
 const { protect } = require("../middlewares/authMiddleware");
 
-router.put("/follow", protect, UsersController.followUser);
-router.put("/unfollow", protect, UsersController.unfollowUser);
+router.put("/follow", protect, UsersController.follow);
+router.put("/unfollow", protect, UsersController.unfollow);
 router.put("/:id/update", protect, UsersController.updateUser);
 router.delete("/:id/delete", UsersController.deleteUser);
 router.get("/me", protect, UsersController.getMe);

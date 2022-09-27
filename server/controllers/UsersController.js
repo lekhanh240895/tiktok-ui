@@ -43,7 +43,7 @@ class UsersController {
   }
 
   // [PUT] /users/follow
-  async followUser(req, res) {
+  async follow(req, res) {
     try {
       // Update followed user
       const followedUser = await UserModel.findByIdAndUpdate(
@@ -75,7 +75,7 @@ class UsersController {
   }
 
   // [PUT] /users/unfollow
-  async unfollowUser(req, res) {
+  async unfollow(req, res) {
     try {
       // Update followed user
       const unfollowedUser = await UserModel.findByIdAndUpdate(
