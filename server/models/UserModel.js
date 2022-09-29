@@ -50,6 +50,10 @@ const UserModel = new Schema(
         ref: "Video",
       },
     ],
+    isAdmin: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );

@@ -50,6 +50,26 @@ class VideosController {
     }
   }
 
+  // [PUT] /videos/:id/like
+  async likeVideo(req, res) {
+    try {
+      const video = await VideoModel.findById(req.params.id);
+      if (!video.likes.includes(req.user.id)) {
+        await video.updateOne({
+          $push: { likes: req.user.id },
+        });
+        res.status(200).json(video);
+      } else {
+        await video.updateOne({
+          $pull: { likes: req.user.id },
+        });
+        res.status(200).json(video);
+      }
+    } catch (err) {
+      res.status(500).json({ error: err });
+    }
+  }
+
   // [DELETE] /videos/:id/delete
   async deleteVideo(req, res) {
     try {

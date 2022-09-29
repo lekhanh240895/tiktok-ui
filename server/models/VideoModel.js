@@ -17,7 +17,12 @@ const VideoModel = new Schema(
         ref: "User",
       },
     ],
-    shares: { type: Array },
+    shares: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
     comments: { type: Array },
     music: { type: String },
     tags: { type: Array },

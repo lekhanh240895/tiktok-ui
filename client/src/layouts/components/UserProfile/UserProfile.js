@@ -31,7 +31,7 @@ export const UserProfile = ({ user }) => {
     }, [currentUser, user]);
 
     const handleFollow = () => {
-        if (!currentUser) dispatch(loginModalSlice.actions.show());
+        if (!currentUser) return dispatch(loginModalSlice.actions.show());
         const updatedUser = {
             ...currentUser,
             followingIDs: currentUser.followingIDs.concat(user._id),
@@ -41,6 +41,8 @@ export const UserProfile = ({ user }) => {
     };
 
     const handleUnFollow = () => {
+        if (!currentUser) return dispatch(loginModalSlice.actions.show());
+
         const updatedUser = {
             ...currentUser,
             followingIDs: currentUser.followingIDs.filter(

@@ -30,13 +30,17 @@ export default function Home() {
     const { currentUser } = useSelector(authSelector);
     const dispatch = useDispatch();
 
+    const fypVideos = videos.filter(
+        (video) => video.userID !== currentUser?._id,
+    );
+
     useEffect(() => {
         if (isVisible) {
-            if (videoCount < videos.length)
+            if (videoCount < fypVideos.length)
                 setVideoCount((prevState) => prevState + 1);
-            else setVideoCount(videos.length);
+            else setVideoCount(fypVideos.length);
         }
-    }, [isVisible, videoCount, videos]);
+    }, [isVisible, videoCount, fypVideos]);
 
     useEffect(() => {
         const settings = JSON.parse(localStorage.getItem('userSettings'));
@@ -70,7 +74,7 @@ export default function Home() {
     };
 
     const handleFollow = (_id) => {
-        if (!currentUser) dispatch(loginModalSlice.actions.show());
+        if (!currentUser) return dispatch(loginModalSlice.actions.show());
         const updatedUser = {
             ...currentUser,
             followingIDs: currentUser.followingIDs?.concat(_id),
@@ -80,7 +84,7 @@ export default function Home() {
     };
 
     const handleUnfollow = (_id) => {
-        if (!currentUser) dispatch(loginModalSlice.actions.show());
+        if (!currentUser) return dispatch(loginModalSlice.actions.show());
         const updatedUser = {
             ...currentUser,
             followingIDs: currentUser.followingIDs?.filter((id) => id !== _id),
@@ -92,7 +96,7 @@ export default function Home() {
     return (
         <div className={cx('wrapper')}>
             <ul className={cx('video-list')}>
-                {videos.slice(0, videoCount).map((video) => {
+                {fypVideos.slice(0, videoCount).map((video) => {
                     const user = users.find(
                         (user) => user?._id === video.userID,
                     );

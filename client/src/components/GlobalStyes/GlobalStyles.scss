@@ -183,3 +183,13 @@ input[type='range']::-webkit-slider-thumb {
 input[type='range']::-webkit-slider-runnable-track {
     cursor: pointer;
 }
+
+// Error
+.error {
+    position: relative;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid #d3d6d8;
+    border-radius: 0.25rem;
+    background-color: #f8d7da;
+}

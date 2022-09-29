@@ -57,6 +57,7 @@ import { authSelector, usersSelector, videosSelector } from '~/redux/selectors';
 import editModalSlice from '~/redux/slices/editModalSlice';
 import { followUser, unfollowUser } from '~/redux/slices/usersSlice';
 import authSlice from '~/redux/slices/authSlice';
+import loginModalSlice from '~/redux/slices/loginModalSlice';
 
 const SHARE_MENU = [
     {
@@ -173,6 +174,7 @@ export default function Profile() {
     };
 
     const handleFollow = () => {
+        if (!currentUser) return dispatch(loginModalSlice.actions.show());
         const updatedUser = {
             ...currentUser,
             followingIDs: currentUser.followingIDs.concat(user._id),
@@ -182,6 +184,7 @@ export default function Profile() {
     };
 
     const handleUnFollow = () => {
+        if (!currentUser) return dispatch(loginModalSlice.actions.show());
         const updatedUser = {
             ...currentUser,
             followingIDs: currentUser.followingIDs.filter(

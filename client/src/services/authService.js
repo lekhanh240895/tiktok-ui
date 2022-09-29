@@ -2,15 +2,11 @@ import { authRequest, httpRequest } from '~/utils/httpRequest';
 
 // Register user
 export const register = async (data) => {
-    try {
-        const response = await httpRequest.post('auth/register', data);
-        const user = response.data;
-        localStorage.setItem('token', user.token);
+    const response = await httpRequest.post('auth/register', data);
+    const user = response.data;
+    localStorage.setItem('token', user.token);
 
-        return user;
-    } catch (err) {
-        console.log(err);
-    }
+    return user;
 };
 
 // Login by JWT
@@ -25,14 +21,10 @@ export const getMe = async () => {
 
 // Login user
 export const login = async (data) => {
-    try {
-        const response = await httpRequest.post('auth/login', data);
-        const user = response.data;
-        localStorage.setItem('token', user.token);
-        return user;
-    } catch (err) {
-        console.log(err);
-    }
+    const response = await httpRequest.post('auth/login', data);
+    const user = response.data;
+    localStorage.setItem('token', user.token);
+    return user;
 };
 
 // Logout user

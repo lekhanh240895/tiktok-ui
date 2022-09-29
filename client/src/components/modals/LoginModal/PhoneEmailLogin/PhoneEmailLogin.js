@@ -42,10 +42,6 @@ export default function PhoneEmailLogin() {
     };
 
     useEffect(() => {
-        if (isError) {
-            console.log('Error');
-        }
-
         if (isSuccess || currentUser) {
             dispatch(loginModalSlice.actions.hide());
         }
@@ -59,6 +55,8 @@ export default function PhoneEmailLogin() {
 
     return (
         <Wrapper>
+            {isError && <div className="error">Invalid credentials!</div>}
+
             <div className="description">
                 Email or username
                 <Link to="/login/phone-or-email/phone" className="styled-link">

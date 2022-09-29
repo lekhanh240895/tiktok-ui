@@ -1,0 +1,54 @@
+.wrapper {
+    padding: 5px 0;
+    display: flex;
+    align-items: center;
+    &:hover {
+        background: rgba(22, 24, 35, 0.03);
+        cursor: pointer;
+    }
+}
+
+.avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: contain;
+    margin: 16px;
+}
+
+.info {
+    flex: 1;
+    color: rgba(22, 24, 35, 0.5);
+    line-height: 20px;
+    font-weight: 400;
+    font-size: 1.4rem;
+    overflow: hidden;
+
+    .name {
+        font-size: 1.6rem;
+        color: var(--black-color);
+        font-weight: 600;
+        line-height: 25px;
+        overflow: hidden;
+    }
+
+    .check {
+        color: rgb(32, 213, 236);
+        margin-left: 8px;
+    }
+
+    .description {
+        .seperate {
+            margin: 0 4px;
+        }
+
+        .followerNumber {
+            font-weight: 600;
+            color: var(--text-color);
+            margin-right: 4px;
+        }
+    }
+    .bio {
+        margin-top: 4px;
+    }
+}

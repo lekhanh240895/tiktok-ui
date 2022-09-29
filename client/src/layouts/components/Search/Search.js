@@ -13,6 +13,7 @@ import * as userService from '~/services/userService';
 import Button from '~/components/Button';
 import { useSelector } from 'react-redux';
 import { appSelector } from '~/redux/selectors';
+
 const cx = classnames.bind(styles);
 
 export default function Search() {
@@ -107,8 +108,10 @@ export default function Search() {
     // Form Submit
     const handleSubmit = (e) => {
         e.preventDefault();
-
-        navigate(`/search?q=${searchValue}`);
+        setShowResult(false);
+        navigate(`/search?q=${searchValue}`, {
+            replace: true,
+        });
     };
 
     return (
@@ -157,6 +160,7 @@ export default function Search() {
                 )}
             >
                 <form className={cx('search')} onSubmit={handleSubmit}>
+                    {/* <form className={cx('search')} method="GET" action="/search"> */}
                     <input
                         placeholder="Search accounts and videos"
                         spellCheck={false}
@@ -165,6 +169,7 @@ export default function Search() {
                         ref={inputRef}
                         onChange={handleChange}
                         onFocus={() => setShowResult(true)}
+                        name="q"
                     />
 
                     {!!searchValue && !loading && (

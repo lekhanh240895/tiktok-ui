@@ -23,10 +23,17 @@ class AuthController {
 
       if (!user) {
         res.status(400);
-        throw new Error("Error: Invalid credentials!");
+        throw new Error("Error: User not found!");
       }
 
-      if (user && (await bcrypt.compare(password, user.password))) {
+      const validPassword = await bcrypt.compare(password, user.password);
+
+      if (!validPassword) {
+        res.status(400);
+        throw new Error("Error: Incorrect password!");
+      }
+
+      if (user && validPassword) {
         res.status(200).json({
           ...user._doc,
           token: generateToken(user._id),

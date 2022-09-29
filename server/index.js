@@ -7,6 +7,7 @@ const videos = require("./routers/videos");
 const auth = require("./routers/auth");
 const path = require("path");
 const cookieParser = require("cookie-parser");
+const helmet = require("helmet");
 
 require("dotenv").config();
 
@@ -28,7 +29,7 @@ app.use(
     limit: "30mb",
   })
 );
-
+app.use(helmet());
 app.use(cors());
 
 app.use("/users", users);
