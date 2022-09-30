@@ -24,9 +24,6 @@ const UserModel = new Schema(
     birthday: { type: String, default: "" },
     bio: { type: String, default: "" },
     tick: { type: Boolean, default: false },
-    followings_count: { type: Number },
-    followers_count: { type: Number },
-    likes_count: { type: Number },
     website_url: { type: String, default: "" },
     facebook_url: { type: String, default: "" },
     youtube_url: { type: String, default: "" },
@@ -42,12 +39,6 @@ const UserModel = new Schema(
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
-      },
-    ],
-    likedVideoIDs: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Video",
       },
     ],
     isAdmin: {

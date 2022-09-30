@@ -8,5 +8,6 @@ export const routes = {
     feedback: '/feedback',
     tag: '/tag/:tagname',
     music: '/music/:musicname',
+    messages: '/messages',
     notFound: '*',
 };

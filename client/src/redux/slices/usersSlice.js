@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import * as userService from '~/services/userService';
 
 const usersSlice = createSlice({
-    name: 'usersList',
+    name: 'users',
     initialState: {
         status: 'idle',
         users: [],
@@ -66,7 +66,7 @@ const usersSlice = createSlice({
     },
 });
 
-export const getUsers = createAsyncThunk('usersList/getUsers', async () => {
+export const getUsers = createAsyncThunk('users/getUsers', async () => {
     const data = await userService.getUsers();
     return data;
 });

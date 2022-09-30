@@ -166,7 +166,7 @@ export default function Profile() {
     }, 0);
 
     const likedVideos = videos.filter((video) =>
-        video.likes.includes(user._id),
+        video.likes.includes(user?._id),
     );
 
     const handleClickItem = (tab) => {

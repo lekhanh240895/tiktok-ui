@@ -1,3 +1,1 @@
-export default function Upload() {
-    return <div>Upload</div>;
-}
+export { default } from './Upload';

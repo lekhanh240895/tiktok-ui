@@ -8,6 +8,7 @@ import editModalSlice from '~/redux/slices/editModalSlice';
 import { authSelector } from '~/redux/selectors';
 import { updateUser } from '~/redux/slices/usersSlice';
 import { useNavigate } from 'react-router-dom';
+import Image from '~/components/Image';
 
 export default function EditProfileModal() {
     const { currentUser } = useSelector(authSelector);
@@ -98,7 +99,7 @@ export default function EditProfileModal() {
                                 <h2>Profile photo</h2>
 
                                 <div className="img">
-                                    <img
+                                    <Image
                                         src={currentUser.avatar}
                                         alt="Avatar"
                                     />

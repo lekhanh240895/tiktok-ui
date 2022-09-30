@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import axios from 'axios';
+import * as videoService from '~/services/videoService';
 
 const videosSlice = createSlice({
     name: 'videos',
@@ -31,55 +31,48 @@ const videosSlice = createSlice({
                 state.videos = state.videos.filter(
                     (video) => video._id !== action.payload.videoID,
                 );
+            })
+            .addCase(likeVideo.fulfilled, (state, action) => {
+                const updatedVideoIndex = state.videos.findIndex(
+                    (video) => video.id === action.payload._id,
+                );
+
+                state.videos[updatedVideoIndex] = action.payload;
             });
     },
 });
 
 export const getVideos = createAsyncThunk('videosList/getVideos', async () => {
-    const res = await axios.get(`http://localhost:3004/videos`);
-    const videos = res.data;
+    const videos = await videoService.getVideos();
     return videos;
 });
 
 export const createVideo = createAsyncThunk(
     'videoList/createVideo',
     async (video) => {
-        const res = await axios.post(`http://localhost:3004/videos`, video);
-        const newVideo = res.data;
+        const newVideo = await videoService.create(video);
         return newVideo;
     },
 );
 
+export const likeVideo = createAsyncThunk('videoList/like', async (videoID) => {
+    const newVideo = await videoService.like(videoID);
+    return newVideo;
+});
+
 export const updateVideo = createAsyncThunk(
     'videoList/updateVideo',
     async ({ id, updatedVideo }) => {
-        const token = localStorage.getItem('token');
-        const config = {
-            method: 'put',
-            url: `http://localhost:3004/videos/${id}/update`,
-            data: updatedVideo,
-            headers: {
-                Authorization: 'Bearer ' + token,
-            },
-        };
-
-        const res = await axios(config);
-        return res.data;
+        const newVideo = await videoService.update(id, updatedVideo);
+        return newVideo;
     },
 );
 
 export const deleteVideo = createAsyncThunk(
     'videoList/deleteVideo',
     async (videoID) => {
-        const config = {
-            method: 'delete',
-            url: 'http://localhost:3004/videos/delete',
-            data: videoID,
-        };
-
-        const res = await axios(config);
-
-        return res.data;
+        const deletedVideo = await videoService.remove(videoID);
+        return deletedVideo;
     },
     {},
 );

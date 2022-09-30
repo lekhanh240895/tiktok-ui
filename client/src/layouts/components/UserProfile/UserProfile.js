@@ -17,18 +17,12 @@ const cx = classnames.bind(styles);
 
 export const UserProfile = ({ user }) => {
     const { currentUser } = useSelector(authSelector);
-    const [isFollow, setIsFollow] = useState(
-        currentUser?.followingIDs.includes(user._id),
-    );
+    const [isFollow, setIsFollow] = useState(false);
     const dispatch = useDispatch();
 
     useEffect(() => {
-        if (currentUser?.followingIDs.includes(user._id)) {
-            setIsFollow(true);
-        } else {
-            setIsFollow(false);
-        }
-    }, [currentUser, user]);
+        setIsFollow(currentUser?.followingIDs.includes(user._id));
+    }, [currentUser?.followingIDs, user._id]);
 
     const handleFollow = () => {
         if (!currentUser) return dispatch(loginModalSlice.actions.show());

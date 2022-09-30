@@ -2,7 +2,7 @@ import React from 'react';
 import classnames from 'classnames/bind';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css'; // optional
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import styles from './Header2.module.scss';
 import images from '~/assets/images';
@@ -19,6 +19,7 @@ import {
     OptionIcon,
     ProfileIcon,
     SettingIcon,
+    SolidMessageIcon,
     UploadIcon,
 } from '~/components/Icons';
 import Image from '~/components/Image';
@@ -33,6 +34,7 @@ const cx = classnames.bind(styles);
 export default function Header2() {
     const { currentUser } = useSelector(authSelector);
     const dispatch = useDispatch();
+    const location = useLocation();
 
     const MENU_ITEMS = [
         {
@@ -109,6 +111,13 @@ export default function Header2() {
                         to="/upload"
                         onClick={handleclick}
                         leftIcon={<UploadIcon width="2rem" height="2rem" />}
+                        style={({ isActive }) =>
+                            isActive
+                                ? {
+                                      backgroundColor: '#f1f1f2',
+                                  }
+                                : undefined
+                        }
                     >
                         Upload
                     </Button>
@@ -120,28 +129,33 @@ export default function Header2() {
                                 placement="bottom"
                                 delay={[0, 200]}
                             >
-                                <button
+                                <Button
+                                    text
                                     to="/messages"
                                     className={cx('action-btn', 'icon-wrapper')}
                                 >
-                                    <MessageIcon
-                                        width="2.6rem"
-                                        height="2.6rem"
-                                    />
-                                </button>
+                                    {location.pathname === '/messages' ? (
+                                        <SolidMessageIcon
+                                            width="2.6rem"
+                                            height="2.6rem"
+                                        />
+                                    ) : (
+                                        <MessageIcon
+                                            width="2.6rem"
+                                            height="2.6rem"
+                                        />
+                                    )}
+                                </Button>
                             </Tippy>
                             <Tippy
                                 content={<span>Inbox</span>}
                                 placement="bottom"
                                 delay={[0, 200]}
                             >
-                                <button
-                                    to="/inbox"
-                                    className={cx('action-btn')}
-                                >
+                                <Button className={cx('action-btn')}>
                                     <InboxIcon />
                                     <span className={cx('badge')}>20</span>
-                                </button>
+                                </Button>
                             </Tippy>
                         </>
                     ) : (

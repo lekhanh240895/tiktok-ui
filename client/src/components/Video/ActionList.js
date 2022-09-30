@@ -5,78 +5,49 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { configNumber } from '~/services';
 import { ShareIcon } from '../Icons';
 import { useDispatch, useSelector } from 'react-redux';
-import { authSelector, usersSelector } from '~/redux/selectors';
-import { updateVideo } from '~/redux/slices/videosSlice';
+import { authSelector } from '~/redux/selectors';
+import { likeVideo } from '~/redux/slices/videosSlice';
 import loginModalSlice from '~/redux/slices/loginModalSlice';
-import usersSlice from '~/redux/slices/usersSlice';
 import authSlice from '~/redux/slices/authSlice';
+import { useState } from 'react';
 
 const cx = classnames.bind(styles);
 
 export default function ActionList({ video }) {
+    const [likes, setLikes] = useState(video.likes.length);
     const { currentUser } = useSelector(authSelector);
-    const { users } = useSelector(usersSelector);
-    const dispatch = useDispatch();
+    const [isLiked, setIsLiked] = useState(
+        video.likes.includes(currentUser?._id),
+    );
 
-    const isLikedByUser = video.likes.includes(currentUser?._id);
+    const dispatch = useDispatch();
 
     const handleLike = (e) => {
         if (!currentUser) {
-            dispatch(loginModalSlice.actions.show());
-        } else {
-            if (isLikedByUser) {
-                const updatedVideo = {
-                    ...video,
-                    likes: video.likes.filter((id) => id !== currentUser?._id),
-                };
-
-                const updatedUser = {
-                    ...currentUser,
-                    likedVideoIDs: currentUser.likedVideoIDs.filter(
-                        (id) => id !== video._id,
-                    ),
-                };
-
-                const updatedUsers = users.map((user) => {
-                    return user._id === currentUser._id
-                        ? {
-                              ...user,
-                              likedVideoIDs: user.likedVideoIDs.filter(
-                                  (id) => id !== video._id,
-                              ),
-                          }
-                        : user;
-                });
-
-                dispatch(authSlice.actions.setCurrentUser(updatedUser));
-                dispatch(usersSlice.actions.setUsers(updatedUsers));
-                dispatch(updateVideo({ id: video._id, updatedVideo }));
-            } else {
-                const updatedVideo = {
-                    ...video,
-                    likes: video.likes.concat(currentUser?._id),
-                };
-
-                const updatedUser = {
-                    ...currentUser,
-                    likedVideoIDs: currentUser.likedVideoIDs.concat(video._id),
-                };
-
-                const updatedUsers = users.map((user) => {
-                    return user._id === currentUser._id
-                        ? {
-                              ...user,
-                              likedVideoIDs: user.likedVideoIDs.concat(
-                                  video._id,
-                              ),
-                          }
-                        : user;
-                });
-                dispatch(authSlice.actions.setCurrentUser(updatedUser));
-                dispatch(usersSlice.actions.setUsers(updatedUsers));
-                dispatch(updateVideo({ id: video._id, updatedVideo }));
-            }
+            return dispatch(loginModalSlice.actions.show());
         }
+
+        if (isLiked) {
+            const updatedUser = {
+                ...currentUser,
+                likedVideoIDs: currentUser.likedVideoIDs.filter(
+                    (id) => id !== video._id,
+                ),
+            };
+
+            dispatch(authSlice.actions.setCurrentUser(updatedUser));
+        } else {
+            const updatedUser = {
+                ...currentUser,
+                likedVideoIDs: currentUser.likedVideoIDs.concat(video._id),
+            };
+
+            dispatch(authSlice.actions.setCurrentUser(updatedUser));
+        }
+
+        dispatch(likeVideo(video._id));
+        setIsLiked(!isLiked);
+        setLikes(isLiked ? likes - 1 : likes + 1);
     };
 
     return (
@@ -86,7 +57,7 @@ export default function ActionList({ video }) {
                     <span
                         className={cx('action-item-btn')}
                         onClick={handleLike}
-                        style={{ color: isLikedByUser ? 'red' : 'initial' }}
+                        style={{ color: isLiked ? 'red' : 'initial' }}
                     >
                         <FontAwesomeIcon
                             icon={faHeart}
@@ -97,7 +68,7 @@ export default function ActionList({ video }) {
                         />
                     </span>
                     <span className={cx('video-stat')}>
-                        {configNumber(video.likes.length)}
+                        {configNumber(likes)}
                     </span>
                 </li>
                 <li className={cx('action-item')}>
