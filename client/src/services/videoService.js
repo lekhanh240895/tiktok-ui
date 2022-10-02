@@ -20,7 +20,16 @@ export const getVideo = async (_id) => {
 
 export const create = async (video) => {
     try {
-        const response = await httpRequest.post(`videos`, video);
+        const response = await authRequest.post(`videos`, video);
+        return response.data;
+    } catch (err) {
+        console.log(err);
+    }
+};
+
+export const upload = async (video) => {
+    try {
+        const response = await httpRequest.post('upload/video', video);
         return response.data;
     } catch (err) {
         console.log(err);

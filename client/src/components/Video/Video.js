@@ -208,11 +208,12 @@ export default function Video({
                                     {videoRef.current && (
                                         <div className={cx('timer-progress')}>
                                             {handleFormatTime(
-                                                videoRef.current.currentTime,
+                                                videoRef.current.currentTime ||
+                                                    0,
                                             )}
                                             /
                                             {handleFormatTime(
-                                                videoRef.current.duration,
+                                                videoRef.current.duration || 0,
                                             )}
                                         </div>
                                     )}

@@ -48,17 +48,21 @@ function App() {
 
     useEffect(() => {
         (async () => {
-            const tags = videos.reduce((cur, video) => {
-                return cur.concat(video.tags.map((tag) => tag));
-            }, []);
+            if (videos?.length > 0) {
+                const tags = videos.reduce((cur, video) => {
+                    return cur.concat(video.tags.map((tag) => tag));
+                }, []);
 
-            const filterTags = unique(tags);
-            const musics = videos.reduce((cur, video) => {
-                return cur.includes(video.music) ? cur : [...cur, video.music];
-            }, []);
+                const filterTags = unique(tags);
+                const musics = videos.reduce((cur, video) => {
+                    return cur.includes(video.music)
+                        ? cur
+                        : [...cur, video.music];
+                }, []);
 
-            dispatch(appSlice.actions.setTags(filterTags));
-            dispatch(appSlice.actions.setMusics(musics));
+                dispatch(appSlice.actions.setTags(filterTags));
+                dispatch(appSlice.actions.setMusics(musics));
+            }
         })();
     }, [dispatch, videos]);
 

@@ -30,15 +30,15 @@ export default function Home() {
     const { currentUser } = useSelector(authSelector);
     const dispatch = useDispatch();
 
-    const fypVideos = videos.filter(
+    const fypVideos = videos?.filter(
         (video) => video.userID !== currentUser?._id,
     );
 
     useEffect(() => {
         if (isVisible) {
-            if (videoCount < fypVideos.length)
+            if (videoCount < fypVideos?.length)
                 setVideoCount((prevState) => prevState + 1);
-            else setVideoCount(fypVideos.length);
+            else setVideoCount(fypVideos?.length);
         }
     }, [isVisible, videoCount, fypVideos]);
 
@@ -96,7 +96,7 @@ export default function Home() {
     return (
         <div className={cx('wrapper')}>
             <ul className={cx('video-list')}>
-                {fypVideos.slice(0, videoCount).map((video) => {
+                {fypVideos?.slice(0, videoCount).map((video) => {
                     const user = users.find(
                         (user) => user?._id === video.userID,
                     );
