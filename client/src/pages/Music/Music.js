@@ -38,10 +38,10 @@ import {
     MoreShareItemButton,
 } from './styled';
 import { useEffect, useRef, useState } from 'react';
-import VideoComp from './VideoComp';
 import { configNumber } from '~/services';
 import { useSelector } from 'react-redux';
-import { videosSelector } from '~/redux/selectors';
+import { usersSelector, videosSelector } from '~/redux/selectors';
+import ShareVideoItem from '~/components/ShareVideoItem';
 
 const SHARE_MENU = [
     {
@@ -104,6 +104,9 @@ export default function Music() {
     const [isPlaying, setIsPLaying] = useState(false);
     const { musicname } = useParams();
     const [progress, setProgress] = useState(0);
+    const { users } = useSelector(usersSelector);
+
+    console.log({ musicname });
 
     const handleTimeUpdate = () => {
         const { currentTime, duration } = videoRef.current;
@@ -118,8 +121,8 @@ export default function Music() {
     }, [musicname]);
 
     const musicVideos = videos?.filter((video) => video.music === musicname);
+    console.log({ musicVideos });
     const videoRef = useRef();
-    const canvasRef = useRef();
     const circleRef = useRef();
 
     const handlePlay = () => {
@@ -157,19 +160,7 @@ export default function Music() {
         setProgress(0);
     };
 
-    // const grabScreen = () => {
-    //     console.log('Grab');
-    //     const video = videoRef.current;
-    //     const canvas = canvasRef.current;
-    //     const ctx = canvas.getContext('2d');
-
-    //     canvas.width = video.videoWidth;
-    //     canvas.height = video.videoHeight;
-
-    //     ctx.drawImage(video, 0, 0);
-    // };
-
-    if (!musicname) return;
+    if (musicVideos.length <= 0) return;
 
     return (
         <Container>
@@ -182,8 +173,6 @@ export default function Music() {
                             onTimeUpdate={handleTimeUpdate}
                             onEnded={handleEnded}
                         />
-
-                        <canvas id="canvas" ref={canvasRef}></canvas>
 
                         {progress > 0 && (
                             <span className="circle">
@@ -315,11 +304,19 @@ export default function Music() {
             </Header>
 
             <VideoList>
-                {musicVideos.map((video) => (
-                    <VideoItem key={video._id}>
-                        <VideoComp src={video.src} title={video.title} />
-                    </VideoItem>
-                ))}
+                {musicVideos.map((video) => {
+                    const user = users.find(
+                        (user) => user._id === video.user._id,
+                    );
+                    return (
+                        <VideoItem key={video._id}>
+                            <ShareVideoItem
+                                video={video}
+                                username={user.username}
+                            />
+                        </VideoItem>
+                    );
+                })}
             </VideoList>
         </Container>
     );

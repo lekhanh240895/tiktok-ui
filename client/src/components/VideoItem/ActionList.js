@@ -1,15 +1,15 @@
-import { faComment, faHeart } from '@fortawesome/free-solid-svg-icons';
 import classnames from 'classnames/bind';
 import styles from './Video.module.scss';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { configNumber } from '~/services';
-import { ShareIcon } from '../Icons';
+import { CommentIcon, ShareIcon, SolidHeartIcon } from '../Icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { authSelector } from '~/redux/selectors';
 import { likeVideo } from '~/redux/slices/videosSlice';
 import loginModalSlice from '~/redux/slices/loginModalSlice';
 import authSlice from '~/redux/slices/authSlice';
 import { useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import ShareOptionsMenu from '../ShareOptionsMenu';
 
 const cx = classnames.bind(styles);
 
@@ -21,6 +21,8 @@ export default function ActionList({ video }) {
     );
 
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const location = useLocation();
 
     const handleLike = (e) => {
         if (!currentUser) {
@@ -50,49 +52,50 @@ export default function ActionList({ video }) {
         setLikes(isLiked ? likes - 1 : likes + 1);
     };
 
+    const handleComment = () => {
+        if (!currentUser) {
+            return dispatch(loginModalSlice.actions.show());
+        }
+        navigate(`/@${video.user.username}/video/${video._id}`, {
+            state: {
+                background: location,
+            },
+        });
+    };
+
     return (
         <div className={cx('actions')}>
             <ul className={cx('actions-list')}>
-                <li className={cx('action-item')}>
+                <li className={cx('action-item')} onClick={handleLike}>
                     <span
                         className={cx('action-item-btn')}
-                        onClick={handleLike}
                         style={{ color: isLiked ? 'red' : 'initial' }}
                     >
-                        <FontAwesomeIcon
-                            icon={faHeart}
-                            style={{
-                                width: '2.4rem',
-                                height: '2.4rem',
-                            }}
-                        />
+                        <SolidHeartIcon width="2.4rem" height="2.4rem" />
                     </span>
                     <span className={cx('video-stat')}>
                         {configNumber(likes)}
                     </span>
                 </li>
-                <li className={cx('action-item')}>
+                <li className={cx('action-item')} onClick={handleComment}>
                     <span className={cx('action-item-btn')}>
-                        <FontAwesomeIcon
-                            icon={faComment}
-                            style={{
-                                width: '2.4rem',
-                                height: '2.4rem',
-                            }}
-                        />
+                        <CommentIcon width="2.4rem" height="2.4rem" />
                     </span>
                     <span className={cx('video-stat')}>
                         {configNumber(video.comments.length)}
                     </span>
                 </li>
-                <li className={cx('action-item')}>
-                    <span className={cx('action-item-btn')}>
-                        <ShareIcon width="2.4rem" height="2.4rem" />
-                    </span>
-                    <span className={cx('video-stat')}>
-                        {configNumber(video.shares.length)}
-                    </span>
-                </li>
+
+                <ShareOptionsMenu offset={[7, 12]}>
+                    <li className={cx('action-item')}>
+                        <span className={cx('action-item-btn')}>
+                            <ShareIcon width="2.4rem" height="2.4rem" />
+                        </span>
+                        <span className={cx('video-stat')}>
+                            {configNumber(video.shares.length)}
+                        </span>
+                    </li>
+                </ShareOptionsMenu>
             </ul>
         </div>
     );

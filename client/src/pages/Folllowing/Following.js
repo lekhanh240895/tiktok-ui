@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styles from './Following.module.scss';
 import classnames from 'classnames/bind';
 
-import Video from '~/components/Video';
+import VideoItem from '~/components/VideoItem';
 import { Link } from 'react-router-dom';
 import Image from '~/components/Image';
 import { useSelector } from 'react-redux';
@@ -23,7 +23,7 @@ export default function Following() {
     const [isPlaying, setIsPlaying] = useState(false);
 
     const followingUserVideos = videos.filter((video) =>
-        currentUser?.followingIDs?.includes(video.userID),
+        currentUser?.followingIDs?.includes(video.user._id),
     );
 
     useEffect(() => {
@@ -66,7 +66,7 @@ export default function Following() {
             <ul className={cx('video-list')}>
                 {followingUserVideos.map((video) => {
                     const user = users.find(
-                        (user) => user?._id === video.userID,
+                        (user) => user?._id === video.user._id,
                     );
                     return (
                         <li key={video._id} className={cx('video-item')}>
@@ -78,7 +78,7 @@ export default function Following() {
                                 />
                             </Link>
 
-                            <Video
+                            <VideoItem
                                 video={video}
                                 user={user}
                                 isMuted={settings.isMuted}

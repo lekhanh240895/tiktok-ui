@@ -103,6 +103,16 @@ ul {
     align-items: center;
     justify-content: center;
 }
+.icon-wrapper-circle {
+    width: 3.2rem;
+    height: 3.2rem;
+    background-color: rgb(22 24 35 / 6%);
+    border-radius: 50%;
+    padding: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
 // Custom tippy
 body {
@@ -148,13 +158,13 @@ html *::-webkit-scrollbar-track {
 
 // Custom input range
 input[type='range'] {
-    -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
+    --webkit-appearance: none; /* Hides the slider so that custom slider can be made */
     /* Specific width is required for Firefox. */
     background: transparent; /* Otherwise white in Chrome */
 }
 
 input[type='range']::-webkit-slider-thumb {
-    -webkit-appearance: none;
+    --webkit-appearance: none;
 }
 
 input[type='range']:focus {
@@ -170,7 +180,7 @@ input[type='range']::-ms-track {
 }
 
 input[type='range']::-webkit-slider-thumb {
-    -webkit-appearance: none;
+    --webkit-appearance: none;
     height: 12px;
     width: 12px;
     border-radius: 50%;
@@ -192,4 +202,13 @@ input[type='range']::-webkit-slider-runnable-track {
     border: 1px solid #d3d6d8;
     border-radius: 0.25rem;
     background-color: #f8d7da;
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }

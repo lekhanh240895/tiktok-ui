@@ -1,34 +1,48 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const AutoIncrement = require("mongoose-sequence")(mongoose);
 
 const VideoModel = new Schema(
-  {
-    userID: {
-      type: mongoose.Schema.Types.ObjectId,
-      required: true,
-      ref: "User",
+    {
+        user: {
+            type: Schema.Types.ObjectId,
+            required: true,
+            ref: 'user',
+        },
+        title: { type: String },
+        privacy: { type: String, default: 'public' },
+        cover: { type: String },
+        allowance: {
+            type: Object,
+            default: {
+                comment: true,
+                duet: true,
+                stitch: true,
+            },
+        },
+        src: { type: String },
+        likes: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'user',
+            },
+        ],
+        shares: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'user',
+            },
+        ],
+        comments: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'comment',
+            },
+        ],
+        music: { type: String },
+        tags: { type: Array },
+        views: { type: Number },
     },
-    title: { type: String },
-    src: { type: String },
-    likes: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-      },
-    ],
-    shares: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-      },
-    ],
-    comments: { type: Array },
-    music: { type: String },
-    tags: { type: Array },
-    views: { type: Number },
-  },
-  { timestamps: true }
+    { timestamps: true },
 );
 
-module.exports = mongoose.model("Video", VideoModel);
+module.exports = mongoose.model('video', VideoModel);

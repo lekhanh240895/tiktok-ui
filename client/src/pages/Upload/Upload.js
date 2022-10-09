@@ -1,149 +1,208 @@
+import { useEffect, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 import Button from '~/components/Button';
 import { CloudUploadIcon } from '~/components/Icons';
+
+import { authSelector } from '~/redux/selectors';
 import { Wrapper } from './styled';
+import {
+    generateVideoThumbnails,
+    getVideoDurationFromVideoFile,
+    importFileandPreview,
+} from '@rajesh896/video-thumbnails-generator';
+import RightBody from './RightBody';
+import VideoPreview from './VideoPreview';
 
 export default function Upload() {
+    const uploadRef = useRef(null);
+    const videoRef = useRef(null);
+    const [videoUrl, setVideoUrl] = useState('');
+    const { currentUser } = useSelector(authSelector);
+    const [progress, setProgress] = useState(0);
+    const [isMuted, setIsMuted] = useState(false);
+    const [isPlaying, setIsPlaying] = useState(true);
+    const [video, setVideo] = useState(null);
+    const [caption, setCaption] = useState('');
+    const [videoThumb, setVideoThumb] = useState('');
+    const [thumbnails, setThumbnails] = useState([]);
+    const [duration, setDuration] = useState(null);
+    const [dragActive, setDragActive] = useState(false);
+
+    useEffect(() => {
+        if (video) {
+            const videoName = video.name.split('.')[0];
+            setCaption(videoName);
+
+            importFileandPreview(video).then((res) => {
+                setVideoUrl(res);
+            });
+            getVideoDurationFromVideoFile(video).then((duration) => {
+                setDuration(duration);
+            });
+            generateVideoThumbnails(video, duration).then((thumbs) => {
+                setThumbnails(thumbs);
+            });
+        } else {
+            setVideoThumb('');
+            setThumbnails([]);
+        }
+    }, [duration, video]);
+
+    useEffect(() => {
+        if (thumbnails.length > 0) {
+            setVideoThumb(thumbnails[0]);
+        } else {
+            setVideoThumb('');
+        }
+    }, [thumbnails]);
+
+    const handleChange = (e) => {
+        const video = e.target.files[0];
+        setVideo(video);
+    };
+
+    const handleTimeUpdate = () => {
+        const { currentTime, duration } = videoRef.current;
+        const progress = Math.floor((currentTime / duration) * 100);
+        setProgress(progress);
+    };
+
+    const handlePlay = () => {
+        if (!videoRef.current.paused) {
+            videoRef.current.pause();
+            setIsPlaying(false);
+        } else {
+            videoRef.current.play();
+            setIsPlaying(true);
+        }
+    };
+
+    const handleDiscard = () => {
+        setVideo(null);
+        setProgress(0);
+        setIsPlaying(true);
+        setDuration(0);
+        setCaption('');
+    };
+
+    const handleClickProgress = (e) => {
+        const rect = e.target.getBoundingClientRect();
+        const newProgress = parseInt(
+            ((e.clientX - rect.left) / e.target.parentNode.clientWidth) * 100,
+            10,
+        );
+
+        setProgress(newProgress);
+        const newCurrentTime = (duration * newProgress) / 100;
+        videoRef.current.currentTime = newCurrentTime;
+    };
+
+    const handleDrag = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (e.type === 'dragenter' || e.type === 'dragover') {
+            setDragActive(true);
+        } else if (e.type === 'dragleave') {
+            setDragActive(false);
+        }
+    };
+    // triggers when file is dropped
+    const handleDrop = function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        setDragActive(false);
+        if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+            const file = e.dataTransfer.files[0];
+            const extension = file.type.split('/')[0];
+
+            if (extension === 'video') setVideo(file);
+        }
+    };
+
     return (
         <Wrapper>
             <div className="header">
                 <h2 className="heading">Upload video</h2>
-                <p className="desc">Post a videoto your account</p>
+                <p className="desc">Post a video to your account</p>
             </div>
 
             <div className="body">
-                <label className="left-body" htmlFor="upload-file">
-                    <span className="upload-icon">
-                        <CloudUploadIcon width="4rem" height="2.9rem" />
-                    </span>
-                    <span className="title">Select video to upload</span>
-                    <p className="sub-title">Or drag and drop a file</p>
-
-                    <div className="video-info">
-                        <div>MP4 or WebM</div>
-                        <div>720x1280 resolution or higher</div>
-                        <div>Up to 10 minutes</div>
-                        <div>Less than 2 GB</div>
-                    </div>
-                    <Button primary className="select-btn">
-                        Select file
-                    </Button>
-                </label>
-
-                <input type="file" hidden id="upload-file" />
-
-                <div className="right-body">
-                    <form>
-                        <div className="form-group">
-                            <div className="title">
-                                <label htmlFor="caption">Caption</label>
-                                <div className="limited">0 / 150</div>
-                            </div>
-
-                            <div className="input-container">
-                                <input
-                                    type="text"
-                                    maxLength={150}
-                                    className="caption-input"
-                                    id="caption"
-                                />
-
-                                <span className="hashtag">
-                                    <span className="hash">@</span>
-                                    <span className="tag">#</span>
-                                </span>
-                            </div>
-                        </div>
-                        <div className="form-group">
-                            <div className="title">
-                                <span>Cover</span>
-                            </div>
-                            <div className="bg-container">
-                                <div className="bg-empty"></div>
-                            </div>
-                        </div>
-                        <div className="form-group">
-                            <div className="title">
-                                <label htmlFor="privacy">
-                                    Who can view this video?
-                                </label>
-                            </div>
-                            <select
-                                defaultValue="Public"
-                                id="privacy"
-                                className="privacy-select"
-                            >
-                                <option value="public">Public</option>
-                                <option value="friends">Friends</option>
-                                <option value="private">Private</option>
-                            </select>
-                        </div>
-                        <div className="form-group">
-                            <div className="title">Allow users to</div>
-                            <div className="checkbox-container">
-                                <label className="checkbox checkbox-label">
-                                    Comment
-                                    <input
-                                        type="checkbox"
-                                        className="checkbox-input"
-                                    />
-                                    <span className="checkmark"></span>
-                                </label>
-                                <label className="checkbox checkbox-label">
-                                    Duet
-                                    <input
-                                        type="checkbox"
-                                        className="checkbox-input"
-                                    />
-                                    <span className="checkmark"></span>
-                                </label>
-                                <label className="checkbox checkbox-label">
-                                    Stitch
-                                    <input
-                                        type="checkbox"
-                                        className="checkbox-input"
-                                    />
-                                    <span className="checkmark"></span>
-                                </label>
-                            </div>
-                        </div>
-                        <div className="form-group">
-                            <div className="title title-copyright">
-                                <span className="copyright">
-                                    Run a copyright check
-                                </span>
-                                <div className="switch">
-                                    <div className="switch-wrapper">
-                                        <span className="switch-inner"></span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <p className="copyright-desc">
-                                We'll check your video for potential copyright
-                                infringements on used sounds. If infringements
-                                are found, you can edit the video before
-                                posting. <b>Learn more</b>
+                {video ? (
+                    <VideoPreview
+                        videoUrl={videoUrl}
+                        isMuted={isMuted}
+                        videoThumb={videoThumb}
+                        video={video}
+                        currentUser={currentUser}
+                        caption={caption}
+                        videoRef={videoRef}
+                        handleTimeUpdate={handleTimeUpdate}
+                        progress={progress}
+                        handleClickProgress={handleClickProgress}
+                        handlePlay={handlePlay}
+                        isPlaying={isPlaying}
+                        setIsMuted={setIsMuted}
+                    />
+                ) : (
+                    <div className="left-body" onDragEnter={handleDrag}>
+                        <label className="upload-body" htmlFor="upload-video">
+                            <span className="upload-icon">
+                                <CloudUploadIcon width="4rem" height="2.9rem" />
+                            </span>
+                            <span className="title">
+                                Select video to upload
+                            </span>
+                            <p className="sub-title">
+                                Or drag and drop a video
                             </p>
-                        </div>
 
-                        <div className="button-group">
+                            <div className="video-info">
+                                <div>MP4 or WebM</div>
+                                <div>720x1280 resolution or higher</div>
+                                <div>Up to 10 minutes</div>
+                                <div>Less than 2 GB</div>
+                            </div>
                             <Button
-                                secondary
-                                type="button"
-                                className="action-btn"
+                                primary
+                                className="select-btn"
+                                onClick={() => uploadRef.current.click()}
                             >
-                                Discard
+                                Select video
                             </Button>
-                            <Button
-                                disabled
-                                type="submit"
-                                className="action-btn"
-                            >
-                                Post
-                            </Button>
-                        </div>
-                    </form>
-                </div>
+                        </label>
+
+                        {dragActive && (
+                            <div
+                                className="drag-file-element"
+                                onDragEnter={handleDrag}
+                                onDragLeave={handleDrag}
+                                onDragOver={handleDrag}
+                                onDrop={handleDrop}
+                            ></div>
+                        )}
+                    </div>
+                )}
+
+                <input
+                    type="file"
+                    hidden
+                    id="upload-video"
+                    accept="video/mp4,video/x-m4v,video/*"
+                    onChange={handleChange}
+                    ref={uploadRef}
+                />
+
+                <RightBody
+                    thumbnails={thumbnails}
+                    caption={caption}
+                    setCaption={setCaption}
+                    videoThumb={videoThumb}
+                    setVideoThumb={setVideoThumb}
+                    onDiscard={handleDiscard}
+                    video={video}
+                    disabled={videoUrl}
+                    currentUser={currentUser}
+                />
             </div>
         </Wrapper>
     );
