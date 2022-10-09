@@ -34,34 +34,30 @@ const usersSlice = createSlice({
                 );
             })
             .addCase(followUser.fulfilled, (state, action) => {
-                const { followedUserID, currentUserID } = action.payload;
-                const followedIndex = state.users.findIndex(
-                    (user) => user._id === followedUserID,
-                );
-                const userIndex = state.users.findIndex(
-                    (user) => user._id === currentUserID,
-                );
-
-                state.users[followedIndex].followerIDs.push(currentUserID);
-                state.users[userIndex].followingIDs.push(followedUserID);
+                // const { followedUserID, currentUserID } = action.payload;
+                // const followedIndex = state.users.findIndex(
+                //     (user) => user._id === followedUserID,
+                // );
+                // const userIndex = state.users.findIndex(
+                //     (user) => user._id === currentUserID,
+                // );
+                // state.users[followedIndex].followerIDs.push(currentUserID);
+                // state.users[userIndex].followingIDs.push(followedUserID);
             })
             .addCase(unfollowUser.fulfilled, (state, action) => {
-                const { unfollowedUserID, currentUserID } = action.payload;
-                const unfollowedIndex = state.users.findIndex(
-                    (user) => user._id === unfollowedUserID,
-                );
-
-                const userIndex = state.users.findIndex(
-                    (user) => user._id === currentUserID,
-                );
-
-                state.users[unfollowedIndex].followerIDs = state.users[
-                    unfollowedIndex
-                ].followerIDs.filter((id) => id !== currentUserID);
-
-                state.users[userIndex].followingIDs = state.users[
-                    userIndex
-                ].followingIDs.filter((id) => id !== unfollowedUserID);
+                // const { unfollowedUserID, currentUserID } = action.payload;
+                // const unfollowedIndex = state.users.findIndex(
+                //     (user) => user._id === unfollowedUserID,
+                // );
+                // const userIndex = state.users.findIndex(
+                //     (user) => user._id === currentUserID,
+                // );
+                // state.users[unfollowedIndex].followerIDs = state.users[
+                //     unfollowedIndex
+                // ].followerIDs.filter((id) => id !== currentUserID);
+                // state.users[userIndex].followingIDs = state.users[
+                //     userIndex
+                // ].followingIDs.filter((id) => id !== unfollowedUserID);
             });
     },
 });
@@ -75,7 +71,6 @@ export const updateUser = createAsyncThunk(
     'userList/updateUser',
     async ({ _id, updatedData }) => {
         const data = await userService.update(_id, updatedData);
-        console.log(data);
         return data;
     },
 );

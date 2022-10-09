@@ -1,5 +1,5 @@
 import { Fragment, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 
 import { publicRoutes, privateRoutes } from '~/routes/index';
 import DefaultLayout from '~/layouts/DefaultLayout';
@@ -13,16 +13,20 @@ import {
 } from './redux/selectors';
 import { getUsers } from './redux/slices/usersSlice';
 import appSlice from './redux/slices/appSlice';
-import { getVideos } from './redux/slices/videosSlice';
+import videosSlice, { getVideos } from './redux/slices/videosSlice';
 import LoginModal from './components/modals/LoginModal';
 import PrivateOutlet from './components/PrivateRouteOutlet';
 import { getMe } from './redux/slices/authSlice';
+import Spinner from './components/Spinner/Spinner';
+import VideoModal from './components/modals/VideoModal';
 
 function App() {
-    const { videos } = useSelector(videosSelector);
+    const { isLoading, isSuccess, videos } = useSelector(videosSelector);
     const { isEditModalShow } = useSelector(editModalSelector);
     const { isLoginModalShow } = useSelector(loginModalSelector);
     const dispatch = useDispatch();
+    const location = useLocation();
+    const background = location.state && location.state.background;
 
     function unique(arr) {
         var newArr = [];
@@ -35,6 +39,12 @@ function App() {
     }
 
     useEffect(() => {
+        if (isSuccess && videos.length > 0) {
+            dispatch(videosSlice.actions.resetStatus());
+        }
+    }, [dispatch, isSuccess, videos]);
+
+    useEffect(() => {
         const token = localStorage.getItem('token');
         // Fetch Users
         dispatch(getUsers());
@@ -44,13 +54,17 @@ function App() {
 
         // Get currentUser
         if (token) dispatch(getMe());
+
+        return () => {
+            dispatch(videosSlice.actions.reset());
+        };
     }, [dispatch]);
 
     useEffect(() => {
         (async () => {
             if (videos?.length > 0) {
                 const tags = videos.reduce((cur, video) => {
-                    return cur.concat(video.tags.map((tag) => tag));
+                    return cur.concat(video.tags?.map((tag) => tag));
                 }, []);
 
                 const filterTags = unique(tags);
@@ -66,65 +80,79 @@ function App() {
         })();
     }, [dispatch, videos]);
 
+    if (isLoading) return <Spinner />;
+
     return (
         <div className="App">
-            <Router>
-                <Routes>
-                    {publicRoutes.map((route, index) => {
-                        let Layout = DefaultLayout;
-                        const Page = route.component;
+            <Routes location={background || location}>
+                {publicRoutes.map((route, index) => {
+                    let Layout = DefaultLayout;
+                    const Page = route.component;
 
-                        if (route.layout) {
-                            Layout = route.layout;
-                        } else if (route.layout === null) {
-                            Layout = Fragment;
-                        }
+                    if (route.layout) {
+                        Layout = route.layout;
+                    } else if (route.layout === null) {
+                        Layout = Fragment;
+                    }
 
-                        return (
+                    return (
+                        <Route
+                            key={index}
+                            path={route.path}
+                            element={
+                                <Layout>
+                                    <Page />
+                                </Layout>
+                            }
+                        />
+                    );
+                })}
+
+                {privateRoutes.map((route, index) => {
+                    let Layout = DefaultLayout;
+                    const Page = route.component;
+
+                    if (route.layout) {
+                        Layout = route.layout;
+                    } else if (route.layout === null) {
+                        Layout = Fragment;
+                    }
+
+                    return (
+                        <Route
+                            path={route.path}
+                            key={index}
+                            element={<PrivateOutlet />}
+                        >
                             <Route
-                                key={index}
-                                path={route.path}
                                 element={
                                     <Layout>
                                         <Page />
                                     </Layout>
                                 }
                             />
-                        );
-                    })}
+                        </Route>
+                    );
+                })}
 
-                    {privateRoutes.map((route, index) => {
-                        let Layout = DefaultLayout;
-                        const Page = route.component;
+                <Route
+                    path={`@:username/video/:videoID`}
+                    element={<VideoModal />}
+                />
+            </Routes>
 
-                        if (route.layout) {
-                            Layout = route.layout;
-                        } else if (route.layout === null) {
-                            Layout = Fragment;
-                        }
-
-                        return (
-                            <Route
-                                path={route.path}
-                                key={index}
-                                element={<PrivateOutlet />}
-                            >
-                                <Route
-                                    element={
-                                        <Layout>
-                                            <Page />
-                                        </Layout>
-                                    }
-                                />
-                            </Route>
-                        );
-                    })}
+            {background && (
+                <Routes>
+                    <Route
+                        path={`@:username/video/:videoID`}
+                        element={<VideoModal />}
+                    />
                 </Routes>
+            )}
 
-                <GetAppButton />
-                {isEditModalShow && <EditProfileModal />}
-                {isLoginModalShow && <LoginModal />}
-            </Router>
+            <GetAppButton />
+            {isEditModalShow && <EditProfileModal />}
+            {isLoginModalShow && <LoginModal />}
         </div>
     );
 }

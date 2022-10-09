@@ -99,19 +99,35 @@ export default function Search() {
 
             {activeTab === 'topVideos' ? (
                 <VideoList>
-                    {topVideos.map((video) => (
-                        <VideoItem key={video._id}>
-                            <VideoComp video={video} />
-                        </VideoItem>
-                    ))}
+                    {topVideos.map((video) => {
+                        const user = users.find(
+                            (user) => user._id === video.user._id,
+                        );
+                        return (
+                            <VideoItem key={video._id}>
+                                <VideoComp
+                                    video={video}
+                                    username={user.username}
+                                />
+                            </VideoItem>
+                        );
+                    })}
                 </VideoList>
             ) : activeTab === 'videos' ? (
                 <VideoList>
-                    {otherVideos.map((video) => (
-                        <VideoItem key={video._id}>
-                            <VideoComp video={video} />
-                        </VideoItem>
-                    ))}
+                    {otherVideos.map((video) => {
+                        const user = users.find(
+                            (user) => user._id === video.user._id,
+                        );
+                        return (
+                            <VideoItem key={video._id}>
+                                <VideoComp
+                                    video={video}
+                                    username={user.username}
+                                />
+                            </VideoItem>
+                        );
+                    })}
                 </VideoList>
             ) : (
                 <ul>

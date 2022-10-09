@@ -164,7 +164,13 @@ export default function Header() {
                         </>
                     )}
 
-                    <Menu items={currentUser ? USER_MENU : MENU_ITEMS}>
+                    <Menu
+                        items={currentUser ? USER_MENU : MENU_ITEMS}
+                        placement="bottom-end"
+                        style={{
+                            maxHeight: 'min((100vh - 96px) - 60px, 734px)',
+                        }}
+                    >
                         {currentUser ? (
                             <Image
                                 className={cx('user-avatar')}

@@ -17,6 +17,18 @@ export const Wrapper = styled.div`
         display: flex;
         align-items: center;
         justify-content: center;
+        animation: show 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
+
+        @keyframes show {
+            from {
+                opacity: 0;
+                transform: scale(0);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
 
         .modal_inner {
             background-color: #fff;

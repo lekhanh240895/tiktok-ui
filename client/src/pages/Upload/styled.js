@@ -239,6 +239,7 @@ export const Wrapper = styled.div`
                 width: calc(100% - 40px);
                 left: 50%;
                 transform: translateX(-50%);
+                cursor: pointer;
 
                 .progress {
                     width: 100%;
@@ -294,6 +295,8 @@ export const Wrapper = styled.div`
             width: 260px;
             height: 460px;
             border-radius: 8px;
+            position: relative;
+            cursor: pointer;
 
             .upload-body {
                 width: 100%;
@@ -337,6 +340,14 @@ export const Wrapper = styled.div`
                 border-color: var(--primary-color);
                 background-color: var(--main-background-color);
             }
+
+            .drag-file-element {
+                position: absolute;
+                top: 0px;
+                right: 0px;
+                bottom: 0px;
+                left: 0px;
+            }
         }
 
         .right-body {
@@ -379,13 +390,14 @@ export const Wrapper = styled.div`
 
                     .hashtag {
                         position: absolute;
-                        right: 20px;
+                        right: 10px;
                         top: 8px;
+                        display: flex;
+                        align-items: center;
 
                         span {
-                            font-size: 2rem;
                             font-weight: 700;
-                            margin: 8px;
+                            margin: 4px 6px;
                         }
                     }
                 }

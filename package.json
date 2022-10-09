@@ -21,7 +21,8 @@
     "concurrently": "^7.4.0"
   },
   "dependencies": {
-    "@rajesh896/video-thumbnails-generator": "^2.3.9"
+    "@rajesh896/video-thumbnails-generator": "^2.3.9",
+    "date-fns": "^2.29.3"
   },
   "prettier": {
     "arrowParens": "always",

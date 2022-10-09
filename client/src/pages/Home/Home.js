@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styles from './Home.module.scss';
 import classnames from 'classnames/bind';
 
-import Video from '~/components/Video';
+import VideoItem from '~/components/VideoItem';
 import { Link } from 'react-router-dom';
 import Image from '~/components/Image';
 import Button from '~/components/Button';
@@ -23,7 +23,6 @@ export default function Home() {
     const { users } = useSelector(usersSelector);
     const { videos } = useSelector(videosSelector);
     const [videoCount, setVideoCount] = useState(1);
-
     const [containerRef, isVisible] = useElementOnScreen({
         threshold: 0,
     });
@@ -31,7 +30,7 @@ export default function Home() {
     const dispatch = useDispatch();
 
     const fypVideos = videos?.filter(
-        (video) => video.userID !== currentUser?._id,
+        (video) => video.user._id !== currentUser?._id,
     );
 
     useEffect(() => {
@@ -98,10 +97,10 @@ export default function Home() {
             <ul className={cx('video-list')}>
                 {fypVideos?.slice(0, videoCount).map((video) => {
                     const user = users.find(
-                        (user) => user?._id === video.userID,
+                        (user) => user?._id === video.user._id,
                     );
                     const isFollowed = currentUser?.followingIDs?.includes(
-                        user._id,
+                        user?._id,
                     );
                     return (
                         <li key={video._id} className={cx('video-item')}>
@@ -113,7 +112,9 @@ export default function Home() {
                                 />
                             </Link>
 
-                            <Video
+                            <div className="video-content-container"></div>
+
+                            <VideoItem
                                 video={video}
                                 user={user}
                                 isMuted={settings.isMuted}
@@ -121,6 +122,7 @@ export default function Home() {
                                 onMutedVolume={handleMuteVolume}
                                 onVolumeChange={handleVolumeChange}
                             />
+
                             {isFollowed ? (
                                 <Button
                                     secondary

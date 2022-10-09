@@ -1,10 +1,9 @@
 const multer = require('multer');
 
 //specify the storage engine
-
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, '../public/images');
+        cb(null, 'public/images');
     },
     filename: function (req, file, cb) {
         cb(null, Date.now() + '-' + file.originalname);
@@ -13,7 +12,7 @@ const storage = multer.diskStorage({
 
 const storageVideo = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, '../public/videos');
+        cb(null, 'public/videos');
     },
     filename: function (req, file, cb) {
         cb(null, Date.now() + '-' + file.originalname);

@@ -1,10 +1,13 @@
 const VideoModel = require('../models/VideoModel');
 
 class VideosController {
-    // [GET] /videos
+    // [GET] api/videos
     async getVideos(req, res, next) {
         try {
-            const videos = await VideoModel.find();
+            const videos = await VideoModel.find()
+                .populate('user')
+                .populate('comments')
+                .exec();
             res.status(200).json(videos);
         } catch (err) {
             res.status(500).json({ error: err });
@@ -12,23 +15,26 @@ class VideosController {
         }
     }
 
-    // [GET] /videos/:id
+    // [GET] api/videos/:id
     async getVideo(req, res, next) {
         try {
-            const videos = await VideoModel.findById(req.params.id);
-            res.status(200).json(videos);
+            const video = await VideoModel.findById(req.params.id)
+                .populate('user')
+                .populate('comment')
+                .exec();
+            res.status(200).json(video);
         } catch (err) {
             res.status(500).json({ error: err });
             next();
         }
     }
 
-    // [POST] /videos
+    // [POST] api/videos
     async createVideo(req, res, next) {
         try {
             const video = new VideoModel({
                 ...req.body,
-                userID: req.user._id,
+                user: req.user._id,
             });
 
             await video.save();
@@ -39,7 +45,7 @@ class VideosController {
         }
     }
 
-    // [PUT] /videos/:id/update
+    // [PUT] api/videos/:id/update
     async updateVideo(req, res, next) {
         try {
             const video = await VideoModel.findByIdAndUpdate(
@@ -54,7 +60,7 @@ class VideosController {
         }
     }
 
-    // [PUT] /videos/:id/like
+    // [PUT] api/videos/:id/like
     async likeVideo(req, res, next) {
         try {
             const video = await VideoModel.findById(req.params.id);
@@ -75,11 +81,13 @@ class VideosController {
         }
     }
 
-    // [DELETE] /videos/:id/delete
+    // [DELETE] api/videos/:id/delete
     async deleteVideo(req, res, next) {
         try {
-            const deleteVideo = await VideoModel.findByIdAndDelete(req.body.id);
-            res.status(200).json(req.body.id);
+            const deletedVideo = await VideoModel.findByIdAndDelete(
+                req.body.id,
+            );
+            res.status(200).json(deletedVideo);
         } catch (err) {
             res.status(500).json({ error: err });
             next();

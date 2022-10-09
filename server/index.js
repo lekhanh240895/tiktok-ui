@@ -5,10 +5,12 @@ const cors = require('cors');
 const users = require('./routers/users');
 const videos = require('./routers/videos');
 const auth = require('./routers/auth');
+const upload = require('./routers/upload');
+const comments = require('./routers/comments');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const helmet = require('helmet');
-const { uploadImage, uploadVideo } = require('./middlewares/multer');
+const fs = require('fs');
 
 require('dotenv').config();
 
@@ -33,25 +35,11 @@ app.use(
 app.use(helmet());
 app.use(cors());
 
-app.use('/users', users);
-app.use('/videos', videos);
-app.use('/auth', auth);
-
-app.post('/upload/video', uploadVideo.single('video'), (req, res) => {
-    try {
-        return res.status(200).json('Video uploaded!');
-    } catch (err) {
-        console.log(err);
-    }
-});
-
-app.post('/upload/image', uploadImage.single('image'), (req, res) => {
-    try {
-        return res.status(200).json('Image uploaded!');
-    } catch (err) {
-        console.log(err);
-    }
-});
+app.use('/api/users', users);
+app.use('/api/videos', videos);
+app.use('/api/auth', auth);
+app.use('/api/upload', upload);
+app.use('/api/comments', comments);
 
 // Cookies
 app.use(cookieParser());

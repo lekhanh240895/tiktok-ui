@@ -160,26 +160,6 @@ export const VideoItem = styled.li`
     cursor: pointer;
 `;
 
-export const VideoWrapper = styled.div`
-    position: relative;
-    width: 100%;
-    overflow: hidden;
-    border-radius: 4px;
-`;
-
-export const Video = styled.video`
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-`;
-
-export const VideoTitle = styled.p`
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    line-height: 21px;
-    font-size: 1.4rem;
-`;
 export const NavList = styled.ul`
     display: inline-block;
     position: relative;

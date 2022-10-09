@@ -14,7 +14,6 @@ const authSlice = createSlice({
             state.currentUser = action.payload;
         },
         reset: (state) => {
-            state.currentUser = null;
             state.isLoading = false;
             state.isSuccess = false;
             state.isError = false;

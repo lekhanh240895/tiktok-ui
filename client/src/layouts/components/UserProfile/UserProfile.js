@@ -72,7 +72,7 @@ export const UserProfile = ({ user }) => {
                         className={cx('follow-btn')}
                         onClick={handleUnFollow}
                     >
-                        Follow
+                        Following
                     </Button>
                 )}
             </div>

@@ -1,12 +1,8 @@
 import { authRequest, httpRequest } from '~/utils/httpRequest';
 
 export const getVideos = async () => {
-    try {
-        const response = await httpRequest.get('videos');
-        return response.data;
-    } catch (err) {
-        console.log(err);
-    }
+    const response = await httpRequest.get('videos');
+    return response.data;
 };
 
 export const getVideo = async (_id) => {
@@ -19,28 +15,15 @@ export const getVideo = async (_id) => {
 };
 
 export const create = async (video) => {
-    try {
-        const response = await authRequest.post(`videos`, video);
-        return response.data;
-    } catch (err) {
-        console.log(err);
-    }
+    const response = await authRequest.post(`videos`, video);
+    return response.data;
 };
 
-export const upload = async (video) => {
-    try {
-        const response = await httpRequest.post('upload/video', video);
-        return response.data;
-    } catch (err) {
-        console.log(err);
-    }
-};
-
-export const update = async (id, updatedData) => {
+export const update = async (updatedVideo) => {
     try {
         const response = await authRequest.put(
-            `/videos/${id}/update`,
-            updatedData,
+            `/videos/${updatedVideo._id}/update`,
+            updatedVideo,
         );
         return response.data;
     } catch (err) {

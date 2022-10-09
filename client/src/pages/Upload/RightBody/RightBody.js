@@ -1,7 +1,12 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import Button from '~/components/Button';
-import * as videoService from '~/services/videoService';
+import { AtIcon, TagIcon } from '~/components/Icons';
+import Spinner from '~/components/Spinner/Spinner';
+import { videosSelector } from '~/redux/selectors';
+import videosSlice, { createVideo } from '~/redux/slices/videosSlice';
+import * as uploadService from '~/services/uploadService';
 
 export default function RightBody({
     thumbnails,
@@ -12,39 +17,75 @@ export default function RightBody({
     duration,
     onDiscard,
     video,
+    currentUser,
 }) {
     const [offset, setOffset] = useState(4);
     const [scroll, setScroll] = useState(0);
+    const [translateX, setTranslateX] = useState(8);
     const [formData, setFormData] = useState({
-        title: caption,
-        cover: videoThumb,
+        src: '',
         privacy: 'public',
         allowance: {
             comment: false,
             duet: false,
             stitch: false,
         },
+        music: `Original sound - @${currentUser?.username}`,
     });
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const { isLoading, isSuccess } = useSelector(videosSelector);
+
+    useEffect(() => {
+        const x = offset - scroll;
+        if (x < 8) {
+            return setTranslateX(8);
+        }
+        if (x > 580) {
+            return setTranslateX(580);
+        }
+        setTranslateX(x);
+    }, [offset, scroll]);
+
+    useEffect(() => {
+        if (isSuccess && video) {
+            onDiscard();
+            navigate(`/@${currentUser?.username}`, { replace: true });
+        }
+        return () => {
+            videosSlice.actions.resetStatus();
+        };
+    }, [currentUser, isSuccess, navigate, onDiscard, video]);
+
+    useEffect(() => {
+        setFormData({
+            ...formData,
+            title: caption,
+            cover: videoThumb,
+        });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [caption, videoThumb]);
 
     useEffect(() => {
         setOffset(0);
         setScroll(0);
     }, [thumbnails]);
 
-    console.log(formData);
-
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (video) {
-            const data = new FormData();
-            const fileName = video.name;
-            data.append('video', video);
-            data.append('name', fileName);
-            await videoService.upload(data);
-        }
+            const videoData = new FormData();
+            videoData.append('video', video);
 
-        // await videoService.create(formData);
+            const uploadVideo = await uploadService.uploadVideo(videoData);
+            const newFormData = {
+                ...formData,
+                src: `http://localhost:3004/videos/${uploadVideo.filename}`,
+            };
+
+            dispatch(createVideo(newFormData));
+        }
     };
 
     const handleInputChange = (e) => {
@@ -60,6 +101,8 @@ export default function RightBody({
             },
         });
     };
+
+    if (isLoading) return <Spinner />;
 
     return (
         <div className="right-body">
@@ -87,8 +130,12 @@ export default function RightBody({
                         />
 
                         <span className="hashtag">
-                            <span className="hash">@</span>
-                            <span className="tag">#</span>
+                            <span className="hash icon-wrapper">
+                                <AtIcon width="1.5rem" height="1.5rem" />
+                            </span>
+                            <span className="tag icon-wrapper">
+                                <TagIcon width="1.5rem" height="1.5rem" />
+                            </span>
                         </span>
                     </div>
                 </div>
@@ -130,9 +177,7 @@ export default function RightBody({
                                     <div
                                         className="choosen"
                                         style={{
-                                            transform: `translate3d( ${
-                                                offset - scroll
-                                            }px ,1px, 0px) scaleX(1.1)    scaleY(1.1)`,
+                                            transform: `translate3d( ${translateX}px ,1px, 0px) scaleX(1.1) scaleY(1.1)`,
                                         }}
                                     >
                                         <img

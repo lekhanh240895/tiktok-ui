@@ -2,14 +2,15 @@ import React, { useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { RegularPlayIcon } from '~/components/Icons';
 import Image from '~/components/Image';
+import Video from '~/components/Video/Video';
 import { usersSelector } from '~/redux/selectors';
 import { configNumber } from '~/services';
-import { VideoWrapper, VideoTitle, Video } from './styled';
+import { VideoWrapper, VideoTitle } from './styled';
 
-export default function VideoComp({ video }) {
+export default function VideoComp({ video, username }) {
     const videoRef = useRef(null);
     const { users } = useSelector(usersSelector);
-    const user = users.find((user) => user._id === video.userID);
+    const user = users.find((user) => user._id === video.user._id);
 
     const handleHoverVideo = () => {
         videoRef.current.play();
@@ -24,9 +25,15 @@ export default function VideoComp({ video }) {
             onMouseEnter={handleHoverVideo}
             onMouseLeave={handleHoverOff}
         >
-            <Video controls muted controlsList="nodownload" ref={videoRef}>
-                <source src={video.src} type="video/mp4" />
-            </Video>
+            <Video
+                video={video}
+                username={username}
+                controls
+                muted
+                controlsList="nodownload"
+                ref={videoRef}
+            />
+
             <VideoTitle>{video.title}</VideoTitle>
 
             <div className="play-line">

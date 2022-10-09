@@ -40,10 +40,10 @@ import {
     TagnameWrapper,
 } from './styled';
 import { useEffect, useState } from 'react';
-import VideoComp from './VideoComp';
 import { configNumber } from '~/services';
 import { useSelector } from 'react-redux';
-import { videosSelector } from '~/redux/selectors';
+import { usersSelector, videosSelector } from '~/redux/selectors';
+import ShareVideoItem from '~/components/ShareVideoItem';
 
 const SHARE_MENU = [
     {
@@ -105,6 +105,7 @@ export default function Tag() {
     const [isMore, setIsMore] = useState(false);
     const { tagname } = useParams();
     const [tagWidth, setTagWidth] = useState();
+    const { users } = useSelector(usersSelector);
 
     const tagVideos = videos?.filter((video) => video.tags.includes(tagname));
 
@@ -247,11 +248,19 @@ export default function Tag() {
             </Header>
 
             <VideoList>
-                {tagVideos.map((video) => (
-                    <VideoItem key={video._id}>
-                        <VideoComp src={video.src} title={video.title} />
-                    </VideoItem>
-                ))}
+                {tagVideos.map((video) => {
+                    const user = users.find(
+                        (user) => user._id === video.user._id,
+                    );
+                    return (
+                        <VideoItem key={video._id}>
+                            <ShareVideoItem
+                                video={video}
+                                username={user.username}
+                            />
+                        </VideoItem>
+                    );
+                })}
             </VideoList>
         </Container>
     );

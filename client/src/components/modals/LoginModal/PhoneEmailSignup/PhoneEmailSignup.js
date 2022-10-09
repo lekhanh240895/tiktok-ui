@@ -24,8 +24,7 @@ export default function PhoneEmailSignup() {
     const monthIconRef = useRef(null);
     const dayIconRef = useRef(null);
     const yearIconRef = useRef(null);
-    const { currentUser, isLoading, isError, isSuccess } =
-        useSelector(authSelector);
+    const { currentUser, isLoading, isSuccess } = useSelector(authSelector);
 
     const months = [
         'January',
@@ -129,15 +128,14 @@ export default function PhoneEmailSignup() {
     };
 
     useEffect(() => {
-        if (isError) {
-            console.log('Error');
-        }
-
         if (isSuccess || currentUser) {
             dispatch(loginModalSlice.actions.hide());
-            dispatch(authSlice.actions.reset());
+            window.location.reload();
         }
-    }, [dispatch, isError, isSuccess, currentUser]);
+        return () => {
+            authSlice.actions.reset();
+        };
+    }, [dispatch, isSuccess, currentUser]);
 
     if (isLoading) return <Spinner />;
 

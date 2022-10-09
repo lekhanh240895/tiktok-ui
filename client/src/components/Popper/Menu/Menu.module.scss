@@ -1,65 +1,80 @@
 .wrapper {
     width: 223px;
 
-    .menu-item {
-        margin-left: 0;
-        padding: 10px 16px;
-        width: 100%;
-        justify-content: start;
-        border-radius: 0;
+    //Menu-Items
+    .items-wrapper {
+        .menu-item {
+            margin-left: 0;
+            padding: 10px 16px;
+            width: 100%;
+            justify-content: start;
+            border-radius: 0;
 
-        &:last-child {
-            margin-bottom: 8px;
-        }
+            &:last-child {
+                margin-bottom: 8px;
+            }
 
-        &:hover {
-            background: rgba(22, 24, 35, 0.03);
-        }
+            &:hover {
+                background: rgba(22, 24, 35, 0.03);
+            }
 
-        span[class*='title'] {
-            font-weight: 500;
+            &.separate {
+                border-top: 1px solid rgba(22, 24, 35, 0.12);
+            }
         }
     }
-}
 
-//Menu-Items
-.items-wrapper {
-    overflow-y: auto;
-}
+    .more-button {
+        margin-left: 0;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
 
-//Header
-.header {
-    height: 50px;
-    position: relative;
-    margin-top: -8px;
-    flex-shrink: 0;
-}
+        &:hover {
+            background-color: rgba(22, 24, 35, 0.03);
+        }
+    }
 
-.back-btn {
-    font-size: 2rem;
-    width: 48px;
-    background-color: transparent;
-    height: 100%;
-    cursor: pointer;
-    margin-left: 5px;
-}
+    //Header
+    .header {
+        height: 50px;
+        position: relative;
+        margin-top: -8px;
+        flex-shrink: 0;
+    }
 
-.header-title {
-    font-size: 1.6rem;
-    font-weight: 600;
-    line-height: 22px;
-    font-family: var(--font-family);
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
+    .back-btn {
+        font-size: 2rem;
+        width: 48px;
+        background-color: transparent;
+        height: 100%;
+        cursor: pointer;
+        margin-left: 5px;
+    }
 
-.separate {
-    border-top: 1px solid rgba(22, 24, 35, 0.12);
-}
+    .header-title {
+        font-size: 1.6rem;
+        font-weight: 600;
+        line-height: 22px;
+        font-family: var(--font-family);
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
 
-.arrow {
-    top: -18px;
-    color: #fff;
+    .arrow {
+        color: #fff;
+    }
+
+    &[data-placement^='top'] .arrow {
+        bottom: -18px;
+        transform: rotate(180deg) !important;
+    }
+
+    &[data-placement^='bottom'] > .arrow {
+        top: -18px;
+    }
 }

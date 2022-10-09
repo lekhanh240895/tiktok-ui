@@ -44,6 +44,7 @@ export default function PhoneEmailLogin() {
     useEffect(() => {
         if (isSuccess || currentUser) {
             dispatch(loginModalSlice.actions.hide());
+            window.location.reload();
         }
 
         return () => {
