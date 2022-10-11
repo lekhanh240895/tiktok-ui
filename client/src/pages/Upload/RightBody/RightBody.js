@@ -26,9 +26,9 @@ export default function RightBody({
         src: '',
         privacy: 'public',
         allowance: {
-            comment: false,
-            duet: false,
-            stitch: false,
+            comment: true,
+            duet: true,
+            stitch: true,
         },
         music: `Original sound - @${currentUser?.username}`,
     });
@@ -38,8 +38,8 @@ export default function RightBody({
 
     useEffect(() => {
         const x = offset - scroll;
-        if (x < 8) {
-            return setTranslateX(8);
+        if (x < 4) {
+            return setTranslateX(4);
         }
         if (x > 580) {
             return setTranslateX(580);
@@ -49,13 +49,12 @@ export default function RightBody({
 
     useEffect(() => {
         if (isSuccess && video) {
-            onDiscard();
             navigate(`/@${currentUser?.username}`, { replace: true });
         }
         return () => {
             videosSlice.actions.resetStatus();
         };
-    }, [currentUser, isSuccess, navigate, onDiscard, video]);
+    }, [currentUser, isSuccess, navigate, video]);
 
     useEffect(() => {
         setFormData({
@@ -77,13 +76,11 @@ export default function RightBody({
         if (video) {
             const videoData = new FormData();
             videoData.append('video', video);
-
             const uploadVideo = await uploadService.uploadVideo(videoData);
             const newFormData = {
                 ...formData,
                 src: `http://localhost:3004/videos/${uploadVideo.filename}`,
             };
-
             dispatch(createVideo(newFormData));
         }
     };
@@ -93,13 +90,20 @@ export default function RightBody({
         const value =
             target.type === 'checkbox' ? target.checked : target.value;
         const name = target.name;
-        setFormData({
-            ...formData,
-            allowance: {
-                ...formData.allowance,
+        if (target.type === 'checkbox') {
+            setFormData({
+                ...formData,
+                allowance: {
+                    ...formData.allowance,
+                    [name]: value,
+                },
+            });
+        } else {
+            setFormData({
+                ...formData,
                 [name]: value,
-            },
-        });
+            });
+        }
     };
 
     if (isLoading) return <Spinner />;
@@ -120,12 +124,10 @@ export default function RightBody({
                             className="caption-input"
                             id="caption"
                             value={caption}
+                            name="title"
                             onChange={(e) => {
                                 setCaption(e.target.value);
-                                setFormData({
-                                    ...formData,
-                                    title: e.target.value,
-                                });
+                                handleInputChange(e);
                             }}
                         />
 
@@ -203,12 +205,8 @@ export default function RightBody({
                         id="privacy"
                         className="privacy-select"
                         defaultValue={formData.privacy}
-                        onChange={(e) =>
-                            setFormData({
-                                ...formData,
-                                privacy: e.target.value,
-                            })
-                        }
+                        name="privacy"
+                        onChange={handleInputChange}
                     >
                         <option value="public">Public</option>
                         <option value="friends">Friends</option>
@@ -224,6 +222,7 @@ export default function RightBody({
                                 type="checkbox"
                                 className="checkbox-input"
                                 name="comment"
+                                defaultChecked={true}
                                 onChange={handleInputChange}
                             />
                             <span className="checkmark"></span>
@@ -234,6 +233,7 @@ export default function RightBody({
                                 name="duet"
                                 type="checkbox"
                                 className="checkbox-input"
+                                defaultChecked={true}
                                 onChange={handleInputChange}
                             />
                             <span className="checkmark"></span>
@@ -244,6 +244,7 @@ export default function RightBody({
                                 name="stitch"
                                 type="checkbox"
                                 className="checkbox-input"
+                                defaultChecked={true}
                                 onChange={handleInputChange}
                             />
                             <span className="checkmark"></span>

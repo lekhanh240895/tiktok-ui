@@ -1,5 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+const settings = JSON.parse(localStorage.getItem('userSettings'));
+
 const appSlice = createSlice({
     name: 'app',
     initialState: {
@@ -8,6 +10,10 @@ const appSlice = createSlice({
         selectedUserID: null,
         tags: [],
         musics: [],
+        settings: settings || {
+            isMuted: true,
+            volume: 1,
+        },
     },
     reducers: {
         setSelectedVideoId: (state, action) => {
@@ -24,6 +30,9 @@ const appSlice = createSlice({
         },
         setMusics: (state, action) => {
             state.musics = action.payload;
+        },
+        setSettings: (state, action) => {
+            state.settings = action.payload;
         },
     },
 });

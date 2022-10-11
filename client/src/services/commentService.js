@@ -1,7 +1,12 @@
 import { authRequest, httpRequest } from '~/utils/httpRequest';
 
 export const get = async (videoID) => {
-    const response = await httpRequest.get(`comments/${videoID}`);
+    const response = await httpRequest.get(`comments/${videoID}/comments`);
+    return response.data;
+};
+
+export const getComment = async (commentID) => {
+    const response = await httpRequest.get(`comments/${commentID}`);
     return response.data;
 };
 
@@ -16,10 +21,10 @@ export const create = async ({ videoID, text }) => {
     }
 };
 
-export const update = async (videoID, commentID, data) => {
+export const update = async (commentID, data) => {
     try {
         const response = await authRequest.put(
-            `/comments/${videoID}/${commentID}/update`,
+            `/comments/${commentID}/update`,
             data,
         );
         return response.data;
@@ -28,20 +33,20 @@ export const update = async (videoID, commentID, data) => {
     }
 };
 
-// export const remove = async (id) => {
-//     try {
-//         const response = await httpRequest.delete(`videos/${id}/delete`);
-//         return response.data;
-//     } catch (err) {
-//         console.log(err);
-//     }
-// };
-
-export const like = async ({ videoID, commentID }) => {
+export const remove = async (commentID) => {
     try {
-        const response = await authRequest.put(
-            `comments/${videoID}/${commentID}/like`,
+        const response = await authRequest.delete(
+            `comments/${commentID}/delete`,
         );
+        return response.data;
+    } catch (err) {
+        console.log(err);
+    }
+};
+
+export const like = async (commentID) => {
+    try {
+        const response = await authRequest.put(`comments/${commentID}/like`);
         return response.data;
     } catch (err) {
         console.log(err);

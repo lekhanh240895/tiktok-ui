@@ -6,19 +6,20 @@ import { useDispatch, useSelector } from 'react-redux';
 import { authSelector } from '~/redux/selectors';
 import { likeVideo } from '~/redux/slices/videosSlice';
 import loginModalSlice from '~/redux/slices/loginModalSlice';
-import authSlice from '~/redux/slices/authSlice';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import ShareOptionsMenu from '../ShareOptionsMenu';
 
 const cx = classnames.bind(styles);
 
 export default function ActionList({ video }) {
-    const [likes, setLikes] = useState(video.likes.length);
     const { currentUser } = useSelector(authSelector);
-    const [isLiked, setIsLiked] = useState(
-        video.likes.includes(currentUser?._id),
-    );
+    const [likes, setLikes] = useState(video.likes.length);
+    const [isLiked, setIsLiked] = useState(false);
+
+    useEffect(() => {
+        setIsLiked(video.likes.includes(currentUser?._id));
+    }, [currentUser, video]);
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -27,24 +28,6 @@ export default function ActionList({ video }) {
     const handleLike = (e) => {
         if (!currentUser) {
             return dispatch(loginModalSlice.actions.show());
-        }
-
-        if (isLiked) {
-            const updatedUser = {
-                ...currentUser,
-                likedVideoIDs: currentUser.likedVideoIDs.filter(
-                    (id) => id !== video._id,
-                ),
-            };
-
-            dispatch(authSlice.actions.setCurrentUser(updatedUser));
-        } else {
-            const updatedUser = {
-                ...currentUser,
-                likedVideoIDs: currentUser.likedVideoIDs.concat(video._id),
-            };
-
-            dispatch(authSlice.actions.setCurrentUser(updatedUser));
         }
 
         dispatch(likeVideo(video._id));

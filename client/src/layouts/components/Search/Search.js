@@ -7,7 +7,7 @@ import config from '~/config';
 import styles from './Search.module.scss';
 import { Wrapper as PopperWrapper } from '~/components/Popper';
 import AccountItem from '../AccountItem';
-import { DeleteCircleIcon, SearchIcon, SpinnerIcon } from '~/components/Icons';
+import { TimesIconCircle, SearchIcon, SpinnerIcon } from '~/components/Icons';
 import { useDebounce } from '~/hooks/useDebounce';
 import * as userService from '~/services/userService';
 import Button from '~/components/Button';
@@ -178,7 +178,7 @@ export default function Search() {
                             onClick={handleClear}
                             type="button"
                         >
-                            <DeleteCircleIcon width="1.6rem" height="1.6rem" />
+                            <TimesIconCircle width="1.6rem" height="1.6rem" />
                         </button>
                     )}
 

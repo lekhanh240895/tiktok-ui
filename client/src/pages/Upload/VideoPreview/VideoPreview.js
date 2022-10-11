@@ -146,7 +146,6 @@ export default function VideoPreview({
                             <div
                                 className="bar"
                                 style={{ width: `${progress}%` }}
-                                onClick={handleClickProgress}
                             />
                         </div>
                     </div>

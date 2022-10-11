@@ -15,6 +15,7 @@ import ActionList from './ActionList';
 import Info from './Info';
 import { useElementOnScreen } from '~/hooks/useElementOnScreen';
 import Video from '../Video/Video';
+import { useLocation } from 'react-router-dom';
 
 const cx = classnames.bind(styles);
 export default function VideoItem({
@@ -31,6 +32,16 @@ export default function VideoItem({
     const [containerRef, isVisible] = useElementOnScreen({
         threshold: 0.75,
     });
+
+    // const location = useLocation();
+    // const background = location.state && location.state.background;
+
+    // useEffect(() => {
+    //     if (background && background.pathname === '/') {
+    //         videoRef.current.pause();
+    //         setIsPlaying(false);
+    //     }
+    // }, [background]);
 
     const videoRef = useRef();
 
@@ -148,9 +159,15 @@ export default function VideoItem({
                                                 min={0}
                                                 max={1}
                                                 step={0.1}
-                                                className={cx('volumn-input')}
+                                                className={cx('volume-input')}
                                                 value={volume}
                                                 onChange={onVolumeChange}
+                                            />
+                                            <div
+                                                className={cx('bar')}
+                                                style={{
+                                                    height: `calc(48px * ${volume}`,
+                                                }}
                                             />
                                         </div>
                                     )}

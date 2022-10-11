@@ -33,16 +33,16 @@ export const update = async (updatedVideo) => {
 
 export const remove = async (id) => {
     try {
-        const response = await httpRequest.delete(`videos/${id}/delete`);
+        const response = await authRequest.delete(`videos/${id}/delete`);
         return response.data;
     } catch (err) {
         console.log(err);
     }
 };
 
-export const like = async (_id) => {
+export const like = async (id) => {
     try {
-        const response = await authRequest.put(`videos/${_id}/like`);
+        const response = await authRequest.put(`videos/${id}/like`);
         return response.data;
     } catch (err) {
         console.log(err);

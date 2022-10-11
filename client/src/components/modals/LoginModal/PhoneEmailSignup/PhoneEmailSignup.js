@@ -128,7 +128,7 @@ export default function PhoneEmailSignup() {
     };
 
     useEffect(() => {
-        if (isSuccess || currentUser) {
+        if (isSuccess && currentUser) {
             dispatch(loginModalSlice.actions.hide());
             window.location.reload();
         }

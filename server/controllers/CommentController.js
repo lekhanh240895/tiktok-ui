@@ -2,8 +2,8 @@ const CommentModel = require('../models/CommentModel');
 const VideoModel = require('../models/VideoModel');
 
 class CommentController {
-    // [GET] api/comments/:videoID
-    async getComments(req, res, next) {
+    // [GET] api/comments/:videoID/comments
+    async getVideoComments(req, res, next) {
         try {
             const comments = await CommentModel.find({
                 video: req.params.videoID,
@@ -18,11 +18,14 @@ class CommentController {
         }
     }
 
-    // [GET]  api/comments/:videoID/:commentID
+    // [GET]  api/comments/:commentID
     async getComment(req, res, next) {
         try {
-            const comments = await CommentModel.findById(req.params.id);
-            res.status(200).json(comments);
+            const comment = await CommentModel.findById(req.params.commentID)
+                .populate('video')
+                .populate('user')
+                .exec();
+            res.status(200).json(comment);
         } catch (err) {
             res.status(500).json({ error: err });
             next();
@@ -39,7 +42,7 @@ class CommentController {
             });
             await newComment.save();
 
-            const newVideo = await VideoModel.findByIdAndUpdate(
+            await VideoModel.findByIdAndUpdate(
                 req.params.videoID,
                 {
                     $push: { comments: newComment._id },
@@ -55,7 +58,7 @@ class CommentController {
         }
     }
 
-    // [PUT] api/comments/:videoID/:commentID/update
+    // [PUT] api/comments/:commentID/update
     async updateComment(req, res, next) {
         try {
             const comment = await CommentModel.findByIdAndUpdate(
@@ -70,7 +73,7 @@ class CommentController {
         }
     }
 
-    // [PUT] api/comments/:videoID/:commentID/like
+    // [PUT] api/comments/:commentID/like
     async likeComment(req, res, next) {
         try {
             const comment = await CommentModel.findById(req.params.commentID);
@@ -91,11 +94,11 @@ class CommentController {
         }
     }
 
-    // [DELETE] api/comments/:videoID/:commentID/delete
+    // [DELETE] api/comments/:commentID/delete
     async deleteComment(req, res, next) {
         try {
             const deletedComment = await CommentModel.findByIdAndDelete(
-                req.body.id,
+                req.params.commentID,
             );
             res.status(200).json(deletedComment);
         } catch (err) {

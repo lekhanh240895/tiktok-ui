@@ -12,10 +12,12 @@ const CommentModel = new Schema(
             type: Schema.Types.ObjectId,
             ref: 'video',
         },
-        comments: {
-            type: Schema.Types.ObjectId,
-            ref: 'comment',
-        },
+        comments: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'comment',
+            },
+        ],
 
         likes: [
             {

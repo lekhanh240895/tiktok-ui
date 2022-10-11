@@ -84,7 +84,8 @@ function App() {
 
     return (
         <div className="App">
-            <Routes location={background || location}>
+            {/* <Routes location={background || location}> */}
+            <Routes>
                 {publicRoutes.map((route, index) => {
                     let Layout = DefaultLayout;
                     const Page = route.component;
@@ -141,14 +142,14 @@ function App() {
                 />
             </Routes>
 
-            {background && (
+            {/* {background && (
                 <Routes>
                     <Route
                         path={`@:username/video/:videoID`}
                         element={<VideoModal />}
                     />
                 </Routes>
-            )}
+            )} */}
 
             <GetAppButton />
             {isEditModalShow && <EditProfileModal />}

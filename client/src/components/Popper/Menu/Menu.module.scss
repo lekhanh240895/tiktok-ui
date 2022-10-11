@@ -21,6 +21,11 @@
             &.separate {
                 border-top: 1px solid rgba(22, 24, 35, 0.12);
             }
+
+            &.hoverColor:hover {
+                color: var(--primary-color);
+                background: unset;
+            }
         }
     }
 

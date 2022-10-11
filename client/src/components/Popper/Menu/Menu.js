@@ -8,7 +8,9 @@ import MenuItem from './MenuItem';
 import Header from './Header';
 import { ArrowIcon, DownArrow } from '~/components/Icons';
 import { useDispatch } from 'react-redux';
-import authSlice, { logout } from '~/redux/slices/authSlice';
+import { logout } from '~/redux/slices/authSlice';
+import { deleteVideo } from '~/redux/slices/videosSlice';
+import { useNavigate } from 'react-router-dom';
 
 const cx = classnames.bind(styles);
 
@@ -21,12 +23,14 @@ export default function Menu({
     popperArrow = true,
     offset = [15, 10],
     delay = [0, 500],
+    onDeleteComment,
     ...props
 }) {
     const [history, setHistory] = useState([{ data: items }]);
     const [isMore, setIsMore] = useState(false);
     const current = history[history.length - 1];
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (moreArrow && !isMore) {
@@ -44,7 +48,7 @@ export default function Menu({
                 <MenuItem
                     key={index}
                     data={item}
-                    onClick={() => {
+                    onClick={async () => {
                         if (isParent) {
                             setHistory((prevState) => [
                                 ...prevState,
@@ -53,7 +57,15 @@ export default function Menu({
                         } else {
                             if (item.title === 'Log out') {
                                 dispatch(logout());
-                                dispatch(authSlice.actions.reset());
+                            }
+                            if (item.title === 'Delete') {
+                                if (item.videoID) {
+                                    dispatch(deleteVideo(item.videoID));
+                                    navigate(-1);
+                                }
+                                if (item.commentID) {
+                                    onDeleteComment(item.commentID);
+                                }
                             }
                         }
                     }}

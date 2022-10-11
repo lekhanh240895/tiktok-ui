@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { DeleteIcon, EditIcon2 } from '~/components/Icons';
+import { TimesIcon, EditIcon } from '~/components/Icons';
 import { Wrapper } from './styled';
 import Button from '~/components/Button';
 import { useState } from 'react';
@@ -89,7 +89,7 @@ export default function EditProfileModal() {
                                 dispatch(editModalSlice.actions.hide())
                             }
                         >
-                            <DeleteIcon width="2.4rem" height="2.4rem" />
+                            <TimesIcon width="2.4rem" height="2.4rem" />
                         </span>
                     </div>
 
@@ -105,7 +105,7 @@ export default function EditProfileModal() {
                                     />
                                     <label htmlFor="avatar-change">
                                         <span className="edit-icon icon-wrapper">
-                                            <EditIcon2
+                                            <EditIcon
                                                 width="1.6rem"
                                                 height="1.6rem"
                                             />

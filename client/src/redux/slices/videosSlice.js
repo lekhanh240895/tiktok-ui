@@ -10,12 +10,6 @@ const videosSlice = createSlice({
         videos: [],
     },
     reducers: {
-        addComment: (state, action) => {
-            const videoIndex = state.videos.findIndex(
-                (video) => video._id === action.payload.videoID,
-            );
-            state.videos[videoIndex].comments.push(action.payload.newComment);
-        },
         reset: (state) => {
             state.isLoading = false;
             state.isSuccess = false;
@@ -68,11 +62,10 @@ const videosSlice = createSlice({
                     (video) => video._id === action.payload._id,
                 );
                 state.videos[videoIndex] = action.payload;
-                console.log('VIDEO', action.payload);
             })
             .addCase(deleteVideo.fulfilled, (state, action) => {
                 state.videos = state.videos.filter(
-                    (video) => video._id !== action.payload.videoID,
+                    (video) => video._id !== action.payload._id,
                 );
             })
             .addCase(likeVideo.fulfilled, (state, action) => {

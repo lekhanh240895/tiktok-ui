@@ -20,7 +20,7 @@ class VideosController {
         try {
             const video = await VideoModel.findById(req.params.id)
                 .populate('user')
-                .populate('comment')
+                .populate('comments')
                 .exec();
             res.status(200).json(video);
         } catch (err) {
@@ -64,16 +64,25 @@ class VideosController {
     async likeVideo(req, res, next) {
         try {
             const video = await VideoModel.findById(req.params.id);
-            if (!video.likes.includes(req.user.id)) {
-                await video.updateOne({
-                    $push: { likes: req.user.id },
-                });
-                res.status(200).json(video);
+
+            if (video.likes.includes(req.user._id)) {
+                const newVideo = await VideoModel.findByIdAndUpdate(
+                    req.params.id,
+                    {
+                        $pull: { likes: req.user._id },
+                    },
+                    { new: true },
+                );
+                res.status(200).json(newVideo);
             } else {
-                await video.updateOne({
-                    $pull: { likes: req.user.id },
-                });
-                res.status(200).json(video);
+                const newVideo = await VideoModel.findByIdAndUpdate(
+                    req.params.id,
+                    {
+                        $push: { likes: req.user._id },
+                    },
+                    { new: true },
+                );
+                res.status(200).json(newVideo);
             }
         } catch (err) {
             res.status(500).json({ error: err });
@@ -85,7 +94,7 @@ class VideosController {
     async deleteVideo(req, res, next) {
         try {
             const deletedVideo = await VideoModel.findByIdAndDelete(
-                req.body.id,
+                req.params.id,
             );
             res.status(200).json(deletedVideo);
         } catch (err) {

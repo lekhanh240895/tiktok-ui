@@ -1,8 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
-    DeleteIcon,
+    TimesIcon,
     DownArrow,
     FlagIcon,
     PlayIcon,
@@ -10,21 +9,54 @@ import {
     VolumeIcon,
     MutedVolumeIcon,
 } from '~/components/Icons';
-import { usersSelector, videosSelector } from '~/redux/selectors';
 import Content from './Content';
 import { Wrapper } from './styled';
+import * as videoService from '~/services/videoService';
+import HeadlessTippy from '@tippyjs/react/headless';
+import { useDispatch, useSelector } from 'react-redux';
+import { appSelector } from '~/redux/selectors';
+import appSlice from '~/redux/slices/appSlice';
 
 export default function VideoModal() {
     const navigate = useNavigate();
-    const { username, videoID } = useParams();
-    const { videos } = useSelector(videosSelector);
-    const { users } = useSelector(usersSelector);
-    const video = videos.find((video) => video._id === videoID);
-    const user = users.find((user) => user.username === username);
+    const { videoID } = useParams();
     const videoRef = useRef(null);
     const [progress, setProgress] = useState(0);
-    const [isMuted, setIsMuted] = useState(false);
     const [isPlaying, setIsPlaying] = useState(true);
+    const [video, setVideo] = useState(null);
+    const dispatch = useDispatch();
+    const { settings } = useSelector(appSelector);
+
+    const setConfig = (settings) => {
+        localStorage.setItem('userSettings', JSON.stringify(settings));
+    };
+
+    const handleMuteVolume = () => {
+        const newSettings = {
+            ...settings,
+            isMuted: !settings.isMuted,
+        };
+        dispatch(appSlice.actions.setSettings(newSettings));
+        setConfig(newSettings);
+    };
+
+    const handleVolumeChange = (e) => {
+        const newVolume = Number(e.target.value);
+        const newSettings = {
+            ...settings,
+            volume: newVolume,
+            isMuted: newVolume > 0 ? false : true,
+        };
+        dispatch(appSlice.actions.setSettings(newSettings));
+        setConfig(newSettings);
+    };
+
+    useEffect(() => {
+        (async () => {
+            const video = await videoService.getVideo(videoID);
+            setVideo(video);
+        })();
+    }, [videoID]);
 
     const escFunction = useCallback(
         (event) => {
@@ -90,7 +122,8 @@ export default function VideoModal() {
         videoRef.current.currentTime = newCurrentTime;
     };
 
-    if (!video || !user) return;
+    if (!video) return;
+
     return (
         <Wrapper>
             <div className="modal">
@@ -102,10 +135,7 @@ export default function VideoModal() {
                                     className="delete-btn icon-wrapper"
                                     onClick={() => navigate(-1)}
                                 >
-                                    <DeleteIcon
-                                        width="2.6rem"
-                                        height="2.6rem"
-                                    />
+                                    <TimesIcon width="2.6rem" height="2.6rem" />
                                 </span>
                                 <span className="tiktok-icon">
                                     <TiktokIcon width="4rem" height="4rem" />
@@ -132,12 +162,13 @@ export default function VideoModal() {
                                     <video
                                         ref={videoRef}
                                         className="video"
-                                        muted={isMuted}
+                                        muted={settings.isMuted}
                                         onTimeUpdate={handleTimeUpdate}
                                         autoPlay
                                         loop
                                         poster={video?.cover}
                                         type={video?.type}
+                                        volume={settings.volume}
                                     >
                                         <source
                                             src={video.src}
@@ -197,26 +228,57 @@ export default function VideoModal() {
                                 </span>
                             </div>
 
-                            <span
-                                className="volume-wrapper icon-wrapper"
-                                onClick={() => setIsMuted(!isMuted)}
-                            >
-                                {isMuted ? (
-                                    <MutedVolumeIcon
-                                        width="2.6rem"
-                                        height="2.6rem"
-                                    />
-                                ) : (
-                                    <VolumeIcon
-                                        width="2.6rem"
-                                        height="2.6rem"
-                                    />
-                                )}
-                            </span>
+                            <div>
+                                <HeadlessTippy
+                                    placement="top"
+                                    offset={[0, 8]}
+                                    interactive
+                                    render={(attrs) => (
+                                        <div
+                                            tabIndex="-1"
+                                            {...attrs}
+                                            className="volume-wrapper"
+                                        >
+                                            <input
+                                                type="range"
+                                                min={0}
+                                                max={1}
+                                                step={0.1}
+                                                className="volume-input"
+                                                value={settings.volume}
+                                                onChange={handleVolumeChange}
+                                            />
+                                            <div
+                                                className="bar"
+                                                style={{
+                                                    height: `calc(80px * ${settings.volume}`,
+                                                }}
+                                            />
+                                        </div>
+                                    )}
+                                >
+                                    <span
+                                        className="volume-icon-wrapper icon-wrapper"
+                                        onClick={handleMuteVolume}
+                                    >
+                                        {settings.isMuted ? (
+                                            <MutedVolumeIcon
+                                                width="2.6rem"
+                                                height="2.6rem"
+                                            />
+                                        ) : (
+                                            <VolumeIcon
+                                                width="2.6rem"
+                                                height="2.6rem"
+                                            />
+                                        )}
+                                    </span>
+                                </HeadlessTippy>
+                            </div>
                         </div>
                     </div>
 
-                    <Content user={user} video={video} />
+                    <Content video={video} />
                 </div>
             </div>
         </Wrapper>

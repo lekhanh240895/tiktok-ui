@@ -158,7 +158,58 @@ export const Wrapper = styled.div`
                         margin-bottom: 16px;
                     }
                 }
+
                 .volume-wrapper {
+                    width: 28px;
+                    height: 96px;
+                    cursor: initial;
+                    background: rgb(255 255 255 / 12%);
+                    border-radius: 32px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    position: relative;
+
+                    .bar {
+                        position: absolute;
+                        left: 50%;
+                        bottom: 0;
+                        transform: translateX(50%);
+                        width: 4px;
+                        background-color: #fff;
+                        border-radius: 4px;
+                        margin-left: -4px;
+                        margin-bottom: 8px;
+                    }
+
+                    .volume-input {
+                        width: 80px;
+                        height: 4px;
+                        transform: rotate(-90deg);
+                        position: absolute;
+                        z-index: 1;
+                    }
+
+                    .volume-input::-webkit-slider-runnable-track {
+                        cursor: pointer;
+                        background: rgb(255 255 255 / 20%);
+                        border-radius: 4px;
+                        width: 100%;
+                        height: 100%;
+                    }
+
+                    .volume-input::-webkit-slider-thumb {
+                        --webkit-appearance: none;
+                        height: 16px;
+                        width: 16px;
+                        border-radius: 50%;
+                        background: var(--white-color);
+                        cursor: pointer;
+                        margin-top: -6px;
+                        margin-right: 50px;
+                    }
+                }
+                .volume-icon-wrapper {
                     position: absolute;
                     right: 20px;
                     bottom: 20px;

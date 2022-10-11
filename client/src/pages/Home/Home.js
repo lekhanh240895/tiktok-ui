@@ -1,25 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import styles from './Home.module.scss';
 import classnames from 'classnames/bind';
-
 import VideoItem from '~/components/VideoItem';
 import { Link } from 'react-router-dom';
 import Image from '~/components/Image';
 import Button from '~/components/Button';
 import { useElementOnScreen } from '~/hooks/useElementOnScreen';
 import { useDispatch, useSelector } from 'react-redux';
-import { authSelector, usersSelector, videosSelector } from '~/redux/selectors';
+import {
+    appSelector,
+    authSelector,
+    usersSelector,
+    videosSelector,
+} from '~/redux/selectors';
 import loginModalSlice from '~/redux/slices/loginModalSlice';
 import { followUser, unfollowUser } from '~/redux/slices/usersSlice';
 import authSlice from '~/redux/slices/authSlice';
+import appSlice from '~/redux/slices/appSlice';
 
 const cx = classnames.bind(styles);
 
 export default function Home() {
-    const [settings, setSettings] = useState({
-        isMuted: true,
-        volume: 1,
-    });
     const { users } = useSelector(usersSelector);
     const { videos } = useSelector(videosSelector);
     const [videoCount, setVideoCount] = useState(1);
@@ -32,6 +33,7 @@ export default function Home() {
     const fypVideos = videos?.filter(
         (video) => video.user._id !== currentUser?._id,
     );
+    const { settings } = useSelector(appSelector);
 
     useEffect(() => {
         if (isVisible) {
@@ -41,35 +43,29 @@ export default function Home() {
         }
     }, [isVisible, videoCount, fypVideos]);
 
-    useEffect(() => {
-        const settings = JSON.parse(localStorage.getItem('userSettings'));
-
-        setSettings((prevState) => ({ ...prevState, ...settings }));
-    }, []);
-
-    const setConfig = (key, value) => {
-        settings[key] = value;
+    const setConfig = (settings) => {
         localStorage.setItem('userSettings', JSON.stringify(settings));
     };
 
     const handleMuteVolume = () => {
-        setSettings({
+        const newSettings = {
             ...settings,
             isMuted: !settings.isMuted,
-        });
-        setConfig('isMuted', !settings.isMuted);
+        };
+        dispatch(appSlice.actions.setSettings(newSettings));
+        setConfig(newSettings);
     };
 
     const handleVolumeChange = (e) => {
         const newVolume = Number(e.target.value);
-
-        setSettings({
+        const newSettings = {
             ...settings,
             volume: newVolume,
             isMuted: newVolume > 0 ? false : true,
-        });
-
+        };
+        dispatch(appSlice.actions.setSettings(newSettings));
         setConfig('volume', newVolume);
+        setConfig(newSettings);
     };
 
     const handleFollow = (_id) => {

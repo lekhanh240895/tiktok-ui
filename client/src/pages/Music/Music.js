@@ -106,8 +106,6 @@ export default function Music() {
     const [progress, setProgress] = useState(0);
     const { users } = useSelector(usersSelector);
 
-    console.log({ musicname });
-
     const handleTimeUpdate = () => {
         const { currentTime, duration } = videoRef.current;
 
@@ -121,7 +119,6 @@ export default function Music() {
     }, [musicname]);
 
     const musicVideos = videos?.filter((video) => video.music === musicname);
-    console.log({ musicVideos });
     const videoRef = useRef();
     const circleRef = useRef();
 

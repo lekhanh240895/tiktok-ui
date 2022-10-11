@@ -1,6 +1,6 @@
 import {
     AppleIcon,
-    DeleteIcon,
+    TimesIcon,
     FacebookIcon,
     GoogleIcon,
     InstagramIcon,
@@ -148,7 +148,7 @@ export default function LoginModal() {
                         onClick={() => dispatch(loginModalSlice.actions.hide())}
                         className="close-icon"
                     >
-                        <DeleteIcon width="1.5rem" height="1.5rem" />
+                        <TimesIcon width="1.5rem" height="1.5rem" />
                     </span>
 
                     <div className="modal_body">

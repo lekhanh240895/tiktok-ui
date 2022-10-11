@@ -49,6 +49,12 @@ export default function Upload() {
     }, [duration, video]);
 
     useEffect(() => {
+        return () => {
+            URL.revokeObjectURL(videoUrl);
+        };
+    }, [videoUrl]);
+
+    useEffect(() => {
         if (thumbnails.length > 0) {
             setVideoThumb(thumbnails[0]);
         } else {
@@ -87,6 +93,8 @@ export default function Upload() {
 
     const handleClickProgress = (e) => {
         const rect = e.target.getBoundingClientRect();
+        e.cancelBubble = true; //IE
+        e.stopPropagation();
         const newProgress = parseInt(
             ((e.clientX - rect.left) / e.target.parentNode.clientWidth) * 100,
             10,

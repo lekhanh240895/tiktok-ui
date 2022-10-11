@@ -18,6 +18,7 @@ import {
     ShareIcon,
     SolidHeartIcon,
     MusicIcon,
+    OptionIcon,
 } from '~/components/Icons';
 import { configNumber } from '~/services';
 import Tippy from '@tippyjs/react';
@@ -26,9 +27,13 @@ import { formatDistanceToNow } from 'date-fns';
 import Avatar from '~/components/Avatar';
 import Comment from '~/components/Comment';
 import * as commentService from '~/services/commentService';
-import { useDispatch } from 'react-redux';
-import videosSlice from '~/redux/slices/videosSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { likeVideo } from '~/redux/slices/videosSlice';
 import Menu from '~/components/Popper/Menu';
+import { authSelector } from '~/redux/selectors';
+import loginModalSlice from '~/redux/slices/loginModalSlice';
+import authSlice from '~/redux/slices/authSlice';
+import { followUser, unfollowUser } from '~/redux/slices/usersSlice';
 
 const SHARE_MENU = [
     {
@@ -78,50 +83,127 @@ const SHARE_MENU = [
     },
 ];
 
-export default function Content({ user, video }) {
+export default function Content({ video }) {
+    const OPTION_MENU = [
+        {
+            title: 'Privacy settings',
+            hoverColor: true,
+        },
+        {
+            title: 'Delete',
+            separate: true,
+            videoID: video._id,
+            hoverColor: true,
+        },
+    ];
+    const commentRef = useRef(null);
+    const commentInputRef = useRef(null);
+    const { currentUser } = useSelector(authSelector);
     const [comment, setComment] = useState('');
     const [comments, setComments] = useState([]);
-    const commentRef = useRef(null);
+    const [likes, setLikes] = useState(video.likes?.length);
+    const [isLiked, setIsLiked] = useState(false);
+    const [isFollow, setIsFollow] = useState(false);
+    const [isAddComment, setIsAddComment] = useState(false);
+
+    useEffect(() => {
+        setIsFollow(currentUser?.followingIDs.includes(video.user._id));
+    }, [currentUser, video]);
+
+    useEffect(() => {
+        if (video) setIsLiked(video.likes.includes(currentUser?._id));
+    }, [currentUser, video]);
+
+    const isUser = video.user._id === currentUser?._id;
 
     useEffect(() => {
         const fetchComments = async () => {
             const comments = await commentService.get(video._id);
             setComments(comments);
         };
-        fetchComments();
+        if (video) {
+            fetchComments();
+        }
     }, [video]);
+
+    useEffect(() => {
+        if (isAddComment) {
+            commentRef.current.scrollIntoView({
+                behavior: 'smooth',
+                block: 'end',
+            });
+            setIsAddComment(false);
+        }
+    }, [isAddComment]);
 
     const dispatch = useDispatch();
     const formatTime = formatDistanceToNow(new Date(video.createdAt));
 
+    const handleLike = (e) => {
+        if (!currentUser) {
+            return dispatch(loginModalSlice.actions.show());
+        }
+
+        dispatch(likeVideo(video._id));
+        setIsLiked(!isLiked);
+        setLikes(isLiked ? likes - 1 : likes + 1);
+    };
+
+    const handleDeleteComment = async (commentID) => {
+        const deleteComment = await commentService.remove(commentID);
+        const newComments = comments.filter(
+            (comment) => comment._id !== deleteComment._id,
+        );
+        setComments(newComments);
+    };
+
+    const handleFollow = () => {
+        if (!currentUser) return dispatch(loginModalSlice.actions.show());
+        const updatedUser = {
+            ...currentUser,
+            followingIDs: currentUser.followingIDs.concat(video.user._id),
+        };
+        dispatch(authSlice.actions.setCurrentUser(updatedUser));
+        dispatch(followUser(video.user._id));
+    };
+
+    const handleUnFollow = () => {
+        if (!currentUser) return dispatch(loginModalSlice.actions.show());
+
+        const updatedUser = {
+            ...currentUser,
+            followingIDs: currentUser.followingIDs.filter(
+                (id) => id !== video.user._id,
+            ),
+        };
+        dispatch(authSlice.actions.setCurrentUser(updatedUser));
+        dispatch(unfollowUser(video.user._id));
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         const newComment = await commentService.create({
             videoID: video._id,
             text: comment,
         });
         setComment('');
-        dispatch(
-            videosSlice.actions.addComment({
-                videoID: video._id,
-                newComment,
-            }),
-        );
-        commentRef.current.scrollIntoView({
-            behavior: 'smooth',
-            block: 'end',
-        });
+        const commentData = await commentService.getComment(newComment._id);
+        setComments((prev) => [...prev, commentData]);
+        setIsAddComment(true);
     };
+
     return (
         <Wrapper>
             <div className="header">
                 <div className="user-info">
-                    <Avatar src={user.avatar} username={user.username} />
-                    <Link to={`/@${user.username}`} className="info">
+                    <Avatar
+                        src={video.user.avatar}
+                        username={video.user.username}
+                    />
+                    <Link to={`/@${video.user.username}`} className="info">
                         <h4>
-                            {user.username}
-                            {user.tick && (
+                            {video.user.username}
+                            {video.user.tick && (
                                 <CheckedIcon
                                     className="check"
                                     width="1.4rem"
@@ -130,12 +212,32 @@ export default function Content({ user, video }) {
                             )}
                         </h4>
                         <p>
-                            {user.full_name} - {formatTime}
+                            {video.user.full_name} - {formatTime}
                         </p>
                     </Link>
-                    <Button outline className="follow-btn">
-                        Follow
-                    </Button>
+                    {isUser ? (
+                        <Menu items={OPTION_MENU} placement="bottom-end">
+                            <span className="option-icon-wrapper icon-wrapper">
+                                <OptionIcon width="2.4rem" height="2.4rem" />
+                            </span>
+                        </Menu>
+                    ) : !isFollow ? (
+                        <Button
+                            primary
+                            className="follow-btn"
+                            onClick={handleFollow}
+                        >
+                            Follow
+                        </Button>
+                    ) : (
+                        <Button
+                            secondary
+                            className="follow-btn"
+                            onClick={handleUnFollow}
+                        >
+                            Following
+                        </Button>
+                    )}
                 </div>
 
                 <div className="video-title">{video.title}</div>
@@ -148,21 +250,30 @@ export default function Content({ user, video }) {
                 </Button>
                 <div className="video-info">
                     <div className="like-comment">
-                        <span className="likes">
-                            <span className="icon-wrapper-circle">
+                        <span className="likes" onClick={handleLike}>
+                            <span
+                                className={
+                                    isLiked
+                                        ? 'icon-wrapper-circle liked'
+                                        : 'icon-wrapper-circle'
+                                }
+                            >
                                 <SolidHeartIcon width="2rem" height="2rem" />
                             </span>
                             <span className="likes-number">
-                                {configNumber(video.likes.length)}
+                                {configNumber(likes)}
                             </span>
                         </span>
 
-                        <span className="comments">
+                        <span
+                            className="comments"
+                            onClick={() => commentInputRef.current.focus()}
+                        >
                             <span className="icon-wrapper-circle">
                                 <CommentIcon width="2rem" height="2rem" />
                             </span>
                             <span className="comments-number">
-                                {configNumber(video.comments.length)}
+                                {configNumber(comments.length)}
                             </span>
                         </span>
                     </div>
@@ -195,7 +306,10 @@ export default function Content({ user, video }) {
                 <ul className="comment-list" ref={commentRef}>
                     {comments.map((comment) => (
                         <li className="comment-item" key={comment._id}>
-                            <Comment comment={comment} />
+                            <Comment
+                                comment={comment}
+                                onDeleteComment={handleDeleteComment}
+                            />
                         </li>
                     ))}
                 </ul>
@@ -204,6 +318,7 @@ export default function Content({ user, video }) {
             <form className="add-comment-form" onSubmit={handleSubmit}>
                 <div className="form-group">
                     <input
+                        ref={commentInputRef}
                         type="text"
                         placeholder="Add comment..."
                         className="form-control"

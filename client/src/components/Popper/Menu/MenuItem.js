@@ -7,6 +7,7 @@ const cx = classnames.bind(styles);
 export default function MenuItem({ data, onClick }) {
     const classes = cx('menu-item', {
         separate: data.separate,
+        hoverColor: data.hoverColor,
     });
     return (
         <Button
