@@ -197,6 +197,7 @@ export default function Upload() {
                     id="upload-video"
                     accept="video/mp4,video/x-m4v,video/*"
                     onChange={handleChange}
+                    onClick={(e) => (e.target.value = '')}
                     ref={uploadRef}
                 />
 

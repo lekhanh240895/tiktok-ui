@@ -32,8 +32,13 @@ class VideosController {
     // [POST] api/videos
     async createVideo(req, res, next) {
         try {
+            const tags = req.body.title
+                .split(' ')
+                .filter((t) => t.includes('#'))
+                .map((t) => t.replace('#', ''));
             const video = new VideoModel({
                 ...req.body,
+                tags,
                 user: req.user._id,
             });
 

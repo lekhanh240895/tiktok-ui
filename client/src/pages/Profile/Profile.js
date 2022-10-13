@@ -7,6 +7,7 @@ import {
     IsFriendIcon,
     LockIcon,
     MoreIcon,
+    RegularPlayIcon,
     ShareIcon,
 } from '~/components/Icons';
 import Image from '~/components/Image';
@@ -38,8 +39,68 @@ import { followUser, unfollowUser } from '~/redux/slices/usersSlice';
 import authSlice from '~/redux/slices/authSlice';
 import loginModalSlice from '~/redux/slices/loginModalSlice';
 import ShareVideoItem from '~/components/ShareVideoItem';
-import ShareOptionsMenu from '~/components/ShareOptionsMenu';
 import Menu from '~/components/Popper/Menu';
+
+import {
+    CodeIcon,
+    CopyIcon,
+    FacebookIcon,
+    LineIcon,
+    LinkedInIcon,
+    MailIcon,
+    PinterestIcon,
+    RedditIcon,
+    TelegramIcon,
+    TwitterIcon,
+    WhatsappIcon,
+} from '~/components/Icons';
+
+const SHARE_MENU = [
+    {
+        icon: <CodeIcon width="2.6rem" height="2.6rem" />,
+        title: 'Embed',
+    },
+    {
+        icon: <FacebookIcon width="2.6rem" height="2.6rem" />,
+        title: 'Share to Facebook',
+    },
+    {
+        icon: <WhatsappIcon width="2.6rem" height="2.6rem" />,
+        title: 'Share to Whatsapp',
+    },
+    {
+        icon: <TwitterIcon width="2.6rem" height="2.6rem" />,
+        title: 'Share to Twitter',
+    },
+    {
+        icon: <CopyIcon width="2.6rem" height="2.6rem" />,
+        title: 'Copy link',
+    },
+    {
+        icon: <LinkedInIcon width="2.6rem" height="2.6rem" />,
+        title: 'Share to LinkedIn',
+    },
+    {
+        icon: <RedditIcon width="2.6rem" height="2.6rem" />,
+        title: 'Share to Reddit',
+    },
+    {
+        icon: <TelegramIcon width="2.6rem" height="2.6rem" />,
+        title: 'Share to Telegram',
+    },
+    {
+        icon: <MailIcon width="2.6rem" height="2.6rem" />,
+        title: 'Share to Email',
+    },
+    {
+        icon: <LineIcon width="2.6rem" height="2.6rem" />,
+        title: 'Share to Line',
+    },
+    {
+        icon: <PinterestIcon width="2.6rem" height="2.6rem" />,
+        title: 'Share to Pinterest',
+    },
+];
 
 const MORE_MENU = [
     {
@@ -204,11 +265,17 @@ export default function Profile() {
                 <Bio>{user.bio}</Bio>
 
                 <HeaderActions>
-                    <ShareOptionsMenu placement="bottom-end">
+                    <Menu
+                        items={SHARE_MENU}
+                        style={{ width: '280px', maxHeight: '448px' }}
+                        moreArrow
+                        offset={[7, 12]}
+                        delay={[200, 500]}
+                    >
                         <span className="share-icon">
                             <ShareIcon width="2.4rem" height="2.4rem" />
                         </span>
-                    </ShareOptionsMenu>
+                    </Menu>
 
                     {!isUser && (
                         <Menu
@@ -250,10 +317,19 @@ export default function Profile() {
                 {(activeTab === 'videos' ? userVideos : likedVideos).map(
                     (video) => (
                         <VideoItem key={video._id}>
-                            <ShareVideoItem
-                                video={video}
-                                username={user?.username}
-                            />
+                            <ShareVideoItem video={video}>
+                                <div className="sub-content">
+                                    <span className="icon-wrapper">
+                                        <RegularPlayIcon
+                                            width="1.8rem"
+                                            height="1.8rem"
+                                        />
+                                    </span>
+                                    <span className="video-info">
+                                        {configNumber(video.views)}
+                                    </span>
+                                </div>
+                            </ShareVideoItem>
                         </VideoItem>
                     ),
                 )}

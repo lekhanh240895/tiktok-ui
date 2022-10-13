@@ -8,9 +8,9 @@ const VideoModel = new Schema(
             required: true,
             ref: 'user',
         },
-        title: { type: String },
+        title: { type: String, default: '' },
         privacy: { type: String, default: 'public' },
-        cover: { type: String },
+        cover: { type: String, default: '' },
         allowance: {
             type: Object,
             default: {
@@ -19,7 +19,7 @@ const VideoModel = new Schema(
                 stitch: true,
             },
         },
-        src: { type: String },
+        src: { type: String, default: '' },
         likes: [
             {
                 type: Schema.Types.ObjectId,
@@ -38,9 +38,9 @@ const VideoModel = new Schema(
                 ref: 'comment',
             },
         ],
-        music: { type: String },
+        music: { type: String, default: '' },
         tags: { type: Array },
-        views: { type: Number },
+        views: { type: Number, default: 0 },
     },
     { timestamps: true },
 );

@@ -34,6 +34,7 @@ import { authSelector } from '~/redux/selectors';
 import loginModalSlice from '~/redux/slices/loginModalSlice';
 import authSlice from '~/redux/slices/authSlice';
 import { followUser, unfollowUser } from '~/redux/slices/usersSlice';
+import VideoTitle from '~/components/VideoTitle';
 
 const SHARE_MENU = [
     {
@@ -240,14 +241,18 @@ export default function Content({ video }) {
                     )}
                 </div>
 
-                <div className="video-title">{video.title}</div>
+                <div className="video-title">
+                    <VideoTitle title={video.title} />
+                </div>
                 <Button
                     text
+                    to={`/music/${video.music}`}
                     className="music"
                     leftIcon={<MusicIcon width="1.6rem" height="1.6rem" />}
                 >
                     {video.music}
                 </Button>
+
                 <div className="video-info">
                     <div className="like-comment">
                         <span className="likes" onClick={handleLike}>

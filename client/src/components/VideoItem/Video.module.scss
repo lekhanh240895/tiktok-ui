@@ -4,65 +4,70 @@
     position: relative;
 }
 
-.header {
-    display: flex;
-    align-items: center;
-    height: 28px;
-}
-
-.styleAuthor {
-    display: block;
-    height: 100%;
-}
-
 .info {
     word-break: break-word;
     margin-right: 114px;
-}
 
-.avatar {
-    display: none;
-}
-
-.username {
-    font-weight: 700;
-    font-size: 1.8rem;
-    margin-right: 4px;
-    line-height: 25px;
-    display: inline-block;
-
-    &:hover {
-        text-decoration: underline;
+    .header {
+        display: flex;
+        align-items: center;
+        height: 28px;
     }
-}
 
-.name {
-    font-weight: 400;
-    font-size: 1.4rem;
-    font-family: var(--font-family);
-    line-height: 28px;
-    display: inline-block;
-}
+    .style-author {
+        display: flex;
+        height: 100%;
 
-.video-title {
-    line-height: 22px;
-    font-size: 1.6rem;
-}
-.video-tag {
-    font-weight: 600;
-    margin-right: 3px;
-
-    &:hover {
-        text-decoration: underline;
+        &:hover .username {
+            text-decoration: underline;
+        }
     }
-}
 
-.video-music {
-    line-height: 22px;
-    margin: 6px 0 12px;
+    .avatar {
+        display: none;
+    }
 
-    & > a {
-        padding: 0;
+    .username {
+        font-weight: 700;
+        font-size: 1.8rem;
+        margin-right: 4px;
+        line-height: 25px;
+        display: inline-block;
+    }
+
+    .name {
+        font-weight: 400;
+        font-size: 1.4rem;
+        font-family: var(--font-family);
+        line-height: 28px;
+        display: inline-block;
+    }
+
+    .video-title {
+        line-height: 22px;
+        font-size: 1.6rem;
+    }
+
+    .video-music {
+        line-height: 22px;
+        margin: 6px 0 12px;
+
+        & > a {
+            padding: 0;
+        }
+    }
+    .time {
+        font-size: 1.4rem;
+        display: flex;
+        align-items: center;
+
+        .separate {
+            margin: 0 5px;
+            width: 3px;
+            height: 3px;
+            border-radius: 50%;
+            background-color: rgb(22 24 35);
+        }
     }
 }
 

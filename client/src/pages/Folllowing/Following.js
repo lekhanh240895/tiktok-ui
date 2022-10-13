@@ -1,97 +1,24 @@
-import React, { useEffect, useState } from 'react';
 import styles from './Following.module.scss';
 import classnames from 'classnames/bind';
-
-import VideoItem from '~/components/VideoItem';
-import { Link } from 'react-router-dom';
-import Image from '~/components/Image';
+import VideoList from '~/components/VideoList';
 import { useSelector } from 'react-redux';
-import { authSelector, usersSelector, videosSelector } from '~/redux/selectors';
+import { authSelector, videosSelector } from '~/redux/selectors';
 
 const cx = classnames.bind(styles);
 
 export default function Following() {
-    const [settings, setSettings] = useState({
-        isMuted: true,
-        volume: 1,
-    });
-
-    const { users } = useSelector(usersSelector);
-    const { currentUser } = useSelector(authSelector);
     const { videos } = useSelector(videosSelector);
-
-    const [isPlaying, setIsPlaying] = useState(false);
-
-    const followingUserVideos = videos.filter((video) =>
+    const { currentUser } = useSelector(authSelector);
+    const followingVideos = videos?.filter((video) =>
         currentUser?.followingIDs?.includes(video.user._id),
     );
-
-    useEffect(() => {
-        const settings = JSON.parse(localStorage.getItem('userSettings'));
-
-        setSettings((prevState) => ({ ...prevState, ...settings }));
-    }, []);
-
-    const setConfig = (key, value) => {
-        settings[key] = value;
-        localStorage.setItem('userSettings', JSON.stringify(settings));
-    };
-
-    const handleMuteVolume = () => {
-        setSettings({
-            ...settings,
-            isMuted: !settings.isMuted,
-        });
-        setConfig('isMuted', !settings.isMuted);
-    };
-
-    const handleVolumeChange = (e) => {
-        const newVolume = Number(e.target.value);
-
-        setSettings({
-            ...settings,
-            volume: newVolume,
-            isMuted: newVolume > 0 ? false : true,
-        });
-
-        setConfig('volume', newVolume);
-    };
-
-    const handlePlay = (bool) => {
-        setIsPlaying(bool);
-    };
-
+    const getTime = (t) => new Date(t);
+    const sortVideos = followingVideos?.sort(
+        (a, b) => getTime(b.createdAt) - getTime(a.createdAt),
+    );
     return (
         <div className={cx('wrapper')}>
-            <ul className={cx('video-list')}>
-                {followingUserVideos.map((video) => {
-                    const user = users.find(
-                        (user) => user?._id === video.user._id,
-                    );
-                    return (
-                        <li key={video._id} className={cx('video-item')}>
-                            <Link to={`/@${user?.username}`}>
-                                <Image
-                                    className={cx('avatar')}
-                                    src={user?.avatar}
-                                    alt="avatar"
-                                />
-                            </Link>
-
-                            <VideoItem
-                                video={video}
-                                user={user}
-                                isMuted={settings.isMuted}
-                                volume={settings.volume}
-                                onMutedVolume={handleMuteVolume}
-                                onVolumeChange={handleVolumeChange}
-                                onPlay={handlePlay}
-                                isPlaying={isPlaying}
-                            />
-                        </li>
-                    );
-                })}
-            </ul>
+            <VideoList videos={sortVideos} time />
         </div>
     );
 }

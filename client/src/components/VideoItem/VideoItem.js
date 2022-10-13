@@ -15,33 +15,21 @@ import ActionList from './ActionList';
 import Info from './Info';
 import { useElementOnScreen } from '~/hooks/useElementOnScreen';
 import Video from '../Video/Video';
-import { useLocation } from 'react-router-dom';
 
 const cx = classnames.bind(styles);
 export default function VideoItem({
     video,
-    user,
     isMuted,
     volume,
     onMutedVolume,
     onVolumeChange,
+    time = false,
 }) {
     const [progress, setProgress] = useState(0);
     const [isPlaying, setIsPlaying] = useState(false);
-
     const [containerRef, isVisible] = useElementOnScreen({
         threshold: 0.75,
     });
-
-    // const location = useLocation();
-    // const background = location.state && location.state.background;
-
-    // useEffect(() => {
-    //     if (background && background.pathname === '/') {
-    //         videoRef.current.pause();
-    //         setIsPlaying(false);
-    //     }
-    // }, [background]);
 
     const videoRef = useRef();
 
@@ -109,7 +97,7 @@ export default function VideoItem({
 
     return (
         <div className={cx('wrapper')}>
-            <Info video={video} user={user} />
+            <Info video={video} time={time} />
 
             <div className={cx('video-card-wrapper')}>
                 <div className={cx('video-card-container')}>
@@ -124,7 +112,7 @@ export default function VideoItem({
                         ref={containerRef}
                     >
                         <Video
-                            username={user?.username}
+                            username={video.user?.username}
                             video={video}
                             ref={videoRef}
                             loop
@@ -132,7 +120,6 @@ export default function VideoItem({
                             muted={isMuted}
                             onTimeUpdate={handleTimeUpdate}
                             id="targetVideo"
-                            volume={volume}
                         />
 
                         <div className={cx('buttons-in-video')}>

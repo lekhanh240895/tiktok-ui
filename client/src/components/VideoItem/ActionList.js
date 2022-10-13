@@ -8,9 +8,68 @@ import { likeVideo } from '~/redux/slices/videosSlice';
 import loginModalSlice from '~/redux/slices/loginModalSlice';
 import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import ShareOptionsMenu from '../ShareOptionsMenu';
+import Menu from '../Popper/Menu';
+import {
+    CodeIcon,
+    CopyIcon,
+    FacebookIcon,
+    LineIcon,
+    LinkedInIcon,
+    MailIcon,
+    PinterestIcon,
+    RedditIcon,
+    TelegramIcon,
+    TwitterIcon,
+    WhatsappIcon,
+} from '~/components/Icons';
 
 const cx = classnames.bind(styles);
+const SHARE_MENU = [
+    {
+        icon: <CodeIcon width="2.6rem" height="2.6rem" />,
+        title: 'Embed',
+    },
+    {
+        icon: <FacebookIcon width="2.6rem" height="2.6rem" />,
+        title: 'Share to Facebook',
+    },
+    {
+        icon: <WhatsappIcon width="2.6rem" height="2.6rem" />,
+        title: 'Share to Whatsapp',
+    },
+    {
+        icon: <TwitterIcon width="2.6rem" height="2.6rem" />,
+        title: 'Share to Twitter',
+    },
+    {
+        icon: <CopyIcon width="2.6rem" height="2.6rem" />,
+        title: 'Copy link',
+    },
+    {
+        icon: <LinkedInIcon width="2.6rem" height="2.6rem" />,
+        title: 'Share to LinkedIn',
+    },
+    {
+        icon: <RedditIcon width="2.6rem" height="2.6rem" />,
+        title: 'Share to Reddit',
+    },
+    {
+        icon: <TelegramIcon width="2.6rem" height="2.6rem" />,
+        title: 'Share to Telegram',
+    },
+    {
+        icon: <MailIcon width="2.6rem" height="2.6rem" />,
+        title: 'Share to Email',
+    },
+    {
+        icon: <LineIcon width="2.6rem" height="2.6rem" />,
+        title: 'Share to Line',
+    },
+    {
+        icon: <PinterestIcon width="2.6rem" height="2.6rem" />,
+        title: 'Share to Pinterest',
+    },
+];
 
 export default function ActionList({ video }) {
     const { currentUser } = useSelector(authSelector);
@@ -69,7 +128,14 @@ export default function ActionList({ video }) {
                     </span>
                 </li>
 
-                <ShareOptionsMenu offset={[7, 12]}>
+                <Menu
+                    items={SHARE_MENU}
+                    style={{ width: '280px', maxHeight: '448px' }}
+                    moreArrow
+                    offset={[7, 12]}
+                    delay={[200, 500]}
+                    placement="top-start"
+                >
                     <li className={cx('action-item')}>
                         <span className={cx('action-item-btn')}>
                             <ShareIcon width="2.4rem" height="2.4rem" />
@@ -78,7 +144,7 @@ export default function ActionList({ video }) {
                             {configNumber(video.shares.length)}
                         </span>
                     </li>
-                </ShareOptionsMenu>
+                </Menu>
             </ul>
         </div>
     );

@@ -1,5 +1,5 @@
 import { Fragment, useEffect } from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 
 import { publicRoutes, privateRoutes } from '~/routes/index';
 import DefaultLayout from '~/layouts/DefaultLayout';
@@ -25,8 +25,6 @@ function App() {
     const { isEditModalShow } = useSelector(editModalSelector);
     const { isLoginModalShow } = useSelector(loginModalSelector);
     const dispatch = useDispatch();
-    const location = useLocation();
-    const background = location.state && location.state.background;
 
     function unique(arr) {
         var newArr = [];

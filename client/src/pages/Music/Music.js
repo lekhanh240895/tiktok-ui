@@ -1,10 +1,8 @@
-import { useParams } from 'react-router-dom';
-import HeadlessTippy from '@tippyjs/react/headless';
+import { Link, useParams } from 'react-router-dom';
 
 import {
-    CodeIcon,
+    CheckedIcon,
     CopyIcon,
-    DownArrow,
     FacebookIcon,
     FlagIcon,
     LineIcon,
@@ -20,34 +18,26 @@ import {
     TwitterIcon,
     WhatsappIcon,
 } from '~/components/Icons';
-import Button from '~/components/Button';
 import {
     Container,
     Header,
     HeaderActions,
     ShareTitle,
-    SharedInfo,
+    ShareInfo,
     ImageWrapper,
     VideoItem,
     VideoList,
-    ShareOptionsWrapper,
-    ShareOptions,
-    MoreOptions,
-    ShareMenuItem,
-    MoreMenuItem,
-    MoreShareItemButton,
+    Bio,
 } from './styled';
 import { useEffect, useRef, useState } from 'react';
 import { configNumber } from '~/services';
 import { useSelector } from 'react-redux';
-import { usersSelector, videosSelector } from '~/redux/selectors';
+import { videosSelector } from '~/redux/selectors';
 import ShareVideoItem from '~/components/ShareVideoItem';
+import Image from '~/components/Image';
+import Menu from '~/components/Popper/Menu';
 
 const SHARE_MENU = [
-    {
-        icon: <CodeIcon width="2.6rem" height="2.6rem" />,
-        title: 'Embed',
-    },
     {
         icon: <FacebookIcon width="2.6rem" height="2.6rem" />,
         title: 'Share to Facebook',
@@ -100,11 +90,9 @@ const MORE_MENU = [
 
 export default function Music() {
     const { videos } = useSelector(videosSelector);
-    const [isMore, setIsMore] = useState(false);
     const [isPlaying, setIsPLaying] = useState(false);
     const { musicname } = useParams();
     const [progress, setProgress] = useState(0);
-    const { users } = useSelector(usersSelector);
 
     const handleTimeUpdate = () => {
         const { currentTime, duration } = videoRef.current;
@@ -162,7 +150,7 @@ export default function Music() {
     return (
         <Container>
             <Header>
-                <SharedInfo>
+                <ShareInfo>
                     <ImageWrapper>
                         <video
                             src={musicVideos[0].src}
@@ -211,106 +199,67 @@ export default function Music() {
                         <h2>{musicname}</h2>
                         <p>{configNumber(musicVideos.length)} videos</p>
                     </ShareTitle>
-                </SharedInfo>
+                </ShareInfo>
+
+                <Bio>
+                    Đã trôi qua nửa năm 2022, bạn đã thay đổi như thế nào? Tham
+                    gia ngay hot trend để mọi người cùng ngắm nhìn hành trình
+                    “lột xác” của bạn nhé~ 🥰
+                </Bio>
 
                 <HeaderActions>
-                    <div>
-                        <HeadlessTippy
-                            placement="bottom-end"
-                            offset={[10, 10]}
-                            onClickOutside={() => setIsMore(false)}
-                            delay={[200, 500]}
-                            interactive
-                            render={(attrs) => (
-                                <ShareOptionsWrapper>
-                                    <ShareOptions tabIndex="-1" {...attrs}>
-                                        {!isMore ? (
-                                            <>
-                                                {SHARE_MENU.slice(0, 5).map(
-                                                    (item, index) => (
-                                                        <ShareMenuItem
-                                                            key={index}
-                                                        >
-                                                            <Button
-                                                                secondary
-                                                                leftIcon={
-                                                                    item.icon
-                                                                }
-                                                            >
-                                                                {item.title}
-                                                            </Button>
-                                                        </ShareMenuItem>
-                                                    ),
-                                                )}
-
-                                                <MoreShareItemButton
-                                                    onClick={() =>
-                                                        setIsMore(true)
-                                                    }
-                                                >
-                                                    <DownArrow
-                                                        width="2.4rem"
-                                                        height="2.4rem"
-                                                    />
-                                                </MoreShareItemButton>
-                                            </>
-                                        ) : (
-                                            SHARE_MENU.map((item, index) => (
-                                                <ShareMenuItem key={index}>
-                                                    <Button
-                                                        secondary
-                                                        leftIcon={item.icon}
-                                                    >
-                                                        {item.title}
-                                                    </Button>
-                                                </ShareMenuItem>
-                                            ))
-                                        )}
-                                    </ShareOptions>
-                                </ShareOptionsWrapper>
-                            )}
-                        >
-                            <span className="share-icon">
-                                <ShareIcon width="2.4rem" height="2.4rem" />
-                            </span>
-                        </HeadlessTippy>
-                    </div>
-
-                    <HeadlessTippy
-                        placement="bottom-end"
-                        offset={[10, 10]}
+                    <Menu
+                        items={SHARE_MENU}
+                        style={{ width: '280px', maxHeight: '448px' }}
+                        moreArrow
                         delay={[200, 500]}
-                        interactive
-                        render={(attrs) => (
-                            <MoreOptions tabIndex="-1" {...attrs}>
-                                {MORE_MENU.map((item, index) => (
-                                    <MoreMenuItem key={index}>
-                                        <Button secondary leftIcon={item.icon}>
-                                            {item.title}
-                                        </Button>
-                                    </MoreMenuItem>
-                                ))}
-                            </MoreOptions>
-                        )}
+                    >
+                        <span className="share-icon">
+                            <ShareIcon width="2.4rem" height="2.4rem" />
+                        </span>
+                    </Menu>
+
+                    <Menu
+                        items={MORE_MENU}
+                        placement="bottom-end"
+                        style={{ width: '180px' }}
                     >
                         <span>
                             <MoreIcon width="2.4rem" height="2.4rem" />
                         </span>
-                    </HeadlessTippy>
+                    </Menu>
                 </HeaderActions>
             </Header>
 
             <VideoList>
                 {musicVideos.map((video) => {
-                    const user = users.find(
-                        (user) => user._id === video.user._id,
-                    );
                     return (
                         <VideoItem key={video._id}>
-                            <ShareVideoItem
-                                video={video}
-                                username={user.username}
-                            />
+                            <ShareVideoItem video={video}>
+                                <div className="sub-content">
+                                    <Link
+                                        to={`/@${video.user.username}`}
+                                        className="user-info"
+                                    >
+                                        <span className="avatar-wrapper">
+                                            <Image
+                                                src={video.user.avatar}
+                                                className="avatar"
+                                            />
+                                        </span>
+                                        <span className="video-info">
+                                            {video.user.username}
+                                            {video.user.tick && (
+                                                <CheckedIcon
+                                                    className="check"
+                                                    width="1.4rem"
+                                                    height="1.4rem"
+                                                />
+                                            )}
+                                        </span>
+                                    </Link>
+                                </div>
+                            </ShareVideoItem>
                         </VideoItem>
                     );
                 })}

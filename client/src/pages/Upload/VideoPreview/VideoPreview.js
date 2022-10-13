@@ -1,6 +1,7 @@
 import Button from '~/components/Button';
 import { CheckedIcon, MusicIcon } from '~/components/Icons';
 import Image from '~/components/Image';
+import { Wrapper } from './styled';
 
 export default function VideoPreview({
     videoUrl,
@@ -37,7 +38,7 @@ export default function VideoPreview({
     };
 
     return (
-        <div>
+        <Wrapper>
             <div className="video-preview">
                 <video
                     src={videoUrl}
@@ -161,6 +162,6 @@ export default function VideoPreview({
                     Change video
                 </Button>
             </div>
-        </div>
+        </Wrapper>
     );
 }

@@ -1,8 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
+import { RegularPlayIcon } from '~/components/Icons';
+import Image from '~/components/Image';
+import ShareVideoItem from '~/components/ShareVideoItem';
 import { usersSelector, videosSelector } from '~/redux/selectors';
-import AccountItem from './AccountItem';
+import { configNumber } from '~/services';
+import { formatDate } from '~/services/formatDate';
+import AccountItem from '~/components/AccountItem';
 import {
     Container,
     VideoItem,
@@ -11,7 +16,6 @@ import {
     NavItem,
     Line,
 } from './styled';
-import VideoComp from './VideoComp';
 
 export default function Search() {
     const [activeTab, setActiveTab] = useState('topVideos');
@@ -97,39 +101,7 @@ export default function Search() {
                 <Line ref={lineRef}></Line>
             </NavList>
 
-            {activeTab === 'topVideos' ? (
-                <VideoList>
-                    {topVideos.map((video) => {
-                        const user = users.find(
-                            (user) => user._id === video.user._id,
-                        );
-                        return (
-                            <VideoItem key={video._id}>
-                                <VideoComp
-                                    video={video}
-                                    username={user.username}
-                                />
-                            </VideoItem>
-                        );
-                    })}
-                </VideoList>
-            ) : activeTab === 'videos' ? (
-                <VideoList>
-                    {otherVideos.map((video) => {
-                        const user = users.find(
-                            (user) => user._id === video.user._id,
-                        );
-                        return (
-                            <VideoItem key={video._id}>
-                                <VideoComp
-                                    video={video}
-                                    username={user.username}
-                                />
-                            </VideoItem>
-                        );
-                    })}
-                </VideoList>
-            ) : (
+            {activeTab === 'accounts' ? (
                 <ul>
                     {accounts.map((account) => (
                         <li key={account._id}>
@@ -137,6 +109,46 @@ export default function Search() {
                         </li>
                     ))}
                 </ul>
+            ) : (
+                <VideoList>
+                    {(activeTab === 'topVideos' ? topVideos : otherVideos).map(
+                        (video) => {
+                            return (
+                                <VideoItem key={video._id}>
+                                    <ShareVideoItem video={video}>
+                                        <div className="play-line">
+                                            <div className="user-info">
+                                                <Image
+                                                    src={video.user.avatar}
+                                                    className="avatar"
+                                                    alt="avatar"
+                                                />
+                                                <span className="username">
+                                                    {video.user.username}
+                                                </span>
+                                            </div>
+
+                                            <div className="play-card">
+                                                <RegularPlayIcon
+                                                    width="1.6rem"
+                                                    height="1.6rem"
+                                                />
+                                                <span>
+                                                    {configNumber(video.views)}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div className="sub-content">
+                                            <span className="video-time">
+                                                {formatDate(video.createdAt)}
+                                            </span>
+                                        </div>
+                                    </ShareVideoItem>
+                                </VideoItem>
+                            );
+                        },
+                    )}
+                </VideoList>
             )}
         </Container>
     );

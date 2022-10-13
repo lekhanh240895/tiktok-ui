@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Button from '~/components/Button';
@@ -7,6 +7,7 @@ import Spinner from '~/components/Spinner/Spinner';
 import { videosSelector } from '~/redux/selectors';
 import videosSlice, { createVideo } from '~/redux/slices/videosSlice';
 import * as uploadService from '~/services/uploadService';
+import { Wrapper } from './styled';
 
 export default function RightBody({
     thumbnails,
@@ -35,6 +36,7 @@ export default function RightBody({
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { isLoading, isSuccess } = useSelector(videosSelector);
+    const captionRef = useRef(null);
 
     useEffect(() => {
         const x = offset - scroll;
@@ -106,10 +108,19 @@ export default function RightBody({
         }
     };
 
+    const handleClickTagIcon = () => {
+        setFormData({
+            ...formData,
+            title: (prev) => prev.concat('#'),
+        });
+        setCaption((prev) => prev.concat('#'));
+        captionRef.current.focus();
+    };
+
     if (isLoading) return <Spinner />;
 
     return (
-        <div className="right-body">
+        <Wrapper>
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
                     <div className="title">
@@ -129,13 +140,17 @@ export default function RightBody({
                                 setCaption(e.target.value);
                                 handleInputChange(e);
                             }}
+                            ref={captionRef}
                         />
 
                         <span className="hashtag">
                             <span className="hash icon-wrapper">
                                 <AtIcon width="1.5rem" height="1.5rem" />
                             </span>
-                            <span className="tag icon-wrapper">
+                            <span
+                                className="tag icon-wrapper"
+                                onClick={handleClickTagIcon}
+                            >
                                 <TagIcon width="1.5rem" height="1.5rem" />
                             </span>
                         </span>
@@ -288,6 +303,6 @@ export default function RightBody({
                     </Button>
                 </div>
             </form>
-        </div>
+        </Wrapper>
     );
 }

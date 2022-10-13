@@ -31,32 +31,18 @@ export default function VideoModal() {
         localStorage.setItem('userSettings', JSON.stringify(settings));
     };
 
-    const handleMuteVolume = () => {
-        const newSettings = {
-            ...settings,
-            isMuted: !settings.isMuted,
-        };
-        dispatch(appSlice.actions.setSettings(newSettings));
-        setConfig(newSettings);
-    };
-
-    const handleVolumeChange = (e) => {
-        const newVolume = Number(e.target.value);
-        const newSettings = {
-            ...settings,
-            volume: newVolume,
-            isMuted: newVolume > 0 ? false : true,
-        };
-        dispatch(appSlice.actions.setSettings(newSettings));
-        setConfig(newSettings);
-    };
-
     useEffect(() => {
         (async () => {
             const video = await videoService.getVideo(videoID);
             setVideo(video);
         })();
     }, [videoID]);
+
+    useEffect(() => {
+        if (video && settings) {
+            videoRef.current.volume = settings.volume;
+        }
+    }, [video, settings]);
 
     const escFunction = useCallback(
         (event) => {
@@ -122,6 +108,26 @@ export default function VideoModal() {
         videoRef.current.currentTime = newCurrentTime;
     };
 
+    const handleMuteVolume = () => {
+        const newSettings = {
+            ...settings,
+            isMuted: !settings.isMuted,
+        };
+        dispatch(appSlice.actions.setSettings(newSettings));
+        setConfig(newSettings);
+    };
+
+    const handleVolumeChange = (e) => {
+        const newVolume = Number(e.target.value);
+        const newSettings = {
+            ...settings,
+            volume: newVolume,
+            isMuted: newVolume > 0 ? false : true,
+        };
+        dispatch(appSlice.actions.setSettings(newSettings));
+        setConfig(newSettings);
+    };
+
     if (!video) return;
 
     return (
@@ -168,7 +174,6 @@ export default function VideoModal() {
                                         loop
                                         poster={video?.cover}
                                         type={video?.type}
-                                        volume={settings.volume}
                                     >
                                         <source
                                             src={video.src}
