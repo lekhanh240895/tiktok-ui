@@ -5,8 +5,8 @@ import classnames from 'classnames/bind';
 import Button from '~/components/Button';
 import { MusicIcon } from '~/components/Icons';
 import styles from './Video.module.scss';
-import Image from '../Image';
-import VideoTitle from '../VideoTitle';
+import Image from '../../Image';
+import VideoTitle from '../../VideoTitle';
 import { formatDate } from '~/services/formatDate';
 
 const cx = classnames.bind(styles);

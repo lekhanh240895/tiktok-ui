@@ -1,46 +1,46 @@
 {
-  "name": "tiktok",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "concurrently \"npm start --prefix server\" \"npm start --prefix client\""
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/lekhanh240895/tiktok-ui.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/lekhanh240895/tiktok-ui/issues"
-  },
-  "homepage": "https://github.com/lekhanh240895/tiktok-ui#readme",
-  "devDependencies": {
-    "concurrently": "^7.4.0"
-  },
-  "dependencies": {
-    "@rajesh896/video-thumbnails-generator": "^2.3.9",
-    "date-fns": "^2.29.3"
-  },
-  "prettier": {
-    "arrowParens": "always",
-    "bracketSameLine": false,
-    "bracketSpacing": true,
-    "embeddedLanguageFormatting": "auto",
-    "htmlWhitespaceSensitivity": "css",
-    "insertPragma": false,
-    "jsxSingleQuote": false,
-    "printWidth": 80,
-    "proseWrap": "preserve",
-    "quoteProps": "as-needed",
-    "requirePragma": false,
-    "semi": true,
-    "singleQuote": true,
-    "tabWidth": 4,
-    "trailingComma": "all",
-    "useTabs": false,
-    "vueIndentScriptAndStyle": false
-  }
+    "name": "tiktok",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "dev": "concurrently \"npm start --prefix server\" \"npm start --prefix client\" \"npm start --prefix socket\""
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/lekhanh240895/tiktok-ui.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/lekhanh240895/tiktok-ui/issues"
+    },
+    "homepage": "https://github.com/lekhanh240895/tiktok-ui#readme",
+    "devDependencies": {
+        "concurrently": "^7.4.0"
+    },
+    "dependencies": {
+        "@rajesh896/video-thumbnails-generator": "^2.3.9",
+        "date-fns": "^2.29.3"
+    },
+    "prettier": {
+        "arrowParens": "always",
+        "bracketSameLine": false,
+        "bracketSpacing": true,
+        "embeddedLanguageFormatting": "auto",
+        "htmlWhitespaceSensitivity": "css",
+        "insertPragma": false,
+        "jsxSingleQuote": false,
+        "printWidth": 80,
+        "proseWrap": "preserve",
+        "quoteProps": "as-needed",
+        "requirePragma": false,
+        "semi": true,
+        "singleQuote": true,
+        "tabWidth": 4,
+        "trailingComma": "all",
+        "useTabs": false,
+        "vueIndentScriptAndStyle": false
+    }
 }

@@ -18,20 +18,6 @@ class CommentController {
         }
     }
 
-    // [GET]  api/comments/:commentID
-    async getComment(req, res, next) {
-        try {
-            const comment = await CommentModel.findById(req.params.commentID)
-                .populate('video')
-                .populate('user')
-                .exec();
-            res.status(200).json(comment);
-        } catch (err) {
-            res.status(500).json({ error: err });
-            next();
-        }
-    }
-
     // [POST] api/comments/:videoID
     async createComment(req, res, next) {
         try {

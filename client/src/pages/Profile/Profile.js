@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import {
     BlockIcon,
     CheckedIcon,
@@ -54,6 +54,8 @@ import {
     TwitterIcon,
     WhatsappIcon,
 } from '~/components/Icons';
+import * as conversationService from '~/services/conversationService';
+import appSlice from '~/redux/slices/appSlice';
 
 const SHARE_MENU = [
     {
@@ -124,6 +126,7 @@ export default function Profile() {
     const lineRef = useRef(null);
     const { username } = useParams();
     const user = users?.find((user) => user.username === username);
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (user?._id === currentUser?._id) {
@@ -190,6 +193,12 @@ export default function Profile() {
         dispatch(unfollowUser(user._id));
     };
 
+    const handleMessage = async () => {
+        const conversation = await conversationService.create(user._id);
+        dispatch(appSlice.actions.setSelectedConversationID(conversation._id));
+        navigate('/messages');
+    };
+
     if (!user) return;
     return (
         <Container>
@@ -226,7 +235,10 @@ export default function Profile() {
                                 </StyledButton>
                             ) : (
                                 <ButtonGroup>
-                                    <StyledButton outline>
+                                    <StyledButton
+                                        outline
+                                        onClick={handleMessage}
+                                    >
                                         Messages
                                     </StyledButton>
 

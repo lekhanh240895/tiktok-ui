@@ -7,6 +7,8 @@ const videos = require('./routers/videos');
 const auth = require('./routers/auth');
 const upload = require('./routers/upload');
 const comments = require('./routers/comments');
+const messages = require('./routers/messages');
+const conversations = require('./routers/conversations');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const helmet = require('helmet');
@@ -40,6 +42,8 @@ app.use('/api/videos', videos);
 app.use('/api/auth', auth);
 app.use('/api/upload', upload);
 app.use('/api/comments', comments);
+app.use('/api/messages', messages);
+app.use('/api/conversations', conversations);
 
 // Cookies
 app.use(cookieParser());

@@ -183,14 +183,14 @@ export default function Content({ video }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const newComment = await commentService.create({
+        const response = await commentService.create({
             videoID: video._id,
             text: comment,
         });
         setComment('');
-        const commentData = await commentService.getComment(newComment._id);
-        setComments((prev) => [...prev, commentData]);
         setIsAddComment(true);
+        const newComment = { ...response, video, user: currentUser };
+        setComments((prev) => [...prev, newComment]);
     };
 
     return (
@@ -198,8 +198,10 @@ export default function Content({ video }) {
             <div className="header">
                 <div className="user-info">
                     <Avatar
+                        width="4rem"
+                        height="4rem"
                         src={video.user.avatar}
-                        username={video.user.username}
+                        to={`/@${video.user.username}`}
                     />
                     <Link to={`/@${video.user.username}`} className="info">
                         <h4>

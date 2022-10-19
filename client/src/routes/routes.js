@@ -12,7 +12,6 @@ import NotFound from '~/pages/NotFound';
 import Messages from '~/pages/Messages';
 import SharedLayout from '~/layouts/SharedLayout';
 import HeaderFooterLayout from '~/layouts/HeaderFooterLayout';
-import HeaderOnlyLayout from '~/layouts/HeaderOnlyLayout/HeaderOnlyLayout';
 
 const publicRoutes = [
     {
@@ -56,18 +55,19 @@ const publicRoutes = [
         component: Music,
         layout: SharedLayout,
     },
+];
+
+const privateRoutes = [
+    {
+        path: config.routes.messages,
+        component: Messages,
+        layout: null,
+    },
     {
         path: config.routes.upload,
         component: Upload,
         layout: HeaderFooterLayout,
     },
-    {
-        path: config.routes.messages,
-        component: Messages,
-        layout: HeaderOnlyLayout,
-    },
 ];
-
-const privateRoutes = [];
 
 export { publicRoutes, privateRoutes };

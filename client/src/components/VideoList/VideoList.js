@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import styles from './VideoList.module.scss';
 import classnames from 'classnames/bind';
-import VideoItem from '~/components/VideoItem';
+import VideoItem from '~/components/VideoList/VideoItem';
 import { Link } from 'react-router-dom';
 import Image from '~/components/Image';
 import Button from '~/components/Button';

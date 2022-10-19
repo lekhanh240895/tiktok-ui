@@ -8,6 +8,7 @@ const appSlice = createSlice({
         mousePosition: {},
         selectedVideoId: null,
         selectedUserID: null,
+        selectedConversationID: null,
         tags: [],
         musics: [],
         settings: settings || {
@@ -18,6 +19,9 @@ const appSlice = createSlice({
     reducers: {
         setSelectedVideoId: (state, action) => {
             state.selectedVideoId = action.payload;
+        },
+        setSelectedConversationID: (state, action) => {
+            state.selectedConversationID = action.payload;
         },
         setSelectedUserID: (state, action) => {
             state.selectedUserID = action.payload;

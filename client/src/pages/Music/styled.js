@@ -25,7 +25,7 @@ export const ImageWrapper = styled.div`
     flex-shrink: 0;
     border-radius: 2px;
 
-    video {
+    .video {
         width: 100%;
         height: 100%;
         position: absolute;
@@ -33,15 +33,17 @@ export const ImageWrapper = styled.div`
         left: 0;
         z-index: 1;
         object-fit: cover;
+        opacity: 0;
     }
 
-    canvas {
+    .canvas {
         position: absolute;
         top: 0;
         left: 0;
         z-index: 2;
         width: 100%;
         height: 100%;
+        object-fit: cover;
         filter: brightness(50%);
     }
 

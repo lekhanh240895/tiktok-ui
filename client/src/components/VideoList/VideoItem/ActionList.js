@@ -1,14 +1,14 @@
 import classnames from 'classnames/bind';
 import styles from './Video.module.scss';
 import { configNumber } from '~/services';
-import { CommentIcon, ShareIcon, SolidHeartIcon } from '../Icons';
+import { CommentIcon, ShareIcon, SolidHeartIcon } from '../../Icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { authSelector } from '~/redux/selectors';
 import { likeVideo } from '~/redux/slices/videosSlice';
 import loginModalSlice from '~/redux/slices/loginModalSlice';
 import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import Menu from '../Popper/Menu';
+import Menu from '../../Popper/Menu';
 import {
     CodeIcon,
     CopyIcon,

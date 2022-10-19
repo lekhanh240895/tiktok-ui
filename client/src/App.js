@@ -1,5 +1,5 @@
 import { Fragment, useEffect } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 
 import { publicRoutes, privateRoutes } from '~/routes/index';
 import DefaultLayout from '~/layouts/DefaultLayout';
@@ -25,6 +25,7 @@ function App() {
     const { isEditModalShow } = useSelector(editModalSelector);
     const { isLoginModalShow } = useSelector(loginModalSelector);
     const dispatch = useDispatch();
+    const location = useLocation();
 
     function unique(arr) {
         var newArr = [];
@@ -124,6 +125,7 @@ function App() {
                             element={<PrivateOutlet />}
                         >
                             <Route
+                                path={route.path}
                                 element={
                                     <Layout>
                                         <Page />
@@ -149,7 +151,7 @@ function App() {
                 </Routes>
             )} */}
 
-            <GetAppButton />
+            {location.pathname !== '/messages' && <GetAppButton />}
             {isEditModalShow && <EditProfileModal />}
             {isLoginModalShow && <LoginModal />}
         </div>

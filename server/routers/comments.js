@@ -7,7 +7,6 @@ router.post('/:videoID', protect, CommentController.createComment);
 router.delete('/:commentID/delete', protect, CommentController.deleteComment);
 router.put('/:commentID/update', protect, CommentController.updateComment);
 router.put('/:commentID/like', protect, CommentController.likeComment);
-router.get('/:commentID', CommentController.getComment);
 router.get('/:videoID/comments', CommentController.getVideoComments);
 
 module.exports = router;

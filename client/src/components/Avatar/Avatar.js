@@ -3,31 +3,37 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import Image from '../Image';
 
-export default function Avatar({
+const AvatarComponent = ({
     src,
-    username,
+    to,
     width = '4rem',
     height = '4rem',
     alt = 'Avatar',
-}) {
-    return (
-        <Link to={`/@${username}`}>
-            <ImageWrapper width={width} height={height}>
-                <Image
-                    src={src}
-                    style={{
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'cover',
-                    }}
-                    alt={alt}
-                />
-            </ImageWrapper>
-        </Link>
-    );
-}
+    isOnline,
+    ...passProps
+}) => {
+    let Component = 'div';
+    if (to) {
+        Component = Link;
+        passProps.to = to;
+    }
 
-export const ImageWrapper = styled.div`
+    return (
+        <Component {...passProps} width={width} height={height}>
+            <Image
+                src={src}
+                style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                }}
+                alt={alt}
+            />
+        </Component>
+    );
+};
+
+export const Avatar = styled(AvatarComponent)`
     width: ${(props) => props.width};
     height: ${(props) => props.height};
     position: relative;
@@ -38,3 +44,5 @@ export const ImageWrapper = styled.div`
     border-width: 0.5px;
     cursor: pointer;
 `;
+
+export default Avatar;

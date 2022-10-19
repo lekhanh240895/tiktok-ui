@@ -199,6 +199,9 @@ export const Wrapper = styled.div`
                         font-weight: 700;
                         line-height: 25px;
                     }
+                    .check {
+                        margin-left: 5px;
+                    }
                     .comment-text {
                         line-height: 22px;
                         white-space: pre-line;

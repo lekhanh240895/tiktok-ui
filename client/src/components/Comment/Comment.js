@@ -6,6 +6,7 @@ import {
     SolidHeartIcon,
     FlagIcon,
     DeleteIcon,
+    CheckedIcon,
 } from '~/components/Icons';
 import Avatar from '~/components/Avatar';
 import formatDateAgo from '~/services/formatDateAgo';
@@ -52,10 +53,19 @@ export default function Comment({ comment, onDeleteComment }) {
                 width="4rem"
                 height="4rem"
                 src={comment.user.avatar}
-                username={comment.user.username}
+                to={`/@${comment.user.username}`}
             />
             <div className="comment-wrapper">
-                <h4 className="comment-username">{comment.user.username}</h4>
+                <h4 className="comment-username">
+                    {comment.user.username}
+                    {comment.user.tick && (
+                        <CheckedIcon
+                            className="check"
+                            width="1.4rem"
+                            height="1.4rem"
+                        />
+                    )}
+                </h4>
                 <p className="comment-text">{comment.text}</p>
                 <div className="comment-info">
                     <span className="comment-time">

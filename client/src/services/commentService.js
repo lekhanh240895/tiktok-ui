@@ -5,11 +5,6 @@ export const get = async (videoID) => {
     return response.data;
 };
 
-export const getComment = async (commentID) => {
-    const response = await httpRequest.get(`comments/${commentID}`);
-    return response.data;
-};
-
 export const create = async ({ videoID, text }) => {
     try {
         const response = await authRequest.post(`comments/${videoID}`, {
@@ -33,20 +28,20 @@ export const update = async (commentID, data) => {
     }
 };
 
-export const remove = async (commentID) => {
+export const like = async (commentID) => {
     try {
-        const response = await authRequest.delete(
-            `comments/${commentID}/delete`,
-        );
+        const response = await authRequest.put(`comments/${commentID}/like`);
         return response.data;
     } catch (err) {
         console.log(err);
     }
 };
 
-export const like = async (commentID) => {
+export const remove = async (commentID) => {
     try {
-        const response = await authRequest.put(`comments/${commentID}/like`);
+        const response = await authRequest.delete(
+            `comments/${commentID}/delete`,
+        );
         return response.data;
     } catch (err) {
         console.log(err);

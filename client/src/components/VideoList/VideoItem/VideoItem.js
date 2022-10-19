@@ -14,7 +14,7 @@ import {
 import ActionList from './ActionList';
 import Info from './Info';
 import { useElementOnScreen } from '~/hooks/useElementOnScreen';
-import Video from '../Video/Video';
+import Video from '../../Video/Video';
 
 const cx = classnames.bind(styles);
 export default function VideoItem({

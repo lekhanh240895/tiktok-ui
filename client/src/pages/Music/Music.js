@@ -1,5 +1,4 @@
 import { Link, useParams } from 'react-router-dom';
-
 import {
     CheckedIcon,
     CopyIcon,
@@ -36,6 +35,7 @@ import { videosSelector } from '~/redux/selectors';
 import ShareVideoItem from '~/components/ShareVideoItem';
 import Image from '~/components/Image';
 import Menu from '~/components/Popper/Menu';
+import {} from '@rajesh896/video-thumbnails-generator';
 
 const SHARE_MENU = [
     {
@@ -90,9 +90,19 @@ const MORE_MENU = [
 
 export default function Music() {
     const { videos } = useSelector(videosSelector);
-    const [isPlaying, setIsPLaying] = useState(false);
     const { musicname } = useParams();
     const [progress, setProgress] = useState(0);
+    const [firstVideoSrc, setFirstVideoSrc] = useState(null);
+    const [isPlaying, setIsPLaying] = useState(false);
+    const musicVideos = videos?.filter((video) => video.music === musicname);
+    const videoRef = useRef();
+    const circleRef = useRef();
+
+    useEffect(() => {
+        if (musicVideos.length > 0) {
+            setFirstVideoSrc(musicVideos[0].src);
+        }
+    }, [musicVideos]);
 
     const handleTimeUpdate = () => {
         const { currentTime, duration } = videoRef.current;
@@ -105,10 +115,6 @@ export default function Music() {
     useEffect(() => {
         setIsPLaying(false);
     }, [musicname]);
-
-    const musicVideos = videos?.filter((video) => video.music === musicname);
-    const videoRef = useRef();
-    const circleRef = useRef();
 
     const handlePlay = () => {
         if (!videoRef.current.paused) {
@@ -145,15 +151,34 @@ export default function Music() {
         setProgress(0);
     };
 
-    if (musicVideos.length <= 0) return;
+    useEffect(() => {
+        const video = document.createElement('video');
+        video.src = firstVideoSrc;
+
+        const onLoad = () => {
+            const canvas = document.querySelector('.canvas');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            video.currentTime = 0;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        };
+
+        video.addEventListener('canplaythrough', onLoad);
+        return () => video.removeEventListener('canplaythrough', onLoad);
+    }, [firstVideoSrc]);
+
+    if (musicVideos.length < 1) return;
 
     return (
         <Container>
             <Header>
                 <ShareInfo>
                     <ImageWrapper>
+                        <canvas className="canvas" />
                         <video
-                            src={musicVideos[0].src}
+                            className="video"
+                            src={firstVideoSrc}
                             ref={videoRef}
                             onTimeUpdate={handleTimeUpdate}
                             onEnded={handleEnded}

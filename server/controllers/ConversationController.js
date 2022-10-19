@@ -1,0 +1,100 @@
+const ConversationModel = require('../models/ConversationModel');
+
+class ConversationController {
+    // [GET] api/conversations
+    async getConversations(req, res, next) {
+        try {
+            const conversations = await ConversationModel.find().populate(
+                'members',
+            );
+
+            res.status(200).json(conversations);
+        } catch (err) {
+            res.status(500).json({ error: err });
+            next();
+        }
+    }
+
+    // Get conversations of a user
+    // [GET]  api/conversations/:userID
+    async getUserConversations(req, res, next) {
+        try {
+            const conversation = await ConversationModel.find({
+                members: {
+                    $in: [req.params.userID],
+                },
+            }).populate('members');
+            res.status(200).json(conversation);
+        } catch (err) {
+            res.status(500).json({ error: err });
+            next();
+        }
+    }
+
+    // // Get conversation with another user
+    // async getConversationWithAnotherUser(req, res, next) {
+    //     try {
+    //         const conversation = await ConversationModel.find({
+    //             members: {
+    //                 $all: [req.params.userID, req.body.receiverID],
+    //             },
+    //         }).populate('members');
+    //         res.status(200).json(conversation);
+    //     } catch (err) {
+    //         res.status(500).json({ error: err });
+    //         next();
+    //     }
+    // }
+
+    // [POST] api/conversations
+    async createConversation(req, res, next) {
+        try {
+            const conversation = await ConversationModel.findOne({
+                members: {
+                    $all: [req.user.id, req.body.receiverID],
+                },
+            }).populate('members');
+
+            if (conversation) {
+                return res.status(200).json(conversation);
+            }
+            const newConversation = new ConversationModel({
+                members: [req.user.id, req.body.receiverID],
+            });
+            await newConversation.save();
+            res.status(200).json(newConversation);
+        } catch (err) {
+            res.status(500).json({ error: err });
+            next();
+        }
+    }
+
+    // [PUT] api/conversations/:id/update
+    async updateConversation(req, res, next) {
+        try {
+            const conversation = await ConversationModel.findByIdAndUpdate(
+                req.params.id,
+                req.body,
+                { new: true },
+            );
+            res.status(200).json(conversation);
+        } catch (err) {
+            res.status(500).json({ error: err });
+            next();
+        }
+    }
+
+    // [DELETE] api/conversations/:id
+    async deleteConversation(req, res, next) {
+        try {
+            const deletedConversation =
+                await ConversationModel.findByIdAndDelete(req.params.id);
+            res.status(200).json(deletedConversation);
+        } catch (err) {
+            res.status(500).json({ error: err });
+            next();
+        }
+    }
+}
+
+module.exports = new ConversationController();
