@@ -43,6 +43,7 @@
 
 .user-avatar {
     width: 32px;
+    height: 32px;
     border-radius: 50%;
     margin-left: 24px;
     cursor: pointer;
@@ -65,6 +66,8 @@
     line-height: 20px;
     cursor: pointer;
     padding: 0 4px;
+    min-width: unset;
+    height: 36px;
 }
 
 .badge {
@@ -90,5 +93,23 @@
 @media (max-width: 468px) {
     .upload-btn {
         display: none;
+    }
+}
+
+// Notifications
+.notifications-wrapper {
+    width: 376px;
+
+    .arrow {
+        color: #fff;
+    }
+
+    &[data-placement^='top'] .arrow {
+        bottom: -18px;
+        transform: rotate(180deg) !important;
+    }
+
+    &[data-placement^='bottom'] > .arrow {
+        top: -18px;
     }
 }

@@ -1,10 +1,11 @@
 .wrapper {
     background: rgb(255, 255, 255);
     max-height: min((100vh - 96px) - 60px, 734px);
-    box-shadow: rgb(0 0 0 / 12%) 0px 2px 12px;
+    box-shadow: rgb(0 0 0 / 12%) 0px -4px 32px;
     border-radius: 8px;
     padding-top: 8px;
     display: flex;
     flex-direction: column;
     overflow: auto;
+    transition: all 200ms linear 0s;
 }

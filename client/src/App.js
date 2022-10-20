@@ -7,6 +7,8 @@ import GetAppButton from './components/BottomContainer/BottomContainer';
 import EditProfileModal from './components/modals/EditProfileModal';
 import { useDispatch, useSelector } from 'react-redux';
 import {
+    appSelector,
+    authSelector,
     editModalSelector,
     loginModalSelector,
     videosSelector,
@@ -19,6 +21,7 @@ import PrivateOutlet from './components/PrivateRouteOutlet';
 import { getMe } from './redux/slices/authSlice';
 import Spinner from './components/Spinner/Spinner';
 import VideoModal from './components/modals/VideoModal';
+import { io } from 'socket.io-client';
 
 function App() {
     const { isLoading, isSuccess, videos } = useSelector(videosSelector);
@@ -26,6 +29,20 @@ function App() {
     const { isLoginModalShow } = useSelector(loginModalSelector);
     const dispatch = useDispatch();
     const location = useLocation();
+    const { currentUser } = useSelector(authSelector);
+    const { socket } = useSelector(appSelector);
+
+    useEffect(() => {
+        const socket = io('ws://localhost:8900');
+        dispatch(appSlice.actions.setSocket(socket));
+    }, [dispatch]);
+
+    useEffect(() => {
+        if (currentUser) socket?.emit('addUser', currentUser._id);
+        socket?.on('getUsers', (users) => {
+            dispatch(appSlice.actions.setOnlineUsers(users));
+        });
+    }, [socket, dispatch, currentUser]);
 
     function unique(arr) {
         var newArr = [];

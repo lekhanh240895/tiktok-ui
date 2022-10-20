@@ -9,26 +9,12 @@ import * as messageService from '~/services/messageService';
 import * as conversationService from '~/services/conversationService';
 import appSlice from '~/redux/slices/appSlice';
 import Chatbox from '~/components/Chatbox/Chatbox';
-import { io } from 'socket.io-client';
 
 export default function Messages() {
     const [conversations, setConversations] = useState([]);
-    const [onlineUsers, setOnlineUsers] = useState([]);
-    const [socket, setSocket] = useState(null);
     const { currentUser } = useSelector(authSelector);
-    const { selectedConversationID } = useSelector(appSelector);
+    const { selectedConversationID, onlineUsers } = useSelector(appSelector);
     const dispatch = useDispatch();
-
-    useEffect(() => {
-        setSocket(io('ws://localhost:8900'));
-    }, []);
-
-    useEffect(() => {
-        if (currentUser) socket?.emit('addUser', currentUser._id);
-        socket?.on('getUsers', (users) => {
-            setOnlineUsers(users);
-        });
-    }, [socket, currentUser]);
 
     // Get user's conversations
     useEffect(() => {
@@ -121,10 +107,7 @@ export default function Messages() {
                 </div>
                 <div className="content">
                     {selectedConversationID && (
-                        <Chatbox
-                            selectedConversation={selectedConversation}
-                            socket={socket}
-                        />
+                        <Chatbox selectedConversation={selectedConversation} />
                     )}
                 </div>
             </div>

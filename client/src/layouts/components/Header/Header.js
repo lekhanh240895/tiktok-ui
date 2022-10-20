@@ -1,15 +1,16 @@
 import React from 'react';
 import classnames from 'classnames/bind';
 import Tippy from '@tippyjs/react';
-
+import HeadlessTippy from '@tippyjs/react/headless';
 import 'tippy.js/dist/tippy.css'; // optional
 import { Link, useLocation } from 'react-router-dom';
-
+import { Wrapper as PopperWrapper } from '~/components/Popper';
 import styles from './Header.module.scss';
 import images from '~/assets/images';
 import Button from '~/components/Button';
 import Menu from '~/components/Popper/Menu';
 import {
+    ArrowIcon,
     CoinIcon,
     HelpIcon,
     InboxIcon,
@@ -29,6 +30,8 @@ import config from '~/config';
 import { useDispatch, useSelector } from 'react-redux';
 import loginModalSlice from '~/redux/slices/loginModalSlice';
 import { authSelector } from '~/redux/selectors';
+import Avatar from '~/components/Avatar';
+import Notifications from '~/components/Notifications';
 
 const cx = classnames.bind(styles);
 
@@ -122,7 +125,7 @@ export default function Header() {
                                 placement="bottom"
                                 delay={[0, 200]}
                             >
-                                <Button
+                                <Link
                                     to="/messages"
                                     className={cx('action-btn', 'icon-wrapper')}
                                 >
@@ -137,18 +140,54 @@ export default function Header() {
                                             height="2.6rem"
                                         />
                                     )}
-                                </Button>
+                                </Link>
                             </Tippy>
-                            <Tippy
-                                content={<span>Inbox</span>}
-                                placement="bottom"
-                                delay={[0, 200]}
-                            >
-                                <Button className={cx('action-btn')}>
-                                    <InboxIcon />
-                                    <span className={cx('badge')}>20</span>
-                                </Button>
-                            </Tippy>
+
+                            <div className="icon-wrapper">
+                                <HeadlessTippy
+                                    trigger="click"
+                                    interactive
+                                    offset={[-100, 13]}
+                                    render={(attrs) => (
+                                        <div
+                                            className={cx(
+                                                'notifications-wrapper',
+                                            )}
+                                            tabIndex="-1"
+                                            {...attrs}
+                                        >
+                                            <PopperWrapper
+                                                style={{ overflow: 'unset' }}
+                                            >
+                                                <Notifications />
+                                            </PopperWrapper>
+
+                                            <div
+                                                data-popper-arrow=""
+                                                className={cx('arrow')}
+                                            >
+                                                <ArrowIcon />
+                                            </div>
+                                        </div>
+                                    )}
+                                >
+                                    <Tippy
+                                        content={<span>Inbox</span>}
+                                        placement="bottom"
+                                        delay={[0, 200]}
+                                    >
+                                        <span className={cx('action-btn')}>
+                                            <InboxIcon
+                                                width="3.2rem"
+                                                height="3.2rem"
+                                            />
+                                            <span className={cx('badge')}>
+                                                20
+                                            </span>
+                                        </span>
+                                    </Tippy>
+                                </HeadlessTippy>
+                            </div>
                         </>
                     ) : (
                         <>
@@ -167,20 +206,18 @@ export default function Header() {
                     <Menu
                         items={currentUser ? USER_MENU : MENU_ITEMS}
                         placement="bottom-end"
-                        style={{
-                            maxHeight: 'min((100vh - 96px) - 60px, 734px)',
-                        }}
+                        style={{ overflow: 'unset' }}
                     >
                         {currentUser ? (
-                            <Image
+                            <Avatar
+                                src={currentUser.avatar}
+                                alt="Avatar"
                                 className={cx('user-avatar')}
-                                alt={currentUser.full_name}
-                                src={currentUser.avatar || ''}
                             />
                         ) : (
-                            <button className={cx('more-btn', 'icon-wrapper')}>
+                            <span className={cx('more-btn', 'icon-wrapper')}>
                                 <OptionIcon width="2rem" height="2rem" />
-                            </button>
+                            </span>
                         )}
                     </Menu>
                 </div>

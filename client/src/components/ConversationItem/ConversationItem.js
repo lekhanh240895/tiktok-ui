@@ -3,6 +3,8 @@ import Avatar from '../Avatar';
 import { Wrapper } from './styled';
 import * as messageService from '~/services/messageService';
 import { formatRelative } from 'date-fns';
+import { useSelector } from 'react-redux';
+import { appSelector } from '~/redux/selectors';
 
 export default function ChatItem({
     user,
@@ -12,6 +14,7 @@ export default function ChatItem({
     isOnline,
 }) {
     const [messages, setMessages] = useState([]);
+    const { socket } = useSelector(appSelector);
     // Get conversation's messages
     useEffect(() => {
         (async () => {
@@ -19,6 +22,11 @@ export default function ChatItem({
             setMessages(messages);
         })();
     }, [conversation]);
+    useEffect(() => {
+        socket?.on('getMessage', (data) => {
+            setMessages((prev) => [...prev, data]);
+        });
+    }, [socket]);
 
     const lastMessage = messages[messages.length - 1];
 

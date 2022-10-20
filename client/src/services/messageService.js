@@ -1,5 +1,11 @@
 import { authRequest, httpRequest } from '~/utils/httpRequest';
 
+// // Get messages of a conversation
+export const getAll = async () => {
+    const response = await httpRequest.get(`messages`);
+    return response.data;
+};
+
 // Get messages of a conversation
 export const get = async (conversationID) => {
     const response = await httpRequest.get(`messages/${conversationID}`);

@@ -5,20 +5,21 @@ import Avatar from '~/components/Avatar';
 import Button from '~/components/Button';
 import { CheckedIcon, EmojiIcon, SolidMessageIcon } from '~/components/Icons';
 import Message from '~/components/Message';
-import { authSelector } from '~/redux/selectors';
+import { appSelector, authSelector } from '~/redux/selectors';
 import * as messageService from '~/services/messageService';
 import { Wrapper } from './styled';
 
-export default function Chatbox({ selectedConversation, socket }) {
+export default function Chatbox({ selectedConversation }) {
     const messageRef = useRef();
     const messageList = useRef();
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState([]);
     const [arrivalMessage, setArrivalMessage] = useState(null);
     const { currentUser } = useSelector(authSelector);
+    const { socket } = useSelector(appSelector);
 
     useEffect(() => {
-        socket.on('getMessage', (data) => {
+        socket?.on('getMessage', (data) => {
             setArrivalMessage(data);
         });
     }, [socket]);
@@ -65,7 +66,7 @@ export default function Chatbox({ selectedConversation, socket }) {
         });
         const newMessage = { ...res, sender: currentUser };
 
-        socket.emit('sendMessage', {
+        socket?.emit('sendMessage', {
             ...newMessage,
             receiverID: receiver._id,
         });

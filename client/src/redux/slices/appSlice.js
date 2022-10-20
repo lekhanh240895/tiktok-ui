@@ -15,8 +15,16 @@ const appSlice = createSlice({
             isMuted: true,
             volume: 1,
         },
+        socket: null,
+        onlineUsers: [],
     },
     reducers: {
+        setSocket: (state, action) => {
+            state.socket = action.payload;
+        },
+        setOnlineUsers: (state, action) => {
+            state.onlineUsers = action.payload;
+        },
         setSelectedVideoId: (state, action) => {
             state.selectedVideoId = action.payload;
         },

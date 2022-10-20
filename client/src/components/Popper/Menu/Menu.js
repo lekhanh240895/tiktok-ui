@@ -21,9 +21,10 @@ export default function Menu({
     placement = 'bottom-end',
     moreArrow = false,
     popperArrow = true,
-    offset = [15, 10],
+    offset = [15, 13],
     delay = [0, 500],
     onDeleteComment,
+    trigger,
     ...props
 }) {
     const [history, setHistory] = useState([{ data: items }]);
@@ -86,6 +87,7 @@ export default function Menu({
     return (
         <div>
             <HeadlessTippy
+                trigger={trigger}
                 onHide={handleReset}
                 hideOnClick={hideOnClick}
                 delay={delay}

@@ -1,37 +1,42 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import Image from '../Image';
 
-const AvatarComponent = ({
-    src,
-    to,
-    width = '4rem',
-    height = '4rem',
-    alt = 'Avatar',
-    isOnline,
-    ...passProps
-}) => {
-    let Component = 'div';
-    if (to) {
-        Component = Link;
-        passProps.to = to;
-    }
+const AvatarComponent = forwardRef(
+    (
+        {
+            src,
+            to,
+            width = '4rem',
+            height = '4rem',
+            alt = 'Avatar',
+            isOnline,
+            ...passProps
+        },
+        ref,
+    ) => {
+        let Component = 'div';
+        if (to) {
+            Component = Link;
+            passProps.to = to;
+        }
 
-    return (
-        <Component {...passProps} width={width} height={height}>
-            <Image
-                src={src}
-                style={{
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover',
-                }}
-                alt={alt}
-            />
-        </Component>
-    );
-};
+        return (
+            <Component {...passProps} width={width} height={height} ref={ref}>
+                <Image
+                    src={src}
+                    style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                    }}
+                    alt={alt}
+                />
+            </Component>
+        );
+    },
+);
 
 export const Avatar = styled(AvatarComponent)`
     width: ${(props) => props.width};
