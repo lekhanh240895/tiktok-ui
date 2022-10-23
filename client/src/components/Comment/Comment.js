@@ -13,8 +13,10 @@ import formatDateAgo from '~/services/formatDateAgo';
 import * as commentService from '~/services/commentService';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { authSelector } from '~/redux/selectors';
+import { appSelector, authSelector } from '~/redux/selectors';
 import Menu from '../Popper/Menu';
+import { renderText } from '~/services/renderText';
+import * as notificationService from '~/services/notificationService';
 
 export default function Comment({ comment, onDeleteComment }) {
     const MENU = [
@@ -34,6 +36,7 @@ export default function Comment({ comment, onDeleteComment }) {
     ];
 
     const { currentUser } = useSelector(authSelector);
+    const { socket } = useSelector(appSelector);
     const [likes, setLikes] = useState(comment.likes.length);
     const [isLiked, setIsLiked] = useState(
         comment.likes.includes(currentUser?._id),
@@ -45,6 +48,24 @@ export default function Comment({ comment, onDeleteComment }) {
         await commentService.like(comment._id);
         setIsLiked(!isLiked);
         setLikes(isLiked ? likes - 1 : likes + 1);
+
+        if (!isLiked) {
+            const data = {
+                receiver: comment.user._id,
+                type: 'like',
+                video: comment.video,
+                sender: currentUser,
+                subType: 'like-comment',
+                comment,
+            };
+
+            socket.emit('sendNotification', data);
+
+            await notificationService.create({
+                ...data,
+                createdAt: new Date(),
+            });
+        }
     };
 
     return (
@@ -66,7 +87,7 @@ export default function Comment({ comment, onDeleteComment }) {
                         />
                     )}
                 </h4>
-                <p className="comment-text">{comment.text}</p>
+                <p className="comment-text">{renderText(comment.text)}</p>
                 <div className="comment-info">
                     <span className="comment-time">
                         {formatDateAgo(comment.createdAt)}
@@ -90,6 +111,7 @@ export default function Comment({ comment, onDeleteComment }) {
                     width: '200px',
                 }}
                 onDeleteComment={onDeleteComment}
+                delay={[200, 0]}
             >
                 <span className="option-icon">
                     <OptionIcon width="2.4rem" height="2.4rem" />

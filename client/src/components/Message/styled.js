@@ -4,16 +4,16 @@ export const Wrapper = styled.li`
     display: flex;
     flex-direction: column;
 
+    &:last-child {
+        margin-bottom: 8px;
+    }
+
     .message-item {
         display: flex;
         flex-direction: row-reverse;
         align-items: flex-start;
         margin: 8px 12px;
         position: relative;
-
-        &:last-child {
-            margin-bottom: 8px;
-        }
 
         &:hover .message-option {
             display: block;

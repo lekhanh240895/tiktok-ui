@@ -22,15 +22,16 @@ import { getMe } from './redux/slices/authSlice';
 import Spinner from './components/Spinner/Spinner';
 import VideoModal from './components/modals/VideoModal';
 import { io } from 'socket.io-client';
+import DeleteVideoModal from './components/modals/DeleteVideoModal';
 
 function App() {
-    const { isLoading, isSuccess, videos } = useSelector(videosSelector);
+    const { isLoading, videos } = useSelector(videosSelector);
     const { isEditModalShow } = useSelector(editModalSelector);
     const { isLoginModalShow } = useSelector(loginModalSelector);
     const dispatch = useDispatch();
     const location = useLocation();
     const { currentUser } = useSelector(authSelector);
-    const { socket } = useSelector(appSelector);
+    const { socket, isDeleteModalShow } = useSelector(appSelector);
 
     useEffect(() => {
         const socket = io('ws://localhost:8900');
@@ -53,12 +54,6 @@ function App() {
         }
         return newArr;
     }
-
-    useEffect(() => {
-        if (isSuccess && videos.length > 0) {
-            dispatch(videosSlice.actions.resetStatus());
-        }
-    }, [dispatch, isSuccess, videos]);
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -171,6 +166,7 @@ function App() {
             {location.pathname !== '/messages' && <GetAppButton />}
             {isEditModalShow && <EditProfileModal />}
             {isLoginModalShow && <LoginModal />}
+            {isDeleteModalShow && <DeleteVideoModal />}
         </div>
     );
 }

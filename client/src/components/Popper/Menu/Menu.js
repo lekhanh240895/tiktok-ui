@@ -5,12 +5,11 @@ import HeadlessTippy from '@tippyjs/react/headless';
 import { useEffect, useState } from 'react';
 import { Wrapper as PopperWrapper } from '~/components/Popper';
 import MenuItem from './MenuItem';
-import Header from './Header';
+import MenuHeader from './MenuHeader';
 import { ArrowIcon, DownArrow } from '~/components/Icons';
 import { useDispatch } from 'react-redux';
 import { logout } from '~/redux/slices/authSlice';
-import { deleteVideo } from '~/redux/slices/videosSlice';
-import { useNavigate } from 'react-router-dom';
+import appSlice from '~/redux/slices/appSlice';
 
 const cx = classnames.bind(styles);
 
@@ -31,7 +30,6 @@ export default function Menu({
     const [isMore, setIsMore] = useState(false);
     const current = history[history.length - 1];
     const dispatch = useDispatch();
-    const navigate = useNavigate();
 
     useEffect(() => {
         if (moreArrow && !isMore) {
@@ -61,8 +59,16 @@ export default function Menu({
                             }
                             if (item.title === 'Delete') {
                                 if (item.videoID) {
-                                    dispatch(deleteVideo(item.videoID));
-                                    navigate(-1);
+                                    dispatch(
+                                        appSlice.actions.setIsDeleteModalShow(
+                                            true,
+                                        ),
+                                    );
+                                    dispatch(
+                                        appSlice.actions.setSelectedVideoID(
+                                            item.videoID,
+                                        ),
+                                    );
                                 }
                                 if (item.commentID) {
                                     onDeleteComment(item.commentID);
@@ -101,7 +107,7 @@ export default function Menu({
                     >
                         <PopperWrapper {...props}>
                             {history.length > 1 && (
-                                <Header
+                                <MenuHeader
                                     title={current.title}
                                     onBack={handleBack}
                                 />

@@ -33,7 +33,7 @@ export const update = async (updatedVideo) => {
 
 export const remove = async (id) => {
     try {
-        const response = await authRequest.delete(`videos/${id}/delete`);
+        const response = await authRequest.delete(`videos/${id}`);
         return response.data;
     } catch (err) {
         console.log(err);

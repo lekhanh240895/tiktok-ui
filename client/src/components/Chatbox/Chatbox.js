@@ -14,25 +14,25 @@ export default function Chatbox({ selectedConversation }) {
     const messageList = useRef();
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState([]);
-    const [arrivalMessage, setArrivalMessage] = useState(null);
+    const [newMessage, setNewMessage] = useState(null);
     const { currentUser } = useSelector(authSelector);
     const { socket } = useSelector(appSelector);
 
     useEffect(() => {
         socket?.on('getMessage', (data) => {
-            setArrivalMessage(data);
+            setNewMessage(data);
         });
     }, [socket]);
 
     useEffect(() => {
         if (
-            arrivalMessage &&
+            newMessage &&
             selectedConversation.members.some(
-                (member) => member._id === arrivalMessage?.sender._id,
+                (member) => member._id === newMessage?.sender._id,
             )
         )
-            setMessages((prev) => [...prev, arrivalMessage]);
-    }, [arrivalMessage, selectedConversation]);
+            setMessages((prev) => [...prev, newMessage]);
+    }, [newMessage, selectedConversation]);
 
     useEffect(() => {
         messageList.current.scrollIntoView({
@@ -60,7 +60,7 @@ export default function Chatbox({ selectedConversation }) {
             (member) => member._id !== currentUser._id,
         );
         const res = await messageService.create({
-            receiverID: receiver._id,
+            receiver: receiver._id,
             text: message,
             conversation: selectedConversation._id,
         });
@@ -68,7 +68,7 @@ export default function Chatbox({ selectedConversation }) {
 
         socket?.emit('sendMessage', {
             ...newMessage,
-            receiverID: receiver._id,
+            receiver: receiver._id,
         });
 
         setMessages((prev) => [...prev, newMessage]);

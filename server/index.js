@@ -9,10 +9,13 @@ const upload = require('./routers/upload');
 const comments = require('./routers/comments');
 const messages = require('./routers/messages');
 const conversations = require('./routers/conversations');
+const notifications = require('./routers/notifications');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const helmet = require('helmet');
 const fs = require('fs');
+var multer = require('multer'); // v1.0.5
+const mime = require('mime');
 
 require('dotenv').config();
 
@@ -44,6 +47,7 @@ app.use('/api/upload', upload);
 app.use('/api/comments', comments);
 app.use('/api/messages', messages);
 app.use('/api/conversations', conversations);
+app.use('/api/notifications', notifications);
 
 // Cookies
 app.use(cookieParser());

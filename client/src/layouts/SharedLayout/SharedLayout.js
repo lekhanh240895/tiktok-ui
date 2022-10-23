@@ -3,11 +3,11 @@ import React, { useEffect, useRef } from 'react';
 import Sidebar from '../components/Sidebar/index';
 import styles from './SharedLayout.module.scss';
 import classnames from 'classnames/bind';
-import HeaderV2 from '../components/Header2';
 import UserProfile from '../components/UserProfile';
 import { useDispatch, useSelector } from 'react-redux';
 import { appSelector, usersSelector } from '~/redux/selectors';
 import appSlice from '~/redux/slices/appSlice';
+import Header from '../components/Header';
 
 const cx = classnames.bind(styles);
 
@@ -45,7 +45,7 @@ export default function SharedLayout({ children }) {
 
     return (
         <div className={cx('wrapper')}>
-            <HeaderV2 />
+            <Header innerWidth="var(--shared-layout-width)" />
 
             <div className={cx('container')}>
                 <div className={cx('sidebar')}>

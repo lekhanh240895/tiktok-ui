@@ -1,7 +1,7 @@
 import classnames from 'classnames/bind';
 import React from 'react';
 import Footer from '~/components/Footer';
-import HeaderV2 from '../components/Header2';
+import Header from '../components/Header';
 import styles from './HeaderFooterLayout.module.scss';
 
 const cx = classnames.bind(styles);
@@ -9,7 +9,7 @@ const cx = classnames.bind(styles);
 export default function HeaderFooterLayout({ children }) {
     return (
         <div className={cx('wrapper')}>
-            <HeaderV2 />
+            <Header innerWidth="var(--shared-layout-width)" />
 
             <div className={cx('container')}>
                 <div className={cx('content')}>{children}</div>

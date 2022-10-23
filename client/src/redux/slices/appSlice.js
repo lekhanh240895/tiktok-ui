@@ -5,8 +5,9 @@ const settings = JSON.parse(localStorage.getItem('userSettings'));
 const appSlice = createSlice({
     name: 'app',
     initialState: {
+        isDeleteModalShow: false,
         mousePosition: {},
-        selectedVideoId: null,
+        selectedVideoID: null,
         selectedUserID: null,
         selectedConversationID: null,
         tags: [],
@@ -19,14 +20,17 @@ const appSlice = createSlice({
         onlineUsers: [],
     },
     reducers: {
+        setIsDeleteModalShow: (state, action) => {
+            state.isDeleteModalShow = action.payload;
+        },
         setSocket: (state, action) => {
             state.socket = action.payload;
         },
         setOnlineUsers: (state, action) => {
             state.onlineUsers = action.payload;
         },
-        setSelectedVideoId: (state, action) => {
-            state.selectedVideoId = action.payload;
+        setSelectedVideoID: (state, action) => {
+            state.selectedVideoID = action.payload;
         },
         setSelectedConversationID: (state, action) => {
             state.selectedConversationID = action.payload;

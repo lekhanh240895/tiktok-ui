@@ -47,4 +47,6 @@ const uploadVideo = multer({
     fileFilter: fileFilterVideo,
 });
 
-module.exports = { uploadImage, uploadVideo };
+const uploadBase64Image = multer();
+
+module.exports = { uploadImage, uploadBase64Image, uploadVideo };

@@ -5,6 +5,7 @@ export const Wrapper = styled.div`
     flex-direction: column;
     height: 100%;
     width: 100%;
+
     .chatbox-header {
         padding: 16px;
         display: flex;
@@ -34,7 +35,7 @@ export const Wrapper = styled.div`
 
     .messages-wrapper {
         flex: 1;
-        padding: 24px 0 16px;
+        padding-top: 24px;
         display: flex;
         flex-direction: column-reverse;
         width: 100%;

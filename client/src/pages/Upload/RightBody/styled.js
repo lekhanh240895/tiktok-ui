@@ -42,7 +42,8 @@ export const Wrapper = styled.div`
             .hashtag {
                 position: absolute;
                 right: 10px;
-                top: 8px;
+                top: 50%;
+                transform: translateY(-50%);
                 display: flex;
                 align-items: center;
 

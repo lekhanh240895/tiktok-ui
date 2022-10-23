@@ -1,5 +1,4 @@
-import { Server } from 'socket.io';
-
+const { Server } = require('socket.io');
 const io = new Server({
     cors: {
         origin: 'http://localhost:3000',
@@ -38,10 +37,20 @@ io.on('connection', (socket) => {
     });
 
     // Send and get message
-    socket.on('sendMessage', ({ receiverID, ...other }) => {
-        const user = getUser(receiverID);
+    socket.on('sendMessage', ({ receiver, ...other }) => {
+        const user = getUser(receiver);
         if (user) {
             io.to(user.socketID).emit('getMessage', other);
+        }
+    });
+
+    // Send and get notifications
+    socket.on('sendNotification', (data) => {
+        const user = getUser(data.receiver);
+        const isNotOwn = data.receiver !== data.sender._id;
+
+        if (user && isNotOwn) {
+            io.to(user.socketID).emit('getNotification', data);
         }
     });
 });

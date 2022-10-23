@@ -18,6 +18,18 @@ export const uploadImage = async (image) => {
     }
 };
 
+export const uploadBase64Image = async (base64Image) => {
+    try {
+        const response = await httpRequest.post(
+            'upload/base64-image',
+            base64Image,
+        );
+        return response.data;
+    } catch (err) {
+        console.log(err);
+    }
+};
+
 export const dataUrlToFile = async (dataUrl, fileName) => {
     const res = await fetch(dataUrl);
     const blob = await res.blob();

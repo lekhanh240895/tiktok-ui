@@ -1,63 +1,108 @@
-import React, { useEffect, useState } from 'react';
 import Avatar from '../Avatar';
 import Button from '../Button';
-import { CheckedIcon } from '../Icons';
-import * as videoService from '~/services/videoService';
+import { CheckedIcon, TwoWayArrow } from '../Icons';
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { appSelector, authSelector } from '~/redux/selectors';
+import { useEffect, useState } from 'react';
+import authSlice from '~/redux/slices/authSlice';
+import { followUser, unfollowUser } from '~/redux/slices/usersSlice';
+import formatDateAgo from '~/services/formatDateAgo';
+import * as notificationService from '~/services/notificationService';
 
 export default function NotificationItem({ notif }) {
-    const [video, setVideo] = useState({});
+    const { currentUser } = useSelector(authSelector);
+    const { socket } = useSelector(appSelector);
+    const [isFollowed, setIsFollowed] = useState(false);
+    const dispatch = useDispatch();
 
     useEffect(() => {
-        (async () => {
-            if (notif.videoID) {
-                const video = await videoService.getVideo(notif.videoID);
-                setVideo(video);
-            }
-        })();
-    }, [notif]);
+        setIsFollowed(currentUser?.followingIDs.includes(notif.sender._id));
+    }, [currentUser, notif]);
+
+    const handleFollow = async (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const updatedUser = {
+            ...currentUser,
+            followingIDs: currentUser.followingIDs.concat(notif.sender._id),
+        };
+        dispatch(authSlice.actions.setCurrentUser(updatedUser));
+        dispatch(followUser(notif.sender._id));
+
+        const data = {
+            receiver: notif.sender._id,
+            type: 'follow',
+            sender: currentUser,
+        };
+
+        socket.emit('sendNotification', data);
+
+        await notificationService.create({
+            ...data,
+            createdAt: new Date(),
+        });
+    };
+
+    const handleUnfollow = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const updatedUser = {
+            ...currentUser,
+            followingIDs: currentUser.followingIDs.filter(
+                (id) => id !== notif.sender._id,
+            ),
+        };
+        dispatch(authSlice.actions.setCurrentUser(updatedUser));
+        dispatch(unfollowUser(notif.sender._id));
+    };
+
     const renderAction = (type) => {
         switch (type) {
             case 'follow':
                 return <span>Follows you.</span>;
             case 'like':
-                if (notif.subType === 'like-video')
-                    return <span>liked your video.</span>;
-                return <span>liked your comment.</span>;
+                if (notif.subType === 'like-comment')
+                    return <span>liked your comment.</span>;
+                return <span>liked your video.</span>;
             case 'comment':
-                return <span>commented: Hahaha, vãi giếng</span>;
+                return <span>commented: {notif.comment.text}</span>;
             case 'mention':
-                return (
-                    <span>
-                        mentioned you in a comment: {notif.comment.text}
-                    </span>
-                );
+                if (notif.subType === 'mention-comment')
+                    return (
+                        <span>
+                            mentioned you in a comment: {notif.comment.text}
+                        </span>
+                    );
+                return <span>mentioned you in a video.</span>;
             default:
                 return;
         }
     };
 
     let Comp;
-    if (notif.videoID) {
+    let props = {};
+    if (notif.video) {
         Comp = Link;
+        props.to = `/@${notif.sender.username}/video/${notif.video?._id}`;
+    } else if (notif.type === 'follow') {
+        Comp = Link;
+        props.to = `/@${notif.sender.username}`;
     } else {
         Comp = 'div';
     }
 
     return (
         <li>
-            <Comp
-                to={`/@${video?.user?.username}/video/${video?._id}`}
-                className="notification-item"
-            >
+            <Comp {...props} className="notification-item">
                 <Avatar
-                    src={notif.user.avatar || ''}
+                    src={notif.sender.avatar}
                     width="4.8rem"
                     height="4.8rem"
                 />
                 <div className="notification-content">
                     <h4 className="notification-content_username">
-                        {notif.user.username}
+                        {notif.sender.username}
                         <span className="icon-wrapper">
                             <CheckedIcon
                                 className="check"
@@ -68,18 +113,42 @@ export default function NotificationItem({ notif }) {
                     </h4>
                     <p className="notification-desc">
                         {renderAction(notif.type)}
-                        <span className="notification-time">5-8</span>
+                        <span className="notification-time">
+                            {formatDateAgo(notif.createdAt)}
+                        </span>
                         {notif.subType === 'like-comment' && (
-                            <span className="notification-desc__comment">{`${notif.user.username}: ${notif.comment.text}`}</span>
+                            <span className="notification-desc__comment">{`${notif.comment?.user.username}: ${notif.comment?.text}`}</span>
                         )}
                     </p>
                 </div>
                 {notif.type === 'follow' ? (
-                    <Button primary className="notification-follow-btn">
-                        Follow back
-                    </Button>
+                    isFollowed ? (
+                        <Button
+                            secondary
+                            className="notification-follow-btn"
+                            onClick={handleUnfollow}
+                            leftIcon={
+                                <TwoWayArrow width="1.4rem" height="1.4rem" />
+                            }
+                        >
+                            Friends
+                        </Button>
+                    ) : (
+                        <Button
+                            primary
+                            className="notification-follow-btn"
+                            onClick={handleFollow}
+                        >
+                            Follow back
+                        </Button>
+                    )
                 ) : (
-                    <div className="video-cover"></div>
+                    <div
+                        className="video-cover"
+                        style={{
+                            backgroundImage: `url(${notif.video?.cover})`,
+                        }}
+                    ></div>
                 )}
             </Comp>
         </li>

@@ -5,7 +5,7 @@ import { LeftArrowIcon } from '~/components/Icons';
 
 const cx = classnames.bind(styles);
 
-export default function Header({ title, onBack }) {
+export default function MenuHeader({ title, onBack }) {
     return (
         <div className={cx('header')}>
             <button className={cx('back-btn')} onClick={onBack}>
@@ -18,7 +18,7 @@ export default function Header({ title, onBack }) {
     );
 }
 
-Header.propTypes = {
+MenuHeader.propTypes = {
     title: PropTypes.string.isRequired,
     onBack: PropTypes.func.isRequired,
 };

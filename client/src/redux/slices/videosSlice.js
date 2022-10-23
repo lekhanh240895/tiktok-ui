@@ -8,8 +8,12 @@ const videosSlice = createSlice({
         isSuccess: false,
         isError: false,
         videos: [],
+        status: 'idle',
     },
     reducers: {
+        addVideo: (state, action) => {
+            state.videos.push(action.payload);
+        },
         reset: (state) => {
             state.isLoading = false;
             state.isSuccess = false;
@@ -65,7 +69,7 @@ const videosSlice = createSlice({
             })
             .addCase(deleteVideo.fulfilled, (state, action) => {
                 state.videos = state.videos.filter(
-                    (video) => video._id !== action.payload._id,
+                    (video) => video._id !== action.payload,
                 );
             })
             .addCase(likeVideo.fulfilled, (state, action) => {
@@ -80,22 +84,13 @@ const videosSlice = createSlice({
 
 export const getVideos = createAsyncThunk('videosList/getVideos', async () => {
     const videos = await videoService.getVideos();
-
     return videos;
 });
 
 export const createVideo = createAsyncThunk(
     'videoList/createVideo',
-    async (video, { getState }) => {
-        const respone = await videoService.create(video);
-        const users = getState().users.users;
-        const user = users.find((user) => user._id === respone.user);
-
-        const newVideo = {
-            ...respone,
-            user,
-        };
-
+    async (videoData) => {
+        const newVideo = await videoService.create(videoData);
         return newVideo;
     },
 );
@@ -116,8 +111,8 @@ export const updateVideo = createAsyncThunk(
 export const deleteVideo = createAsyncThunk(
     'videoList/deleteVideo',
     async (videoID) => {
-        const deletedVideo = await videoService.remove(videoID);
-        return deletedVideo;
+        const deletedVideoID = await videoService.remove(videoID);
+        return deletedVideoID;
     },
     {},
 );

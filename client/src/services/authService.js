@@ -13,6 +13,8 @@ export const register = async (data) => {
 export const getMe = async () => {
     try {
         const response = await authRequest.get('users/me');
+        const { password, ...other } = { ...response.data };
+        localStorage.setItem('user', JSON.stringify(other));
         return response.data;
     } catch (err) {
         console.log(err);

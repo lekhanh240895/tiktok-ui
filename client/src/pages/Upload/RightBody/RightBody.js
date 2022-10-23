@@ -4,10 +4,14 @@ import { useNavigate } from 'react-router-dom';
 import Button from '~/components/Button';
 import { AtIcon, TagIcon } from '~/components/Icons';
 import Spinner from '~/components/Spinner/Spinner';
-import { videosSelector } from '~/redux/selectors';
-import videosSlice, { createVideo } from '~/redux/slices/videosSlice';
+import { appSelector, usersSelector } from '~/redux/selectors';
+import videosSlice from '~/redux/slices/videosSlice';
 import * as uploadService from '~/services/uploadService';
+import * as videoService from '~/services/videoService';
+import DiscardModal from './DiscardModal';
+import RedirectModal from './RedirectModal';
 import { Wrapper } from './styled';
+import * as notificationService from '~/services/notificationService';
 
 export default function RightBody({
     thumbnails,
@@ -23,20 +27,25 @@ export default function RightBody({
     const [offset, setOffset] = useState(4);
     const [scroll, setScroll] = useState(0);
     const [translateX, setTranslateX] = useState(8);
+    const [discardModalShow, setDiscardModalShow] = useState(false);
+    const [isUploaded, setIsUploaded] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [formData, setFormData] = useState({
         src: '',
         privacy: 'public',
+        cover: '',
         allowance: {
             comment: true,
             duet: true,
             stitch: true,
         },
-        music: `Original sound - @${currentUser?.username}`,
+        music: '',
     });
+    const { users } = useSelector(usersSelector);
+    const { socket } = useSelector(appSelector);
+    const captionRef = useRef(null);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { isLoading, isSuccess } = useSelector(videosSelector);
-    const captionRef = useRef(null);
 
     useEffect(() => {
         const x = offset - scroll;
@@ -50,42 +59,20 @@ export default function RightBody({
     }, [offset, scroll]);
 
     useEffect(() => {
-        if (isSuccess && video) {
-            navigate(`/@${currentUser?.username}`, { replace: true });
-        }
-        return () => {
-            videosSlice.actions.resetStatus();
-        };
-    }, [currentUser, isSuccess, navigate, video]);
-
-    useEffect(() => {
         setFormData({
             ...formData,
             title: caption,
-            cover: videoThumb,
+            music: `Original sound - @${currentUser?.username}`,
         });
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [caption, videoThumb]);
+    }, [caption, currentUser]);
+
+    useEffect(() => {}, []);
 
     useEffect(() => {
         setOffset(0);
         setScroll(0);
     }, [thumbnails]);
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        if (video) {
-            const videoData = new FormData();
-            videoData.append('video', video);
-            const uploadVideo = await uploadService.uploadVideo(videoData);
-            const newFormData = {
-                ...formData,
-                src: `http://localhost:3004/videos/${uploadVideo.filename}`,
-            };
-            dispatch(createVideo(newFormData));
-        }
-    };
 
     const handleInputChange = (e) => {
         const target = e.target;
@@ -115,6 +102,69 @@ export default function RightBody({
         });
         setCaption((prev) => prev.concat('#'));
         captionRef.current.focus();
+    };
+
+    const handleRedirect = () => {
+        navigate(`/@${currentUser.username}`);
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setIsLoading(true);
+
+        // Create video in db
+        const videoData = new FormData();
+        videoData.append('video', video);
+        const uploadVideo = await uploadService.uploadVideo(videoData);
+
+        // Create image in db
+        const imageData = new FormData();
+        imageData.append('base64Image', videoThumb);
+        const uploadImageName = await uploadService.uploadBase64Image(
+            imageData,
+        );
+
+        // Upload Video
+        const newFormData = {
+            ...formData,
+            src: `http://localhost:3004/videos/${uploadVideo.filename}`,
+            cover: `http://localhost:3004/images/${uploadImageName}`,
+        };
+        const response = await videoService.create(newFormData);
+        const user = users.find((user) => user._id === response.user);
+        const newVideo = {
+            ...response,
+            user,
+        };
+        dispatch(videosSlice.actions.addVideo(newVideo));
+        setIsLoading(false);
+        setIsUploaded(true);
+        onDiscard();
+
+        // Send notification to tag user
+        const tagUsernames = newVideo.title.match(/[@]\w*\b/g) || [];
+        if (tagUsernames.length > 0) {
+            const tagUsers = users.filter((user) =>
+                tagUsernames.some(
+                    (username) => username.replace('@', '') === user.username,
+                ),
+            );
+            tagUsers.forEach(async (user) => {
+                const data = {
+                    receiver: user._id,
+                    type: 'mention',
+                    video: newVideo,
+                    sender: currentUser,
+                };
+
+                socket.emit('sendNotification', data);
+
+                await notificationService.create({
+                    ...data,
+                    createdAt: new Date(),
+                });
+            });
+        }
     };
 
     if (isLoading) return <Spinner />;
@@ -289,12 +339,12 @@ export default function RightBody({
                         secondary
                         type="button"
                         className="action-btn"
-                        onClick={onDiscard}
+                        onClick={() => setDiscardModalShow(!discardModalShow)}
                     >
                         Discard
                     </Button>
                     <Button
-                        disabled={video === null}
+                        disabled={!videoThumb}
                         type="submit"
                         className="action-btn"
                         primary
@@ -303,6 +353,21 @@ export default function RightBody({
                     </Button>
                 </div>
             </form>
+
+            {discardModalShow && (
+                <DiscardModal
+                    onCancel={() => setDiscardModalShow(!discardModalShow)}
+                    onDiscard={onDiscard}
+                />
+            )}
+            {isUploaded && (
+                <RedirectModal
+                    onCancel={() => {
+                        setIsUploaded(false);
+                    }}
+                    onRedirect={handleRedirect}
+                />
+            )}
         </Wrapper>
     );
 }

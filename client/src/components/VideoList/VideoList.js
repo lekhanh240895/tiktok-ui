@@ -12,6 +12,7 @@ import loginModalSlice from '~/redux/slices/loginModalSlice';
 import { followUser, unfollowUser } from '~/redux/slices/usersSlice';
 import authSlice from '~/redux/slices/authSlice';
 import appSlice from '~/redux/slices/appSlice';
+import * as notificationService from '~/services/notificationService';
 
 const cx = classnames.bind(styles);
 
@@ -25,8 +26,7 @@ export default function VideoList({ videos, time }) {
     const [containerRef, isVisible] = useElementOnScreen({
         threshold: 0,
     });
-
-    const { settings } = useSelector(appSelector);
+    const { settings, socket } = useSelector(appSelector);
 
     useEffect(() => {
         if (isVisible) {
@@ -57,7 +57,7 @@ export default function VideoList({ videos, time }) {
         setConfig(newSettings);
     };
 
-    const handleFollow = (_id) => {
+    const handleFollow = async (_id) => {
         if (!currentUser) return dispatch(loginModalSlice.actions.show());
         const updatedUser = {
             ...currentUser,
@@ -65,6 +65,19 @@ export default function VideoList({ videos, time }) {
         };
         dispatch(authSlice.actions.setCurrentUser(updatedUser));
         dispatch(followUser(_id));
+
+        const data = {
+            receiver: _id,
+            type: 'follow',
+            sender: currentUser,
+        };
+
+        socket.emit('sendNotification', data);
+
+        await notificationService.create({
+            ...data,
+            createdAt: new Date(),
+        });
     };
 
     const handleUnfollow = (_id) => {

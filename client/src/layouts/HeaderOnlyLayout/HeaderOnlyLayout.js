@@ -1,10 +1,10 @@
 import React from 'react';
-import HeaderV2 from '../components/Header2';
+import Header from '../components/Header';
 
 export default function HeaderOnlyLayout({ children }) {
     return (
         <div>
-            <HeaderV2 />
+            <Header innerWidth="var(--shared-layout-width)" />
 
             <div className="container">
                 <div className="content">{children}</div>

@@ -3,7 +3,7 @@ import styles from './Video.module.scss';
 import { configNumber } from '~/services';
 import { CommentIcon, ShareIcon, SolidHeartIcon } from '../../Icons';
 import { useDispatch, useSelector } from 'react-redux';
-import { authSelector } from '~/redux/selectors';
+import { appSelector, authSelector } from '~/redux/selectors';
 import { likeVideo } from '~/redux/slices/videosSlice';
 import loginModalSlice from '~/redux/slices/loginModalSlice';
 import { useEffect, useState } from 'react';
@@ -22,6 +22,7 @@ import {
     TwitterIcon,
     WhatsappIcon,
 } from '~/components/Icons';
+import * as notificationService from '~/services/notificationService';
 
 const cx = classnames.bind(styles);
 const SHARE_MENU = [
@@ -75,6 +76,7 @@ export default function ActionList({ video }) {
     const { currentUser } = useSelector(authSelector);
     const [likes, setLikes] = useState(video.likes.length);
     const [isLiked, setIsLiked] = useState(false);
+    const { socket } = useSelector(appSelector);
 
     useEffect(() => {
         setIsLiked(video.likes.includes(currentUser?._id));
@@ -84,7 +86,7 @@ export default function ActionList({ video }) {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const handleLike = (e) => {
+    const handleLike = async (e) => {
         if (!currentUser) {
             return dispatch(loginModalSlice.actions.show());
         }
@@ -92,6 +94,22 @@ export default function ActionList({ video }) {
         dispatch(likeVideo(video._id));
         setIsLiked(!isLiked);
         setLikes(isLiked ? likes - 1 : likes + 1);
+
+        if (!isLiked) {
+            const data = {
+                receiver: video.user._id,
+                type: 'like',
+                video: video,
+                sender: currentUser,
+            };
+
+            socket.emit('sendNotification', data);
+
+            await notificationService.create({
+                ...data,
+                createdAt: new Date(),
+            });
+        }
     };
 
     const handleComment = () => {

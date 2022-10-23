@@ -108,9 +108,10 @@ export const Wrapper = styled.div`
 
             .notification-follow-btn {
                 height: 29px;
-                padding: 6px 8px;
+                padding: 8px;
                 align-self: center;
                 min-width: 96px;
+                font-size: 1.4rem;
             }
 
             .video-cover {

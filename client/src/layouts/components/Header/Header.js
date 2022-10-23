@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import classnames from 'classnames/bind';
 import Tippy from '@tippyjs/react';
 import HeadlessTippy from '@tippyjs/react/headless';
@@ -32,14 +32,13 @@ import loginModalSlice from '~/redux/slices/loginModalSlice';
 import { authSelector } from '~/redux/selectors';
 import Avatar from '~/components/Avatar';
 import Notifications from '~/components/Notifications';
+import { appSelector } from '~/redux/selectors';
+import * as notificationService from '~/services/notificationService';
 
 const cx = classnames.bind(styles);
 
-export default function Header() {
+export default function Header({ innerWidth }) {
     const { currentUser } = useSelector(authSelector);
-    const dispatch = useDispatch();
-    const location = useLocation();
-
     const MENU_ITEMS = [
         {
             icon: <LanguageIcon width="2rem" height="2rem" />,
@@ -68,7 +67,6 @@ export default function Header() {
             title: 'Keyboard shortcuts',
         },
     ];
-
     const USER_MENU = [
         {
             icon: <ProfileIcon width="2rem" height="2rem" />,
@@ -91,20 +89,60 @@ export default function Header() {
         },
     ];
 
+    const dispatch = useDispatch();
+    const location = useLocation();
+    const [notifications, setNotifications] = useState([]);
+    const [messagesNotification, setMessagesNotification] = useState([]);
+    const { socket } = useSelector(appSelector);
+
+    useEffect(() => {
+        socket?.on('getMessage', (data) => {
+            const newMessages = messagesNotification.concat(data);
+            setMessagesNotification(newMessages);
+        });
+    }, [socket, messagesNotification]);
+
+    useEffect(() => {
+        (async () => {
+            if (currentUser) {
+                const notifs = await notificationService.getUserNotifications(
+                    currentUser._id,
+                );
+                setNotifications(notifs);
+            }
+        })();
+    }, [currentUser]);
+
+    useEffect(() => {
+        socket?.on('getNotification', async (data) => {
+            const newNotifs = [
+                ...notifications,
+                {
+                    ...data,
+                    createdAt: new Date(),
+                },
+            ];
+            setNotifications(newNotifs);
+        });
+    }, [socket, notifications]);
+
     const handleclick = (e) => {
         if (!currentUser) {
             e.preventDefault();
             dispatch(loginModalSlice.actions.show());
         }
     };
+    const toTime = (time) => new Date(time);
+    const orderedNotifications = notifications.sort(
+        (a, b) => toTime(b.createdAt) - toTime(a.createdAt),
+    );
     return (
         <header className={cx('wrapper')}>
-            <div className={cx('inner')}>
+            <div className={cx('inner')} style={{ width: innerWidth }}>
                 <Link to={config.routes.home} className={cx('logo')}>
                     <Image src={images.logo} alt="Tiktok Logo" />
                 </Link>
 
-                {/* Search */}
                 <Search />
 
                 <div className={cx('actions')}>
@@ -140,6 +178,11 @@ export default function Header() {
                                             height="2.6rem"
                                         />
                                     )}
+                                    <span
+                                        className={cx('badge', 'icon-wrapper')}
+                                    >
+                                        {messagesNotification.length}
+                                    </span>
                                 </Link>
                             </Tippy>
 
@@ -159,7 +202,11 @@ export default function Header() {
                                             <PopperWrapper
                                                 style={{ overflow: 'unset' }}
                                             >
-                                                <Notifications />
+                                                <Notifications
+                                                    notifications={
+                                                        orderedNotifications
+                                                    }
+                                                />
                                             </PopperWrapper>
 
                                             <div
@@ -181,8 +228,13 @@ export default function Header() {
                                                 width="3.2rem"
                                                 height="3.2rem"
                                             />
-                                            <span className={cx('badge')}>
-                                                20
+                                            <span
+                                                className={cx(
+                                                    'badge',
+                                                    'icon-wrapper',
+                                                )}
+                                            >
+                                                {notifications.length}
                                             </span>
                                         </span>
                                     </Tippy>

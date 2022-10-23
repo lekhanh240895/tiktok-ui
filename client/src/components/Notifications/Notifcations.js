@@ -1,104 +1,7 @@
 import React, { useEffect, useState } from 'react';
+
 import NotificationItem from './NotificationItem';
-
 import { Wrapper } from './styled';
-
-const notifs = [
-    {
-        user: {
-            avatar: 'https://picsum.photos/500/500',
-            username: 'lekhanhhh',
-        },
-        type: 'like',
-        subType: 'like-video',
-        videoID: '632d723373ffa34b41f8c0fe',
-    },
-    {
-        user: {
-            avatar: 'https://picsum.photos/500/500',
-            username: 'lekhanhhh',
-        },
-        type: 'like',
-        subType: 'like-comment',
-        videoID: '632ea5d62532d351508cff6e',
-        comment: {
-            text: 'cuon quaaaaa',
-        },
-    },
-    {
-        user: {
-            avatar: 'https://picsum.photos/500/500',
-            username: 'tosmy',
-        },
-        type: 'follow',
-    },
-    {
-        user: {
-            avatar: 'https://picsum.photos/500/500',
-            username: 'hoahanaasi',
-        },
-        type: 'comment',
-        videoID: '6331d2b102aa960cde6a66f4',
-    },
-    {
-        user: {
-            avatar: 'https://picsum.photos/500/500',
-            username: 'j-cop',
-        },
-        type: 'mention',
-        comment: {
-            text: '@lekhanhhh Eeeee vô đây mà xem Eeeee vô đây mà xem Eeeee vô đây mà xem',
-        },
-        videoID: '6331d27502aa960cde6a66e8',
-    },
-    {
-        user: {
-            avatar: 'https://picsum.photos/500/500',
-            username: 'lekhanhhh',
-        },
-        type: 'like',
-        subType: 'like-video',
-        videoID: '632d723373ffa34b41f8c0fe',
-    },
-    {
-        user: {
-            avatar: 'https://picsum.photos/500/500',
-            username: 'lekhanhhh',
-        },
-        type: 'like',
-        subType: 'like-comment',
-        videoID: '632ea5d62532d351508cff6e',
-        comment: {
-            text: 'cuon quaaaaa',
-        },
-    },
-    {
-        user: {
-            avatar: 'https://picsum.photos/500/500',
-            username: 'tosmy',
-        },
-        type: 'follow',
-    },
-    {
-        user: {
-            avatar: 'https://picsum.photos/500/500',
-            username: 'hoahanaasi',
-        },
-        type: 'comment',
-        videoID: '6331d2b102aa960cde6a66f4',
-    },
-    {
-        user: {
-            avatar: 'https://picsum.photos/500/500',
-            username: 'j-cop',
-        },
-        type: 'mention',
-        comment: {
-            text: '@lekhanhhh Eeeee vô đây mà xem Eeeee vô đây mà xem Eeeee vô đây mà xem',
-        },
-        videoID: '6331d27502aa960cde6a66e8',
-    },
-];
 
 const menu = [
     {
@@ -123,17 +26,20 @@ const menu = [
     },
 ];
 
-export default function Notifications() {
+export default function Notifications({ notifications }) {
     const [type, setType] = useState('all');
-    const [notifications, setNotifications] = useState([]);
+    const [filterNotifs, setFilterNotifs] = useState([]);
 
     useEffect(() => {
         if (type !== 'all') {
-            setNotifications(notifs.filter((n) => n.type === type));
+            const newFilterNotifs = notifications.filter(
+                (n) => n.type === type,
+            );
+            setFilterNotifs(newFilterNotifs);
         } else {
-            setNotifications(notifs);
+            setFilterNotifs(notifications);
         }
-    }, [type]);
+    }, [type, notifications]);
 
     return (
         <Wrapper>
@@ -161,8 +67,8 @@ export default function Notifications() {
             <div className="notifications-body">
                 <p className="time-group">Previous</p>
                 <ul className="notification-list">
-                    {notifications.length > 0 &&
-                        notifications.map((notif, index) => (
+                    {filterNotifs.length > 0 &&
+                        filterNotifs.map((notif, index) => (
                             <NotificationItem key={index} notif={notif} />
                         ))}
                 </ul>

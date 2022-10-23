@@ -1,4 +1,6 @@
 const VideoModel = require('../models/VideoModel');
+const NotificationModel = require('../models/NotificationModel');
+const CommentModel = require('../models/CommentModel');
 
 class VideosController {
     // [GET] api/videos
@@ -11,7 +13,7 @@ class VideosController {
             res.status(200).json(videos);
         } catch (err) {
             res.status(500).json({ error: err });
-            next();
+            next(err);
         }
     }
 
@@ -25,7 +27,7 @@ class VideosController {
             res.status(200).json(video);
         } catch (err) {
             res.status(500).json({ error: err });
-            next();
+            next(err);
         }
     }
 
@@ -46,7 +48,7 @@ class VideosController {
             res.status(200).json(video);
         } catch (err) {
             res.status(500).json({ error: err });
-            next();
+            next(err);
         }
     }
 
@@ -61,7 +63,7 @@ class VideosController {
             res.status(200).json(video);
         } catch (err) {
             res.status(500).json({ error: err });
-            next();
+            next(err);
         }
     }
 
@@ -91,20 +93,37 @@ class VideosController {
             }
         } catch (err) {
             res.status(500).json({ error: err });
-            next();
+            next(err);
         }
     }
 
-    // [DELETE] api/videos/:id/delete
+    // [DELETE] api/videos/:id
     async deleteVideo(req, res, next) {
         try {
             const deletedVideo = await VideoModel.findByIdAndDelete(
                 req.params.id,
             );
-            res.status(200).json(deletedVideo);
+            const videoNotifications = await NotificationModel.find({
+                video: req.params.id,
+            });
+            const videoComments = await CommentModel.find({
+                video: req.params.id,
+            });
+            let promises = [];
+            videoNotifications.forEach((notif) =>
+                promises.push(NotificationModel.findByIdAndDelete(notif._id)),
+            );
+            videoComments.forEach((comment) =>
+                promises.push(CommentModel.findByIdAndDelete(comment._id)),
+            );
+            Promise.all(promises)
+                .then(() => {
+                    res.status(200).json(deletedVideo.id);
+                })
+                .catch((err) => console.log(err));
         } catch (err) {
             res.status(500).json({ error: err });
-            next();
+            next(err);
         }
     }
 }

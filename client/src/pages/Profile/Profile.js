@@ -33,7 +33,12 @@ import {
 import { useEffect, useRef, useState } from 'react';
 import Tippy from '@tippyjs/react';
 import { useDispatch, useSelector } from 'react-redux';
-import { authSelector, usersSelector, videosSelector } from '~/redux/selectors';
+import {
+    appSelector,
+    authSelector,
+    usersSelector,
+    videosSelector,
+} from '~/redux/selectors';
 import editModalSlice from '~/redux/slices/editModalSlice';
 import { followUser, unfollowUser } from '~/redux/slices/usersSlice';
 import authSlice from '~/redux/slices/authSlice';
@@ -119,6 +124,7 @@ export default function Profile() {
     const { users } = useSelector(usersSelector);
     const { currentUser } = useSelector(authSelector);
     const { videos } = useSelector(videosSelector);
+    const { socket } = useSelector(appSelector);
     const [activeTab, setActiveTab] = useState('videos');
     const [isUser, setIsUser] = useState(false);
     const [isFollowing, setIsFollowing] = useState(false);
@@ -178,6 +184,12 @@ export default function Profile() {
         };
         dispatch(authSlice.actions.setCurrentUser(updatedUser));
         dispatch(followUser(user._id));
+
+        socket.emit('sendNotification', {
+            receiver: user._id,
+            type: 'follow',
+            sender: currentUser,
+        });
     };
 
     const handleUnFollow = () => {

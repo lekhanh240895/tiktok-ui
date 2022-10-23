@@ -30,11 +30,12 @@ import * as commentService from '~/services/commentService';
 import { useDispatch, useSelector } from 'react-redux';
 import { likeVideo } from '~/redux/slices/videosSlice';
 import Menu from '~/components/Popper/Menu';
-import { authSelector } from '~/redux/selectors';
+import { appSelector, authSelector, usersSelector } from '~/redux/selectors';
 import loginModalSlice from '~/redux/slices/loginModalSlice';
 import authSlice from '~/redux/slices/authSlice';
 import { followUser, unfollowUser } from '~/redux/slices/usersSlice';
 import VideoTitle from '~/components/VideoTitle';
+import * as notificationService from '~/services/notificationService';
 
 const SHARE_MENU = [
     {
@@ -100,12 +101,14 @@ export default function Content({ video }) {
     const commentRef = useRef(null);
     const commentInputRef = useRef(null);
     const { currentUser } = useSelector(authSelector);
-    const [comment, setComment] = useState('');
+    const [commentInput, setCommentInput] = useState('');
     const [comments, setComments] = useState([]);
     const [likes, setLikes] = useState(video.likes?.length);
     const [isLiked, setIsLiked] = useState(false);
     const [isFollow, setIsFollow] = useState(false);
     const [isAddComment, setIsAddComment] = useState(false);
+    const { socket } = useSelector(appSelector);
+    const { users } = useSelector(usersSelector);
 
     useEffect(() => {
         setIsFollow(currentUser?.followingIDs.includes(video.user._id));
@@ -140,7 +143,7 @@ export default function Content({ video }) {
     const dispatch = useDispatch();
     const formatTime = formatDistanceToNow(new Date(video.createdAt));
 
-    const handleLike = (e) => {
+    const handleLike = async (e) => {
         if (!currentUser) {
             return dispatch(loginModalSlice.actions.show());
         }
@@ -148,6 +151,22 @@ export default function Content({ video }) {
         dispatch(likeVideo(video._id));
         setIsLiked(!isLiked);
         setLikes(isLiked ? likes - 1 : likes + 1);
+
+        if (!isLiked) {
+            const data = {
+                receiver: video.user._id,
+                type: 'like',
+                video: video,
+                sender: currentUser,
+            };
+
+            socket.emit('sendNotification', data);
+
+            await notificationService.create({
+                ...data,
+                createdAt: new Date(),
+            });
+        }
     };
 
     const handleDeleteComment = async (commentID) => {
@@ -158,7 +177,7 @@ export default function Content({ video }) {
         setComments(newComments);
     };
 
-    const handleFollow = () => {
+    const handleFollow = async () => {
         if (!currentUser) return dispatch(loginModalSlice.actions.show());
         const updatedUser = {
             ...currentUser,
@@ -166,6 +185,19 @@ export default function Content({ video }) {
         };
         dispatch(authSlice.actions.setCurrentUser(updatedUser));
         dispatch(followUser(video.user._id));
+
+        const data = {
+            receiver: video.user._id,
+            type: 'follow',
+            sender: currentUser,
+        };
+
+        socket.emit('sendNotification', data);
+
+        await notificationService.create({
+            ...data,
+            createdAt: new Date(),
+        });
     };
 
     const handleUnFollow = () => {
@@ -185,12 +217,52 @@ export default function Content({ video }) {
         e.preventDefault();
         const response = await commentService.create({
             videoID: video._id,
-            text: comment,
+            text: commentInput,
         });
-        setComment('');
+        setCommentInput('');
         setIsAddComment(true);
         const newComment = { ...response, video, user: currentUser };
-        setComments((prev) => [...prev, newComment]);
+        setComments(comments.concat(newComment));
+
+        const data = {
+            receiver: video.user._id,
+            type: 'comment',
+            video: video,
+            sender: currentUser,
+            comment: newComment,
+        };
+
+        socket.emit('sendNotification', data);
+
+        await notificationService.create({
+            ...data,
+            createdAt: new Date(),
+        });
+
+        const tagUsernames = newComment.text.match(/[@]\w*\b/g) || [];
+        if (tagUsernames.length > 0) {
+            const tagUsers = users.filter((user) =>
+                tagUsernames.some(
+                    (username) => username.replace('@', '') === user.username,
+                ),
+            );
+            tagUsers.forEach(async (user) => {
+                const tagData = {
+                    receiver: user._id,
+                    type: 'mention',
+                    subType: 'mention-comment',
+                    video: video,
+                    sender: currentUser,
+                    comment: newComment,
+                };
+                socket.emit('sendNotification', tagData);
+
+                await notificationService.create({
+                    ...tagData,
+                    createdAt: new Date(),
+                });
+            });
+        }
     };
 
     return (
@@ -329,14 +401,14 @@ export default function Content({ video }) {
                         type="text"
                         placeholder="Add comment..."
                         className="form-control"
-                        value={comment}
-                        onChange={(e) => setComment(e.target.value)}
+                        value={commentInput}
+                        onChange={(e) => setCommentInput(e.target.value)}
                     />
                 </div>
                 <Button
                     type="submit"
                     className={
-                        comment
+                        commentInput
                             ? 'post-comment-btn'
                             : 'post-comment-btn disabled'
                     }

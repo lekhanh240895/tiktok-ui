@@ -1,4 +1,5 @@
 const ConversationModel = require('../models/ConversationModel');
+const MessageModel = require('../models/MessageModel');
 
 class ConversationController {
     // [GET] api/conversations
@@ -89,7 +90,18 @@ class ConversationController {
         try {
             const deletedConversation =
                 await ConversationModel.findByIdAndDelete(req.params.id);
-            res.status(200).json(deletedConversation);
+            const messages = await MessageModel.find({
+                conversation: deletedConversation.id,
+            });
+            let promises = [];
+            messages.forEach((message) =>
+                promises.push(MessageModel.findByIdAndDelete(message.id)),
+            );
+            Promise.all(promises)
+                .then(() => {
+                    res.status(200).json(deletedConversation.id);
+                })
+                .catch((err) => console.log(err));
         } catch (err) {
             res.status(500).json({ error: err });
             next();

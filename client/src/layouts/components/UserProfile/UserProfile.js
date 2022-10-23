@@ -8,15 +8,17 @@ import Image from '~/components/Image';
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { authSelector } from '~/redux/selectors';
+import { appSelector, authSelector } from '~/redux/selectors';
 import { unfollowUser, followUser } from '~/redux/slices/usersSlice';
 import loginModalSlice from '~/redux/slices/loginModalSlice';
 import authSlice from '~/redux/slices/authSlice';
+import * as notificationService from '~/services/notificationService';
 
 const cx = classnames.bind(styles);
 
 export const UserProfile = ({ user }) => {
     const { currentUser } = useSelector(authSelector);
+    const { socket } = useSelector(appSelector);
     const [isFollow, setIsFollow] = useState(false);
     const dispatch = useDispatch();
 
@@ -24,7 +26,7 @@ export const UserProfile = ({ user }) => {
         setIsFollow(currentUser?.followingIDs.includes(user._id));
     }, [currentUser?.followingIDs, user._id]);
 
-    const handleFollow = () => {
+    const handleFollow = async () => {
         if (!currentUser) return dispatch(loginModalSlice.actions.show());
         const updatedUser = {
             ...currentUser,
@@ -32,6 +34,19 @@ export const UserProfile = ({ user }) => {
         };
         dispatch(authSlice.actions.setCurrentUser(updatedUser));
         dispatch(followUser(user._id));
+
+        const data = {
+            receiver: user._id,
+            type: 'follow',
+            sender: currentUser,
+        };
+
+        socket.emit('sendNotification', data);
+
+        await notificationService.create({
+            ...data,
+            createdAt: new Date(),
+        });
     };
 
     const handleUnFollow = () => {
