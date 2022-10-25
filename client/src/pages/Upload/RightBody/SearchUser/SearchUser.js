@@ -72,6 +72,8 @@ export default function SearchUser({
         }
     };
 
+    console.log('1');
+
     return (
         <div className="form-group">
             <div className="title">
