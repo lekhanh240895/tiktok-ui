@@ -1,7 +1,10 @@
 const express = require('express');
-const app = express();
-const bodyParser = require('body-parser');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const helmet = require('helmet'); // v1.0.5
 const cors = require('cors');
+require('dotenv').config();
+
 const users = require('./routers/users');
 const videos = require('./routers/videos');
 const auth = require('./routers/auth');
@@ -10,13 +13,8 @@ const comments = require('./routers/comments');
 const messages = require('./routers/messages');
 const conversations = require('./routers/conversations');
 const notifications = require('./routers/notifications');
-const path = require('path');
-const cookieParser = require('cookie-parser');
-const helmet = require('helmet');
-const fs = require('fs');
-var multer = require('multer'); // v1.0.5
 
-require('dotenv').config();
+const app = express();
 
 // Connect to DB
 const db = require('./config/db');
@@ -61,6 +59,11 @@ app.get('/set-cookies', (req, res) => {
     res.send('You create cookies');
 });
 
+// app.listen(process.env.API_PORT, () => {
+//     console.log(`App listening on port http://localhost:${process.env.API_PORT}`);
+// });
+
+// Deploy to Heroku
 app.listen(process.env.PORT, () => {
-    console.log(`App listening on port http://localhost:${process.env.PORT}`);
+    console.log(`App listening on port ${process.env.PORT}`);
 });
