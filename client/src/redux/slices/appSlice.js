@@ -18,12 +18,8 @@ const appSlice = createSlice({
         },
         socket: null,
         onlineUsers: [],
-        conversations: [],
     },
     reducers: {
-        setConversations: (state, action) => {
-            state.conversations = action.payload;
-        },
         setIsDeleteModalShow: (state, action) => {
             state.isDeleteModalShow = action.payload;
         },

@@ -20,12 +20,8 @@ export const create = async (receiverID) => {
 
 // Get messages of a conversation
 export const remove = async (conversationID) => {
-    try {
-        const response = await authRequest.delete(
-            `conversations/${conversationID}`,
-        );
-        return response.data;
-    } catch (err) {
-        console.log(err);
-    }
+    const response = await authRequest.delete(
+        `conversations/${conversationID}`,
+    );
+    return response.data;
 };
