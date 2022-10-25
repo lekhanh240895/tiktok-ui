@@ -88,18 +88,17 @@ class ConversationController {
     // [DELETE] api/conversations/:id
     async deleteConversation(req, res, next) {
         try {
-            const deletedConversation =
-                await ConversationModel.findByIdAndDelete(req.params.id);
             const messages = await MessageModel.find({
-                conversation: deletedConversation.id,
+                conversation: req.params.id,
             });
             let promises = [];
+            promises.push(ConversationModel.findByIdAndDelete(req.params.id));
             messages.forEach((message) =>
                 promises.push(MessageModel.findByIdAndDelete(message.id)),
             );
             Promise.all(promises)
                 .then(() => {
-                    res.status(200).json(deletedConversation.id);
+                    res.status(200).json(req.params.id);
                 })
                 .catch((err) => console.log(err));
         } catch (err) {
