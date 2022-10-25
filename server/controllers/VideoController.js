@@ -100,6 +100,9 @@ class VideosController {
     // [DELETE] api/videos/:id
     async deleteVideo(req, res, next) {
         try {
+            const deletedVideo = await VideoModel.findByIdAndDelete(
+                req.params.id,
+            );
             const videoNotifications = await NotificationModel.find({
                 video: req.params.id,
             });
@@ -107,7 +110,6 @@ class VideosController {
                 video: req.params.id,
             });
             let promises = [];
-            promises.push(VideoModel.findByIdAndDelete(req.params.id));
             videoNotifications.forEach((notif) =>
                 promises.push(NotificationModel.findByIdAndDelete(notif._id)),
             );
@@ -116,7 +118,7 @@ class VideosController {
             );
             Promise.all(promises)
                 .then(() => {
-                    res.status(200).json(req.params.id);
+                    res.status(200).json(deletedVideo.id);
                 })
                 .catch((err) => console.log(err));
         } catch (err) {

@@ -15,6 +15,7 @@ const cookieParser = require('cookie-parser');
 const helmet = require('helmet');
 const fs = require('fs');
 var multer = require('multer'); // v1.0.5
+const mime = require('mime');
 
 require('dotenv').config();
 
