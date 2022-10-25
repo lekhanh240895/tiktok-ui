@@ -1,29 +1,21 @@
 import { httpRequest } from '~/utils/httpRequest';
 
-export const uploadVideo = async (video) => {
+export const uploadFile = async (path, file) => {
     try {
-        const response = await httpRequest.post('upload/video', video);
+        const data = new FormData();
+        data.append('video', file);
+        const response = await httpRequest.post('upload/' + path, data);
         return response.data;
     } catch (err) {
         console.log(err);
     }
 };
 
-export const uploadImage = async (image) => {
+export const uploadBase64File = async (base64File) => {
     try {
-        const response = await httpRequest.post('upload/image', image);
-        return response.data;
-    } catch (err) {
-        console.log(err);
-    }
-};
-
-export const uploadBase64Image = async (base64Image) => {
-    try {
-        const response = await httpRequest.post(
-            'upload/base64-image',
-            base64Image,
-        );
+        const data = new FormData();
+        data.append('base64Image', base64File);
+        const response = await httpRequest.post('upload/base64-image', data);
         return response.data;
     } catch (err) {
         console.log(err);

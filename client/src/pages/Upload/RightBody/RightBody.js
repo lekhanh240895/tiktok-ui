@@ -6,12 +6,16 @@ import { AtIcon, TagIcon } from '~/components/Icons';
 import Spinner from '~/components/Spinner/Spinner';
 import { appSelector, usersSelector } from '~/redux/selectors';
 import videosSlice from '~/redux/slices/videosSlice';
-import * as uploadService from '~/services/uploadService';
 import * as videoService from '~/services/videoService';
 import DiscardModal from './DiscardModal';
 import RedirectModal from './RedirectModal';
 import { Wrapper } from './styled';
 import * as notificationService from '~/services/notificationService';
+import {
+    handleUploadDataUrlFirebase,
+    handleUploadFileFirebase,
+} from '~/services/firebaseService';
+import SearchUser from './SearchUser';
 
 export default function RightBody({
     thumbnails,
@@ -30,6 +34,7 @@ export default function RightBody({
     const [discardModalShow, setDiscardModalShow] = useState(false);
     const [isUploaded, setIsUploaded] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [selectFormShow, setSelectFormShow] = useState(false);
     const [formData, setFormData] = useState({
         src: '',
         privacy: 'public',
@@ -46,6 +51,12 @@ export default function RightBody({
     const captionRef = useRef(null);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (caption.match(/@\B/g)) {
+            setSelectFormShow(true);
+        }
+    }, [caption]);
 
     useEffect(() => {
         const x = offset - scroll;
@@ -66,8 +77,6 @@ export default function RightBody({
         });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [caption, currentUser]);
-
-    useEffect(() => {}, []);
 
     useEffect(() => {
         setOffset(0);
@@ -112,23 +121,15 @@ export default function RightBody({
         e.preventDefault();
         setIsLoading(true);
 
-        // Create video in db
-        const videoData = new FormData();
-        videoData.append('video', video);
-        const uploadVideo = await uploadService.uploadVideo(videoData);
-
-        // Create image in db
-        const imageData = new FormData();
-        imageData.append('base64Image', videoThumb);
-        const uploadImageName = await uploadService.uploadBase64Image(
-            imageData,
-        );
+        // Upload to firebase
+        const videoUrl = await handleUploadFileFirebase('videos/', video);
+        const imgUrl = await handleUploadDataUrlFirebase('images/', videoThumb);
 
         // Upload Video
         const newFormData = {
             ...formData,
-            src: `http://localhost:3004/videos/${uploadVideo.filename}`,
-            cover: `http://localhost:3004/images/${uploadImageName}`,
+            src: videoUrl,
+            cover: imgUrl,
         };
         const response = await videoService.create(newFormData);
         const user = users.find((user) => user._id === response.user);
@@ -172,40 +173,50 @@ export default function RightBody({
     return (
         <Wrapper>
             <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                    <div className="title">
-                        <label htmlFor="caption">Caption</label>
-                        <div className="limited">0 / 150</div>
-                    </div>
+                {selectFormShow ? (
+                    <SearchUser
+                        currentUser={currentUser}
+                        caption={caption}
+                        setCaption={setCaption}
+                        setSelectFormShow={setSelectFormShow}
+                        users={users}
+                    />
+                ) : (
+                    <div className="form-group">
+                        <div className="title">
+                            <label htmlFor="caption">Caption</label>
+                            <div className="limited">0 / 150</div>
+                        </div>
 
-                    <div className="input-container">
-                        <input
-                            type="text"
-                            maxLength={150}
-                            className="caption-input"
-                            id="caption"
-                            value={caption}
-                            name="title"
-                            onChange={(e) => {
-                                setCaption(e.target.value);
-                                handleInputChange(e);
-                            }}
-                            ref={captionRef}
-                        />
+                        <div className="input-container">
+                            <input
+                                type="text"
+                                maxLength={150}
+                                className="input"
+                                id="caption"
+                                value={caption}
+                                name="title"
+                                onChange={(e) => setCaption(e.target.value)}
+                                ref={captionRef}
+                            />
 
-                        <span className="hashtag">
-                            <span className="hash icon-wrapper">
-                                <AtIcon width="1.5rem" height="1.5rem" />
+                            <span className="hashtag">
+                                <span
+                                    className="hash icon-wrapper"
+                                    onClick={() => setSelectFormShow('true')}
+                                >
+                                    <AtIcon width="1.5rem" height="1.5rem" />
+                                </span>
+                                <span
+                                    className="tag icon-wrapper"
+                                    onClick={handleClickTagIcon}
+                                >
+                                    <TagIcon width="1.5rem" height="1.5rem" />
+                                </span>
                             </span>
-                            <span
-                                className="tag icon-wrapper"
-                                onClick={handleClickTagIcon}
-                            >
-                                <TagIcon width="1.5rem" height="1.5rem" />
-                            </span>
-                        </span>
+                        </div>
                     </div>
-                </div>
+                )}
                 <div className="form-group">
                     <div className="title">
                         <span>Cover</span>

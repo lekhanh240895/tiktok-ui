@@ -22,7 +22,8 @@
     },
     "dependencies": {
         "@rajesh896/video-thumbnails-generator": "^2.3.9",
-        "date-fns": "^2.29.3"
+        "date-fns": "^2.29.3",
+        "firebase": "^9.12.1"
     },
     "prettier": {
         "arrowParens": "always",

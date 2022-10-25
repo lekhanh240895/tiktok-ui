@@ -16,14 +16,15 @@ const cx = classnames.bind(styles);
 export default function Menu({
     children,
     items,
-    hideOnClick = false,
     placement = 'bottom-end',
     moreArrow = false,
     popperArrow = true,
     offset = [15, 13],
     delay = [0, 500],
     onDeleteComment,
+    onDeleteConversation,
     trigger,
+    paddingMenu = false,
     ...props
 }) {
     const [history, setHistory] = useState([{ data: items }]);
@@ -47,6 +48,7 @@ export default function Menu({
                 <MenuItem
                     key={index}
                     data={item}
+                    paddingMenu={paddingMenu}
                     onClick={async () => {
                         if (isParent) {
                             setHistory((prevState) => [
@@ -73,6 +75,9 @@ export default function Menu({
                                 if (item.commentID) {
                                     onDeleteComment(item.commentID);
                                 }
+                                if (item.conversationID) {
+                                    onDeleteConversation(item.conversationID);
+                                }
                             }
                         }
                     }}
@@ -95,7 +100,6 @@ export default function Menu({
             <HeadlessTippy
                 trigger={trigger}
                 onHide={handleReset}
-                hideOnClick={hideOnClick}
                 delay={delay}
                 offset={offset}
                 render={(attrs) => (
@@ -113,7 +117,10 @@ export default function Menu({
                                 />
                             )}
 
-                            <div className={cx('items-wrapper')}>
+                            <div
+                                className={cx('items-wrapper')}
+                                style={{ padding: paddingMenu && '0 16px' }}
+                            >
                                 {renderItems()}
 
                                 {moreArrow & !isMore ? (

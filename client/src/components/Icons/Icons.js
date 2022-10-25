@@ -1769,3 +1769,43 @@ export const PlayIcon = ({ width = '3.2rem', height = '3.2rem', ...props }) => (
         ></path>
     </svg>
 );
+
+export const MuteIcon = ({ width = '3.2rem', height = '3.2rem', ...props }) => (
+    <svg
+        width={width}
+        height={height}
+        fill="currentColor"
+        viewBox="0 0 16 16"
+        xmlns="http://www.w3.org/2000/svg"
+        {...props}
+    >
+        <path
+            fill="black"
+            fillRule="evenodd"
+            d="M1.902 2.764a.333.333 0 000 .472l1.83 1.829a4.97 4.97 0 00-.599 2.37v2.792c0 .513-.128.988-.34 1.312-.2.304-.457.461-.793.461a.667.667 0 100 1.333h10l1.216 1.216c.13.13.341.13.471 0l.472-.47a.333.333 0 000-.472L2.845 2.293a.333.333 0 00-.471 0l-.472.471zM10.667 12L4.73 6.065c-.17.422-.264.885-.264 1.37v2.792c0 .603-.125 1.234-.403 1.773h6.603zm.866-4.564v1.66l1.34 1.34a3.06 3.06 0 01-.006-.209V7.436C12.867 4.72 10.697 2.5 8 2.5a4.79 4.79 0 00-2.414.648l.99.99A3.464 3.464 0 018 3.833c1.941 0 3.533 1.603 3.533 3.603z"
+            clipRule="evenodd"
+        ></path>
+    </svg>
+);
+
+export const PinTopIcon = ({
+    width = '3.2rem',
+    height = '3.2rem',
+    ...props
+}) => (
+    <svg
+        width={width}
+        height={height}
+        fill="currentColor"
+        viewBox="0 0 16 16"
+        xmlns="http://www.w3.org/2000/svg"
+        {...props}
+    >
+        <path
+            fill="black"
+            fillRule="evenodd"
+            d="M2.667 1.333a.333.333 0 00-.334.334v.666c0 .184.15.334.334.334h10.666c.184 0 .334-.15.334-.334v-.666a.333.333 0 00-.334-.334H2.667zM2.529 8.53a.667.667 0 00.47 1.138h2.668V14a.667.667 0 00.666.667h3.334a.667.667 0 00.666-.667V9.667H13a.667.667 0 00.471-1.138l-5-5a.667.667 0 00-.942 0l-5 5zm5.47-3.586l3.391 3.39H9.667A.667.667 0 009 9v4.333H7V9a.667.667 0 00-.667-.667H4.61L8 4.943z"
+            clipRule="evenodd"
+        ></path>
+    </svg>
+);

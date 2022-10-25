@@ -29,7 +29,8 @@ export default function Search() {
         (video) =>
             video.views >= 1000000 &&
             video.likes.length >= 1 &&
-            video.title.toLowerCase().includes(query.toLowerCase()),
+            (video.title.toLowerCase().includes(query.toLowerCase()) ||
+                video.music.toLowerCase().includes(query.toLowerCase())),
     );
 
     const accounts = users.filter(
@@ -38,8 +39,10 @@ export default function Search() {
             user.full_name.toLowerCase().includes(query.toLowerCase()),
     );
 
-    const otherVideos = videos.filter((video) =>
-        video.title.toLowerCase().includes(query.toLowerCase()),
+    const otherVideos = videos.filter(
+        (video) =>
+            video.title.toLowerCase().includes(query.toLowerCase()) ||
+            video.music.toLowerCase().includes(query.toLowerCase()),
     );
 
     useEffect(() => {

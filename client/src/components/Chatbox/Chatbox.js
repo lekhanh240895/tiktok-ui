@@ -27,7 +27,7 @@ export default function Chatbox({ selectedConversation }) {
     useEffect(() => {
         if (
             newMessage &&
-            selectedConversation.members.some(
+            selectedConversation?.members.some(
                 (member) => member._id === newMessage?.sender._id,
             )
         )
@@ -35,7 +35,7 @@ export default function Chatbox({ selectedConversation }) {
     }, [newMessage, selectedConversation]);
 
     useEffect(() => {
-        messageList.current.scrollIntoView({
+        messageList.current?.scrollIntoView({
             behavior: 'smooth',
             block: 'end',
         });
@@ -85,6 +85,8 @@ export default function Chatbox({ selectedConversation }) {
         (member) => member._id !== currentUser?._id,
     );
 
+    if (!selectedConversation) return;
+
     return (
         <Wrapper>
             <div className="chatbox-header">
@@ -114,6 +116,7 @@ export default function Chatbox({ selectedConversation }) {
                     </div>
                 </Link>
             </div>
+
             <div className="messages-wrapper">
                 <ul className="message-list" ref={messageList}>
                     {messages.map((message) => {
