@@ -28,19 +28,18 @@
 .icon + .title,
 .title + .icon {
     margin-left: 8px;
-}
-
-.icon {
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
+.icon {
+    display: flex;
+    align-items: center;
+}
+
 .title {
     font-family: var(--font-family);
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
 }
 
 // Button types

@@ -21,15 +21,6 @@ export const search = async (query, options) => {
     }
 };
 
-export const searchUser = async (query) => {
-    try {
-        const response = await authRequest.get(`users/search?q=${query}`);
-        return response.data;
-    } catch (err) {
-        console.log(err);
-    }
-};
-
 export const getUsers = async () => {
     try {
         const response = await httpRequest.get('users');

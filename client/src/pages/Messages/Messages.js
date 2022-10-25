@@ -61,21 +61,6 @@ export default function Messages() {
         (a, b) => toTime(b.createdAt) - toTime(a.createdAt),
     );
 
-    const handleDeleteConversation = async (conversationID) => {
-        await conversationService.remove(conversationID);
-        const newConversations = conversations.filter(
-            (conversation) => conversation._id !== conversationID,
-        );
-        setConversations(newConversations);
-        if (newConversations.length > 0) {
-            dispatch(
-                appSlice.actions.setSelectedConversationID(
-                    newConversations[0]._id,
-                ),
-            );
-        }
-    };
-
     return (
         <Wrapper>
             <Header />
@@ -88,7 +73,6 @@ export default function Messages() {
                             <SettingIcon2 width="3.2rem" height="3.2rem" />
                         </span>
                     </div>
-
                     <ul className="chat-list">
                         {orderedConversations.length > 0 &&
                             orderedConversations.map((conversation) => {
@@ -101,9 +85,6 @@ export default function Messages() {
 
                                 return (
                                     <ConversationItem
-                                        onDeleteConversation={
-                                            handleDeleteConversation
-                                        }
                                         user={user}
                                         isOnline={isOnline}
                                         key={conversation._id}

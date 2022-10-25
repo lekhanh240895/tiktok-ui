@@ -57,10 +57,10 @@ function App() {
 
     useEffect(() => {
         const token = localStorage.getItem('token');
-        // Fetch users
+        // Fetch Users
         dispatch(getUsers());
 
-        // Fetch videos
+        // Fetch Videos
         dispatch(getVideos());
 
         // Get currentUser

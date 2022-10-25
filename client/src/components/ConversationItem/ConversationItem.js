@@ -5,15 +5,6 @@ import * as messageService from '~/services/messageService';
 import { formatRelative } from 'date-fns';
 import { useSelector } from 'react-redux';
 import { appSelector } from '~/redux/selectors';
-import {
-    BlockIcon,
-    DeleteIcon,
-    FlagIcon,
-    MuteIcon,
-    OptionIcon,
-    PinTopIcon,
-} from '../Icons';
-import Menu from '../Popper/Menu';
 
 export default function ChatItem({
     user,
@@ -21,7 +12,6 @@ export default function ChatItem({
     conversation,
     active,
     isOnline,
-    onDeleteConversation,
 }) {
     const [messages, setMessages] = useState([]);
     const { socket } = useSelector(appSelector);
@@ -48,34 +38,6 @@ export default function ChatItem({
         }
         return formatDate || date;
     };
-
-    const CHAT_MENU = [
-        {
-            icon: <MuteIcon width="1.6rem" height="1.6rem" />,
-            title: 'Mute',
-        },
-        {
-            icon: <DeleteIcon width="1.6rem" height="1.6rem" />,
-            title: 'Delete',
-            separate: true,
-            conversationID: conversation._id,
-        },
-        {
-            icon: <PinTopIcon width="1.6rem" height="1.6rem" />,
-            title: 'Pin to top',
-            separate: true,
-        },
-        {
-            icon: <FlagIcon width="1.6rem" height="1.6rem" />,
-            title: 'Report',
-            separate: true,
-        },
-        {
-            icon: <BlockIcon width="1.6rem" height="1.6rem" />,
-            title: 'Block',
-            separate: true,
-        },
-    ];
 
     return (
         <Wrapper
@@ -108,16 +70,6 @@ export default function ChatItem({
                     </span>
                 </div>
             </div>
-            <Menu
-                items={CHAT_MENU}
-                trigger="click"
-                paddingMenu
-                onDeleteConversation={onDeleteConversation}
-            >
-                <span className="option-icon icon-wrapper">
-                    <OptionIcon width="2.4rem" height="2.4rem" />
-                </span>
-            </Menu>
         </Wrapper>
     );
 }

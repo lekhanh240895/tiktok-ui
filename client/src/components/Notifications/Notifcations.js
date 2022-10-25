@@ -65,16 +65,13 @@ export default function Notifications({ notifications }) {
                 </ul>
             </div>
             <div className="notifications-body">
-                {filterNotifs.length > 0 && (
-                    <>
-                        <p className="time-group">Previous</p>
-                        <ul className="notification-list">
-                            {filterNotifs.map((notif, index) => (
-                                <NotificationItem key={index} notif={notif} />
-                            ))}
-                        </ul>
-                    </>
-                )}
+                <p className="time-group">Previous</p>
+                <ul className="notification-list">
+                    {filterNotifs.length > 0 &&
+                        filterNotifs.map((notif, index) => (
+                            <NotificationItem key={index} notif={notif} />
+                        ))}
+                </ul>
             </div>
         </Wrapper>
     );

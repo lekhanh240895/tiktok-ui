@@ -4,7 +4,7 @@ import styles from './Menu.module.scss';
 
 const cx = classnames.bind(styles);
 
-export default function MenuItem({ data, onClick, paddingMenu }) {
+export default function MenuItem({ data, onClick }) {
     const classes = cx('menu-item', {
         separate: data.separate,
         hoverColor: data.hoverColor,
@@ -15,7 +15,6 @@ export default function MenuItem({ data, onClick, paddingMenu }) {
             className={classes}
             to={data.to}
             onClick={onClick}
-            style={{ padding: paddingMenu && '10px 0' }}
         >
             {data.title}
         </Button>
