@@ -9,7 +9,6 @@ class UsersController {
             res.status(200).json(users);
         } catch (err) {
             res.status(500).json({ error: err });
-            next(err);
         }
     }
 
@@ -20,37 +19,6 @@ class UsersController {
             res.status(200).json(user);
         } catch (err) {
             res.status(500).json({ error: err });
-            next(err);
-        }
-    }
-
-    // [GET] /users/search?q=:query
-    async getUsersByQuery(req, res, next) {
-        try {
-            const regEx = new RegExp(`${req.query.q}`, 'i');
-            const users = await UserModel.find({
-                $or: [{ username: regEx }, { full_name: regEx }],
-                $and: [
-                    {
-                        _id: { $ne: req.user._id },
-                    },
-                ],
-            });
-
-            res.status(200).json(users);
-        } catch (err) {
-            res.status(500).json({ error: err });
-            next(err);
-        }
-    }
-    // [GET] /users/:id
-    async getUser(req, res, next) {
-        try {
-            const user = await UserModel.findById(req.params.id);
-            res.status(200).json(user);
-        } catch (err) {
-            res.status(500).json({ error: err });
-            next(err);
         }
     }
 
@@ -60,7 +28,6 @@ class UsersController {
             res.status(200).json(req.user);
         } catch (err) {
             res.status(500).json({ error: err });
-            next(err);
         }
     }
 
@@ -76,7 +43,6 @@ class UsersController {
                     );
                 } catch (err) {
                     res.status(500).json({ error: err });
-                    next(err);
                 }
             }
 
@@ -91,7 +57,6 @@ class UsersController {
                 res.status(200).json(user);
             } catch (err) {
                 res.status(500).json({ error: err });
-                next(err);
             }
         } else {
             res.status(400);
@@ -107,7 +72,6 @@ class UsersController {
                 res.status(200).json(user);
             } catch (err) {
                 res.status(500).json({ error: err });
-                next(err);
             }
         } else {
             res.status(400);
@@ -145,7 +109,6 @@ class UsersController {
             });
         } catch (err) {
             res.status(500).json({ error: err });
-            next(err);
         }
     }
 
@@ -179,7 +142,6 @@ class UsersController {
             });
         } catch (err) {
             res.status(500).json({ error: err });
-            next(err);
         }
     }
 }

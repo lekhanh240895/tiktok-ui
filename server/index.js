@@ -13,8 +13,6 @@ const notifications = require('./routers/notifications');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const helmet = require('helmet');
-const fs = require('fs');
-var multer = require('multer'); // v1.0.5
 
 require('dotenv').config();
 
@@ -61,6 +59,14 @@ app.get('/set-cookies', (req, res) => {
     res.send('You create cookies');
 });
 
+// Development
+// app.listen(process.env.API_PORT, () => {
+//     console.log(
+//         `App listening on port http://localhost:${process.env.API_PORT}`,
+//     );
+// });
+
+// // Production: heroku deploy
 app.listen(process.env.PORT, () => {
-    console.log(`App listening on port http://localhost:${process.env.PORT}`);
+    console.log(`App listening on port ${process.env.PORT}`);
 });
