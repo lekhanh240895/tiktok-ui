@@ -1,0 +1,96 @@
+.wrapper {
+  padding: 16px 0;
+  position: relative;
+}
+.wrapper::after {
+  content: "";
+  height: 1px;
+  background-color: rgba(22, 24, 35, 0.12);
+  position: absolute;
+  top: 0;
+  left: 8px;
+  right: 8px;
+}
+
+.title {
+  font-size: 1.4rem;
+  line-height: 20px;
+  margin-bottom: 8px;
+  padding: 0 8px;
+  font-weight: 600;
+  color: rgba(22, 24, 35, 0.75);
+}
+
+.more-btn {
+  font-size: 1.4rem;
+  line-height: 20px;
+  margin-top: 8px;
+  padding: 0 8px;
+  font-weight: 600;
+  color: var(--primary-color);
+  cursor: pointer;
+}
+
+.user-item {
+  display: flex;
+  align-items: center;
+  padding: 6px 8px;
+}
+.user-item:hover {
+  background: rgba(22, 24, 35, 0.03);
+  cursor: pointer;
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  -o-object-fit: contain;
+     object-fit: contain;
+}
+
+.info {
+  margin-left: 12px;
+  flex-shrink: 0;
+  overflow-x: hidden;
+}
+
+.name {
+  font-size: 1.6rem;
+  color: var(--black-color);
+  font-weight: 600;
+  line-height: 22px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.check {
+  color: rgb(32, 213, 236);
+  margin-left: 8px;
+}
+
+.description {
+  color: rgba(22, 24, 35, 0.5);
+  line-height: 15px;
+  font-weight: 400;
+  font-size: 1.2rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 1024px) {
+  .title,
+.more-btn,
+.info {
+    display: none;
+  }
+  .user-item {
+    padding: 8px 0 8px 4px;
+  }
+  .wrapper::after {
+    left: 0;
+    right: 0;
+  }
+}/*# sourceMappingURL=UserList.module.css.map */

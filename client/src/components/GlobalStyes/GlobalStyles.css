@@ -1,0 +1,213 @@
+@import 'normalize.css';
+:root {
+  --primary-color: #fe2c55;
+  --text-color: #161823;
+  --white-color: #fff;
+  --main-background-color: #f1f1f2;
+  --black-color: #000;
+  --main-border-color: rgba(0, 0, 0, 0.12);
+  --font-family: "ProximaNova", sans-serif;
+  --default-layout-width: 1150px;
+  --shared-layout-width: 1368px;
+  --default-layout-header-height: 60px;
+  --default-layout-horizontal-spacer: 24px;
+}
+
+@font-face {
+  font-family: "ProximaNova";
+  src: url(../../assets/fonts/Proxima-Nova-Regular.woff2);
+  font-weight: 400;
+}
+@font-face {
+  font-family: "ProximaNova";
+  src: url(../../assets/fonts/ProximaNova-Semibold.woff2);
+  font-weight: 600;
+}
+@font-face {
+  font-family: "ProximaNova";
+  src: url(../../assets/fonts/Proxima-Nova-Bold.woff);
+  font-weight: 700;
+}
+@font-face {
+  font-family: "SofiaPro";
+  src: url(../../assets/fonts/sofiapro-medium.woff);
+  font-weight: 500;
+}
+@font-face {
+  font-family: "SofiaPro";
+  src: url(../../assets/fonts/sofiapro-semibold.otf);
+  font-weight: 600;
+}
+@font-face {
+  font-family: "SofiaPro";
+  src: url(../../assets/fonts/sofiapro-bold.woff);
+  font-weight: 700;
+}
+@font-face {
+  font-family: "SofiaPro";
+  src: url(../../assets/fonts/sofiapro-bold.woff2);
+  font-weight: 700;
+}
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  font-family: var(--font-family);
+  font-size: 1.6rem;
+  line-height: 1.5;
+  text-rendering: optimizeSpeed;
+  color: var(--text-color);
+  overflow-y: overlay;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-family: "SofiaPro", sans-serif;
+}
+
+a {
+  text-decoration: none;
+  color: var(--text-color);
+}
+
+button,
+input,
+[tabindex] {
+  border: none;
+  outline: none;
+  font-family: var(--font-family);
+  color: var(--text-color);
+}
+
+ul {
+  list-style: none;
+}
+
+.icon-wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-wrapper-circle {
+  width: 3.2rem;
+  height: 3.2rem;
+  background-color: rgba(22, 24, 35, 0.06);
+  border-radius: 50%;
+  padding: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+body .tippy-box {
+  background-color: rgba(84, 84, 84, 0.9215686275);
+  color: var(--white-color);
+  border-radius: 8px;
+  font-size: 1.6rem;
+}
+body .tippy-content {
+  padding: 8px 9px;
+}
+body .tippy-arrow {
+  color: rgba(84, 84, 84, 0.9215686275);
+}
+body .tippy-box[data-placement^=bottom] > .tippy-arrow {
+  top: -1px;
+}
+
+@media (max-width: 736px) {
+  body {
+    font-size: 1.5rem;
+  }
+}
+html *::-webkit-scrollbar {
+  border-radius: 0;
+  width: 8px;
+}
+
+html *::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.15);
+}
+
+html *::-webkit-scrollbar-track {
+  border-radius: 0;
+  background-color: rgba(0, 0, 0, 0);
+}
+
+input[type=range] {
+  -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
+  /* Specific width is required for Firefox. */
+  background: transparent; /* Otherwise white in Chrome */
+}
+
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+}
+
+input[type=range]:focus {
+  outline: none; /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */
+}
+
+input[type=range]::-ms-track {
+  cursor: pointer;
+  /* Hides the slider so custom styles can be added */
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+
+input[type=range]::-webkit-slider-thumb {
+  --webkit-appearance: none;
+  height: 12px;
+  width: 12px;
+  border-radius: 50%;
+  background: var(--white-color);
+  cursor: pointer;
+  margin-top: -5px;
+  margin-right: 50px;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 4px;
+}
+
+.error {
+  position: relative;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid #d3d6d8;
+  border-radius: 0.25rem;
+  background-color: #f8d7da;
+}
+
+@-webkit-keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}/*# sourceMappingURL=GlobalStyles.css.map */

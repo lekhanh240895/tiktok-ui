@@ -1,0 +1,49 @@
+.wrapper {
+  padding: 5px 0;
+  display: flex;
+  align-items: center;
+}
+.wrapper:hover {
+  background: rgba(22, 24, 35, 0.03);
+  cursor: pointer;
+}
+
+.avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  -o-object-fit: contain;
+     object-fit: contain;
+  margin: 16px;
+}
+
+.info {
+  flex: 1;
+  color: rgba(22, 24, 35, 0.5);
+  line-height: 20px;
+  font-weight: 400;
+  font-size: 1.4rem;
+  overflow: hidden;
+}
+.info .name {
+  font-size: 1.6rem;
+  color: var(--black-color);
+  font-weight: 600;
+  line-height: 25px;
+  overflow: hidden;
+}
+.info .check {
+  color: rgb(32, 213, 236);
+  margin-left: 8px;
+}
+.info .description .seperate {
+  margin: 0 4px;
+}
+.info .description .followerNumber {
+  font-weight: 600;
+  color: var(--text-color);
+  margin-right: 4px;
+}
+.info .bio {
+  margin-top: 4px;
+}/*# sourceMappingURL=AccountItem.module.css.map */

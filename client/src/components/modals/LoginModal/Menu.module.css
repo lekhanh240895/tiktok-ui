@@ -1,0 +1,64 @@
+.wrapper {
+  width: 375px;
+  margin: auto;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 12px;
+  margin-bottom: 16px;
+  border: 1px solid rgba(22, 24, 35, 0.12);
+  height: 44px;
+  line-height: 44px;
+}
+
+.login-link {
+  display: flex;
+  width: 100%;
+}
+
+.item_title {
+  flex: 1;
+  text-align: center;
+  font-weight: 600;
+  display: block;
+}
+.item_title:hover {
+  text-decoration: none;
+}
+
+.header {
+  text-align: center;
+  margin: 16px 0;
+}
+
+.header-wrapper {
+  margin: 16px 0;
+  margin-top: -8px;
+  flex-shrink: 0;
+}
+
+.back-btn {
+  position: absolute;
+  left: 16px;
+  top: 16px;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.policy {
+  padding: 16px 0;
+  color: rgba(22, 24, 35, 0.5);
+  font-size: 12px;
+  line-height: 15px;
+  width: 375px;
+  text-align: center;
+}
+.policy a {
+  margin-left: 3px;
+}
+.policy a:hover {
+  text-decoration: underline;
+}/*# sourceMappingURL=Menu.module.css.map */

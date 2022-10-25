@@ -1,0 +1,72 @@
+.sidebar-scroll-container {
+  position: fixed;
+  margin-left: -8px;
+}
+
+.wrapper {
+  padding: 20px 0 26px;
+  max-height: calc(100vh - var(--default-layout-header-height));
+  position: relative;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.wrapper::-webkit-scrollbar {
+  display: none;
+}
+.wrapper:hover ~ .scrollbar {
+  display: block;
+}
+
+.login {
+  padding: 16px 12px 16px 8px;
+  position: relative;
+}
+.login p {
+  font-size: 1.6rem;
+  line-height: 22px;
+  color: rgba(22, 24, 35, 0.5);
+}
+.login:after {
+  content: "";
+  height: 1px;
+  background-color: rgba(22, 24, 35, 0.12);
+  position: absolute;
+  top: 0;
+  left: 8px;
+  right: 8px;
+}
+
+.login-btn {
+  width: 100%;
+  padding: 14px 18px;
+  margin-top: 20px;
+}
+
+.scrollbar {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: none;
+}
+
+.scrollbar-thumb {
+  width: 6px;
+  height: 100%;
+  border-radius: 3px;
+  background: rgba(22, 24, 35, 0.06);
+}
+
+@media (max-width: 1024px) {
+  .wrapper {
+    width: 55px;
+    padding: 0 8px;
+  }
+  .login {
+    display: none;
+  }
+  .sidebar-scroll-container {
+    border-right: 1px solid rgba(22, 24, 35, 0.12);
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.06);
+  }
+}/*# sourceMappingURL=Sidebar.module.css.map */

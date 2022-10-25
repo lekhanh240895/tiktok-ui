@@ -1,0 +1,17 @@
+.video-item {
+  display: flex;
+  padding: 20px 0;
+}
+
+.avatar {
+  flex: 0 0 auto;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+}
+
+@media (max-width: 468px) {
+  .avatar {
+    display: none;
+  }
+}/*# sourceMappingURL=Following.module.css.map */

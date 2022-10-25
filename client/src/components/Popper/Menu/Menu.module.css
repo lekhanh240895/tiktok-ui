@@ -1,0 +1,72 @@
+.wrapper {
+  width: 223px;
+}
+.wrapper .header {
+  height: 50px;
+  position: relative;
+  margin-top: -8px;
+  flex-shrink: 0;
+}
+.wrapper .header .back-btn {
+  font-size: 2rem;
+  width: 48px;
+  background-color: transparent;
+  height: 100%;
+  cursor: pointer;
+  margin-left: 5px;
+}
+.wrapper .header .header-title {
+  font-size: 1.6rem;
+  font-weight: 600;
+  line-height: 22px;
+  font-family: var(--font-family);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.wrapper .items-wrapper {
+  flex: 1;
+  overflow-y: auto;
+}
+.wrapper .items-wrapper .menu-item {
+  margin-left: 0;
+  padding: 10px 16px;
+  width: 100%;
+  justify-content: start;
+  border-radius: 0;
+}
+.wrapper .items-wrapper .menu-item:last-child {
+  margin-bottom: 8px;
+}
+.wrapper .items-wrapper .menu-item:hover {
+  background: rgba(22, 24, 35, 0.03);
+}
+.wrapper .items-wrapper .menu-item.separate {
+  border-top: 1px solid rgba(22, 24, 35, 0.12);
+}
+.wrapper .items-wrapper .menu-item.hoverColor:hover {
+  color: var(--primary-color);
+  background: unset;
+}
+.wrapper .more-button {
+  margin-left: 0;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.wrapper .more-button:hover {
+  background-color: rgba(22, 24, 35, 0.03);
+}
+.wrapper .arrow {
+  color: #fff;
+}
+.wrapper[data-placement^=top] .arrow {
+  bottom: -18px;
+  transform: rotate(180deg) !important;
+}
+.wrapper[data-placement^=bottom] > .arrow {
+  top: -18px;
+}/*# sourceMappingURL=Menu.module.css.map */

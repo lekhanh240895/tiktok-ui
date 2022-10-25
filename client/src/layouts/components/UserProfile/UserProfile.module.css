@@ -1,0 +1,55 @@
+.wrapper {
+  position: relative;
+  width: 320px;
+  box-sizing: border-box;
+  padding: 20px;
+  background: rgb(255, 255, 255);
+  border-radius: 8px;
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 2px 12px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.avatar {
+  width: 44px;
+  border-radius: 50%;
+  -o-object-fit: contain;
+     object-fit: contain;
+}
+
+.follow-btn {
+  width: 106px;
+}
+
+.name {
+  margin-right: 8px;
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.desc {
+  font-size: 1.4rem;
+  font-weight: 600;
+  line-height: 20px;
+}
+
+.user-stat {
+  margin-top: 8px;
+  font-size: 1.7rem;
+}
+
+.stat-number {
+  line-height: 20px;
+  font-weight: 700;
+  margin-right: 6px;
+}
+
+.stat-desc {
+  margin-right: 12px;
+  color: rgba(22, 24, 35, 0.75);
+}/*# sourceMappingURL=UserProfile.module.css.map */
