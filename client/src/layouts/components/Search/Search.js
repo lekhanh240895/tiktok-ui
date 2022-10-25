@@ -2,6 +2,8 @@ import HeadlessTippy from '@tippyjs/react/headless';
 import classnames from 'classnames/bind';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import config from '~/config';
+
 import styles from './Search.module.scss';
 import { Wrapper as PopperWrapper } from '~/components/Popper';
 import AccountItem from '../AccountItem';
@@ -30,7 +32,7 @@ export default function Search() {
         if (searchKeywords.length > 0) {
             return searchKeywords.map((item, index) => (
                 <Link
-                    to={`/search?q=${item}`}
+                    to={config.routes.search}
                     key={index}
                     className={cx('keyword-link')}
                     onClick={handleHideResult}
@@ -60,7 +62,7 @@ export default function Search() {
         const fetchAPI = async () => {
             setLoading(true);
 
-            const searchUsers = await userService.searchUser(debouncedValue);
+            const searchUsers = await userService.search(debouncedValue);
 
             const searchKeywords = [
                 ...tags.map((tag) => tag),
@@ -149,15 +151,7 @@ export default function Search() {
                             </ul>
 
                             {debouncedValue && (
-                                <p
-                                    className={cx('search-footer')}
-                                    onClick={() => {
-                                        navigate(`/search?q=${searchValue}`, {
-                                            replace: true,
-                                        });
-                                        handleHideResult();
-                                    }}
-                                >
+                                <p className={cx('search-footer')}>
                                     View all results for {debouncedValue}
                                 </p>
                             )}

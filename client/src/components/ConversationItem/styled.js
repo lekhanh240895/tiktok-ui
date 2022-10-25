@@ -1,16 +1,17 @@
 import styled from 'styled-components';
 
 export const Wrapper = styled.li`
+    &.conversation-item--active {
+        background-color: rgb(248 248 248);
+    }
     padding: 0 24px;
     height: 72px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
     cursor: pointer;
 
     .avatar-wrapper {
         position: relative;
-        flex-shrink: 0;
 
         .online-circle {
             position: absolute;
@@ -28,7 +29,6 @@ export const Wrapper = styled.li`
 
     .conversation-content-wrapper {
         margin-left: 12px;
-        flex: 1;
         .conversation-user {
             font-family: var(--font-family);
             line-height: 22px;
@@ -56,18 +56,5 @@ export const Wrapper = styled.li`
                 color: rgb(22 24 35 / 40%);
             }
         }
-    }
-    .option-icon {
-        align-self: center;
-        transform: rotate(90deg);
-        opacity: 0;
-        transition: all 0.3s ease;
-    }
-
-    &.conversation-item--active {
-        background-color: rgb(248 248 248);
-    }
-    &:hover .option-icon {
-        opacity: 1;
     }
 `;
