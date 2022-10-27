@@ -30,7 +30,6 @@ export default function UserList({ title, users, text, showUser }) {
                     className={cx('more-btn')}
                     onClick={() => {
                         setIsMore(true);
-                        // onMore(title);
                     }}
                 >
                     {text}
@@ -40,7 +39,6 @@ export default function UserList({ title, users, text, showUser }) {
                     className={cx('more-btn')}
                     onClick={() => {
                         setIsMore(false);
-                        // onLess(title);
                     }}
                 >
                     See less

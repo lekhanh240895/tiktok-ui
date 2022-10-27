@@ -21,10 +21,8 @@ export default function PhoneEmailSignup() {
     const monthRef = useRef(null);
     const dayRef = useRef(null);
     const yearRef = useRef(null);
-    const monthIconRef = useRef(null);
-    const dayIconRef = useRef(null);
-    const yearIconRef = useRef(null);
-    const { currentUser, isLoading, isSuccess } = useSelector(authSelector);
+    const { currentUser, isLoading, isSuccess, error } =
+        useSelector(authSelector);
 
     const months = [
         'January',
@@ -75,38 +73,9 @@ export default function PhoneEmailSignup() {
             : 31;
     };
 
-    const handleSelectMonth = () => {
-        const ref = monthRef.current;
-        const icon = monthIconRef.current;
-        if (ref.style.display === 'none') {
-            ref.style.display = 'block';
-            icon.style.transform = 'rotateZ(180deg)';
-        } else {
-            ref.style.display = 'none';
-            icon.style.transform = 'rotateZ(0)';
-        }
-    };
-    const handleSelectDay = () => {
-        const ref = dayRef.current;
-        const icon = dayIconRef.current;
-        if (ref.style.display === 'none') {
-            ref.style.display = 'block';
-            icon.style.transform = 'rotateZ(180deg)';
-        } else {
-            ref.style.display = 'none';
-            icon.style.transform = 'rotateZ(0)';
-        }
-    };
-    const handleSelectYear = () => {
-        const ref = yearRef.current;
-        const icon = yearIconRef.current;
-        if (ref.style.display === 'none') {
-            ref.style.display = 'block';
-            icon.style.transform = 'rotateZ(180deg)';
-        } else {
-            ref.style.display = 'none';
-            icon.style.transform = 'rotateZ(0)';
-        }
+    const handleShowSelect = (ref) => {
+        const divRef = ref.current;
+        divRef.classList.toggle('show');
     };
 
     const formatDate = (year, month, day) => {
@@ -141,20 +110,26 @@ export default function PhoneEmailSignup() {
 
     return (
         <Wrapper>
+            {error && <div className="error">{error}</div>}
+
             <div className="title">When’s your birthday?</div>
             <div className="age-select">
-                <div className="select-container" onClick={handleSelectMonth}>
+                <div
+                    className="select-container"
+                    onClick={() => handleShowSelect(monthRef)}
+                    ref={monthRef}
+                >
                     <div className="select-label">
                         {months[month - 1] || 'Month'}
 
-                        <span ref={monthIconRef} className="icon icon-wrapper">
+                        <span className="icon icon-wrapper">
                             <SolidDownArrowIcon
                                 width="1.6rem"
                                 height="1.6rem"
                             />
                         </span>
                     </div>
-                    <div className="select-list" ref={monthRef}>
+                    <div className="select-list">
                         {months.map((month, index) => (
                             <div
                                 className="select-option"
@@ -167,10 +142,14 @@ export default function PhoneEmailSignup() {
                     </div>
                 </div>
 
-                <div className="select-container" onClick={handleSelectDay}>
+                <div
+                    className="select-container"
+                    onClick={() => handleShowSelect(dayRef)}
+                    ref={dayRef}
+                >
                     <div className="select-label">
                         {day || 'Day'}
-                        <span ref={dayIconRef} className="icon icon-wrapper">
+                        <span className="icon icon-wrapper">
                             <SolidDownArrowIcon
                                 width="1.6rem"
                                 height="1.6rem"
@@ -178,7 +157,7 @@ export default function PhoneEmailSignup() {
                         </span>
                     </div>
 
-                    <div className="select-list" ref={dayRef}>
+                    <div className="select-list">
                         {days.map((day) => (
                             <div
                                 className="select-option"
@@ -190,17 +169,21 @@ export default function PhoneEmailSignup() {
                         ))}
                     </div>
                 </div>
-                <div className="select-container" onClick={handleSelectYear}>
+                <div
+                    className="select-container"
+                    onClick={() => handleShowSelect(yearRef)}
+                    ref={yearRef}
+                >
                     <div className="select-label">
                         {year || 'Year'}
-                        <span ref={yearIconRef} className="icon icon-wrapper">
+                        <span className="icon icon-wrapper">
                             <SolidDownArrowIcon
                                 width="1.6rem"
                                 height="1.6rem"
                             />
                         </span>
                     </div>
-                    <div className="select-list" ref={yearRef}>
+                    <div className="select-list">
                         {years.reverse().map((year) => (
                             <div
                                 className="select-option"

@@ -5,7 +5,7 @@ class UsersController {
     // [GET] /users
     async getUsers(req, res, next) {
         try {
-            const users = await UserModel.find();
+            const users = await UserModel.find().select('-password');
             res.status(200).json(users);
         } catch (err) {
             res.status(500).json({ error: err });
@@ -16,7 +16,9 @@ class UsersController {
     // [GET] /users/:id
     async getUser(req, res, next) {
         try {
-            const user = await UserModel.findById(req.params.id);
+            const user = await UserModel.findById(req.params.id).select(
+                '-password',
+            );
             res.status(200).json(user);
         } catch (err) {
             res.status(500).json({ error: err });
@@ -35,19 +37,9 @@ class UsersController {
                         _id: { $ne: req.user._id },
                     },
                 ],
-            });
+            }).select('-password');
 
             res.status(200).json(users);
-        } catch (err) {
-            res.status(500).json({ error: err });
-            next(err);
-        }
-    }
-    // [GET] /users/:id
-    async getUser(req, res, next) {
-        try {
-            const user = await UserModel.findById(req.params.id);
-            res.status(200).json(user);
         } catch (err) {
             res.status(500).json({ error: err });
             next(err);
@@ -64,38 +56,56 @@ class UsersController {
         }
     }
 
-    // [PUT] /users/:id/update
-    async updateUser(req, res) {
-        if (req.user.id === req.params.id || req.user.isAdmin) {
-            if (req.body.password) {
+    // [PUT] /users/:id
+    async updateUser(req, res, next) {
+        try {
+            if (req.user.id === req.params.id || req.user.isAdmin) {
+                if (req.body.password) {
+                    try {
+                        const salt = await bcrypt.genSalt(10);
+                        req.body.password = await bcrypt.hash(
+                            req.body.password,
+                            salt,
+                        );
+                    } catch (err) {
+                        res.status(500).json({ error: err });
+                        next(err);
+                    }
+                }
+
                 try {
-                    const salt = await bcrypt.genSalt(10);
-                    req.body.password = await bcrypt.hash(
-                        req.body.password,
-                        salt,
-                    );
+                    const isUser = req.user.username === req.body.username;
+                    const userExixts = await UserModel.findOne({
+                        username: req.body.username,
+                    });
+
+                    if (!isUser && userExixts) {
+                        res.status(400).json({
+                            status: 400,
+                            message: 'Username already exists!',
+                        });
+                        throw new Error('Username already exixts!');
+                    }
+
+                    if (isUser || !userExixts) {
+                        const user = await UserModel.findByIdAndUpdate(
+                            req.params.id,
+                            req.body,
+                            {
+                                new: true,
+                            },
+                        );
+                        res.status(200).json(user);
+                    }
                 } catch (err) {
-                    res.status(500).json({ error: err });
                     next(err);
                 }
+            } else {
+                res.status(400);
+                throw new Error('Error: You can only update your account!');
             }
-
-            try {
-                const user = await UserModel.findByIdAndUpdate(
-                    req.params.id,
-                    req.body,
-                    {
-                        new: true,
-                    },
-                );
-                res.status(200).json(user);
-            } catch (err) {
-                res.status(500).json({ error: err });
-                next(err);
-            }
-        } else {
-            res.status(400);
-            throw new Error('Error: You can only update your account!');
+        } catch (err) {
+            next(err);
         }
     }
 
@@ -122,7 +132,7 @@ class UsersController {
             const followedUser = await UserModel.findByIdAndUpdate(
                 req.body._id,
                 {
-                    $push: { followerIDs: req.user._id },
+                    $push: { followers: req.user._id },
                 },
                 {
                     new: true,
@@ -133,7 +143,7 @@ class UsersController {
             const currentUser = await UserModel.findByIdAndUpdate(
                 req.user._id,
                 {
-                    $push: { followingIDs: req.body._id },
+                    $push: { followings: req.body._id },
                 },
                 {
                     new: true,
@@ -156,7 +166,7 @@ class UsersController {
             const unfollowedUser = await UserModel.findByIdAndUpdate(
                 req.body._id,
                 {
-                    $pull: { followerIDs: req.user._id },
+                    $pull: { followers: req.user._id },
                 },
                 {
                     new: true,
@@ -167,7 +177,7 @@ class UsersController {
             const currentUser = await UserModel.findByIdAndUpdate(
                 req.user._id,
                 {
-                    $pull: { followingIDs: req.body._id },
+                    $pull: { followings: req.body._id },
                 },
                 {
                     new: true,

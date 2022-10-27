@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import {
     TimesIcon,
     DownArrow,
@@ -14,18 +14,21 @@ import { Wrapper } from './styled';
 import * as videoService from '~/services/videoService';
 import HeadlessTippy from '@tippyjs/react/headless';
 import { useDispatch, useSelector } from 'react-redux';
-import { appSelector } from '~/redux/selectors';
+import { appSelector, authSelector, videosSelector } from '~/redux/selectors';
 import appSlice from '~/redux/slices/appSlice';
 
 export default function VideoModal() {
     const navigate = useNavigate();
     const { videoID } = useParams();
+    const dispatch = useDispatch();
     const videoRef = useRef(null);
+    const [video, setVideo] = useState(null);
+    const { settings } = useSelector(appSelector);
+    const { videos } = useSelector(videosSelector);
+    const { currentUser } = useSelector(authSelector);
     const [progress, setProgress] = useState(0);
     const [isPlaying, setIsPlaying] = useState(true);
-    const [video, setVideo] = useState(null);
-    const dispatch = useDispatch();
-    const { settings } = useSelector(appSelector);
+    const location = useLocation();
 
     const setConfig = (settings) => {
         localStorage.setItem('userSettings', JSON.stringify(settings));
@@ -47,10 +50,14 @@ export default function VideoModal() {
     const escFunction = useCallback(
         (event) => {
             if (event.key === 'Escape') {
-                navigate(-1);
+                if (location.state && location.state.background) {
+                    navigate(location.state.background.pathname);
+                } else {
+                    navigate('/');
+                }
             }
         },
-        [navigate],
+        [navigate, location],
     );
 
     useEffect(() => {
@@ -128,6 +135,48 @@ export default function VideoModal() {
         setConfig(newSettings);
     };
 
+    const handleClose = () => {
+        if (location.state && location.state.background) {
+            navigate(location.state.background.pathname);
+        } else {
+            navigate('/');
+        }
+    };
+
+    const fypVideos = videos.filter(
+        (video) => video.user._id !== currentUser?._id,
+    );
+    const videoIndex = fypVideos.findIndex((v) => v._id === video?._id);
+
+    const handlePrevious = () => {
+        const previousIndex =
+            videoIndex - 1 < 0 ? fypVideos.length - 1 : videoIndex - 1;
+
+        const previousVideo = fypVideos[previousIndex];
+        const background = location.state.background;
+        navigate(
+            `/@${previousVideo.user.username}/video/${previousVideo._id}`,
+            {
+                state: {
+                    background,
+                },
+            },
+        );
+    };
+
+    const handleNext = () => {
+        const nextIndex =
+            videoIndex + 1 > fypVideos.length - 1 ? 0 : videoIndex + 1;
+
+        const nextVideo = fypVideos[nextIndex];
+        const background = location.state.background;
+        navigate(`/@${nextVideo.user.username}/video/${nextVideo._id}`, {
+            state: {
+                background,
+            },
+        });
+    };
+
     if (!video) return;
 
     return (
@@ -139,7 +188,7 @@ export default function VideoModal() {
                             <div className="left">
                                 <span
                                     className="delete-btn icon-wrapper"
-                                    onClick={() => navigate(-1)}
+                                    onClick={handleClose}
                                 >
                                     <TimesIcon width="2.6rem" height="2.6rem" />
                                 </span>
@@ -166,11 +215,12 @@ export default function VideoModal() {
                             <div className="video-layout" onClick={handlePlay}>
                                 <div className="video-wrapper">
                                     <video
+                                        key={video.src}
                                         ref={videoRef}
                                         className="video"
                                         muted={settings.isMuted}
                                         onTimeUpdate={handleTimeUpdate}
-                                        autoPlay
+                                        autoPlay={isPlaying}
                                         loop
                                         poster={video?.cover}
                                         type={video?.type}
@@ -225,10 +275,16 @@ export default function VideoModal() {
                             </div>
 
                             <div className="updown-icon-group">
-                                <span className="previous icon-wrapper">
+                                <span
+                                    className="previous icon-wrapper"
+                                    onClick={handlePrevious}
+                                >
                                     <DownArrow width="2.6rem" height="2.6rem" />
                                 </span>
-                                <span className="next icon-wrapper">
+                                <span
+                                    className="next icon-wrapper"
+                                    onClick={handleNext}
+                                >
                                     <DownArrow width="2.6rem" height="2.6rem" />
                                 </span>
                             </div>

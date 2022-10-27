@@ -10,7 +10,7 @@ export default function Home() {
     const { videos } = useSelector(videosSelector);
     const { currentUser } = useSelector(authSelector);
     const fypVideos = videos?.filter(
-        (video) => video.user._id !== currentUser?._id,
+        (video) => video.user?._id !== currentUser?._id,
     );
     const sortVideos = fypVideos?.sort((a, b) => b.views - a.views);
     return (

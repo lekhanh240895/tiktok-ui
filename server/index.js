@@ -60,7 +60,9 @@ app.get('/set-cookies', (req, res) => {
 });
 
 // app.listen(process.env.API_PORT, () => {
-//     console.log(`App listening on port http://localhost:${process.env.API_PORT}`);
+//     console.log(
+//         `App listening on port http://localhost:${process.env.API_PORT}`,
+//     );
 // });
 
 // Deploy to Heroku

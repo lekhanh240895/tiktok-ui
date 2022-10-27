@@ -1,7 +1,8 @@
 const { Server } = require('socket.io');
+const PORT = process.env.PORT || 8900;
 const io = new Server({
     cors: {
-        origin: 'http://localhost:3000',
+        origin: ['http://localhost:3000', 'https://tiktok-lekhanh.web.app'],
     },
 });
 
@@ -55,4 +56,4 @@ io.on('connection', (socket) => {
     });
 });
 
-io.listen(8900);
+io.listen(PORT);

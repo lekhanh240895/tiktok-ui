@@ -23,7 +23,7 @@ export default function Search() {
     const { videos } = useSelector(videosSelector);
     const { users } = useSelector(usersSelector);
     const [searchParams] = useSearchParams();
-    const query = searchParams.get('q');
+    const query = searchParams.get('q') || '';
 
     const topVideos = videos.filter(
         (video) =>

@@ -12,7 +12,7 @@ export default function PhoneEmailLogin() {
     const [emailUsername, setEmailUsername] = useState('');
     const [password, setPassword] = useState('');
     const isEmail = ValidateEmail(emailUsername);
-    const { currentUser, isLoading, isError, isSuccess } =
+    const { currentUser, isLoading, isSuccess, error } =
         useSelector(authSelector);
 
     const dispatch = useDispatch();
@@ -46,17 +46,16 @@ export default function PhoneEmailLogin() {
             dispatch(loginModalSlice.actions.hide());
             window.location.reload();
         }
-
         return () => {
             authSlice.actions.reset();
         };
-    }, [dispatch, isError, isSuccess, currentUser]);
+    }, [dispatch, isSuccess, currentUser]);
 
     if (isLoading) return <Spinner />;
 
     return (
         <Wrapper>
-            {isError && <div className="error">Invalid credentials!</div>}
+            {error && <div className="error">{error}</div>}
 
             <div className="description">
                 Email or username

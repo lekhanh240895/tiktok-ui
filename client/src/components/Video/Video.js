@@ -2,11 +2,11 @@ import { forwardRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
-export const Video = forwardRef(({ video, username, ...props }, ref) => {
+export const Video = forwardRef(({ video, ...props }, ref) => {
     const location = useLocation();
     return (
         <Link
-            to={`/@${username}/video/${video._id}`}
+            to={`/@${video.user.username}/video/${video._id}`}
             state={{ background: location }}
         >
             <VideoElm {...props} ref={ref}>

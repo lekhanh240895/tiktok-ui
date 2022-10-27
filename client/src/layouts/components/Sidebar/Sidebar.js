@@ -35,13 +35,12 @@ export default function Sidebar({ width }) {
     const suggestUsers = users.filter(
         (user) =>
             user.tick &&
-            user.followers_count > 100000 &&
-            !currentUser?.followingIDs?.includes(user._id) &&
+            !currentUser?.followings.includes(user._id) &&
             user._id !== currentUser?._id,
     );
 
     const followingUsers = users.filter((user) =>
-        currentUser?.followingIDs?.includes(user._id),
+        currentUser?.followings.includes(user._id),
     );
 
     const handleResize = (ref) => {

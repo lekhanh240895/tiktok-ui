@@ -1,26 +1,5 @@
 import { authRequest, httpRequest } from '~/utils/httpRequest';
 
-export const search = async (query, options) => {
-    try {
-        const response = await httpRequest.get(`users/`, {
-            params: {
-                query,
-                ...options,
-            },
-        });
-
-        const users = response.data.filter(
-            (user) =>
-                user.full_name.toLowerCase().includes(query.toLowerCase()) ||
-                user.username.toLowerCase().includes(query.toLowerCase()),
-        );
-
-        return users;
-    } catch (err) {
-        console.log(err);
-    }
-};
-
 export const searchUser = async (query) => {
     try {
         const response = await authRequest.get(`users/search?q=${query}`);
@@ -39,16 +18,27 @@ export const getUsers = async () => {
     }
 };
 
-export const update = async (_id, updatedData) => {
+export const getUser = async (id) => {
     try {
-        const response = await authRequest.put(
-            `/users/${_id}/update`,
-            updatedData,
-        );
+        const response = await httpRequest.get(`users/${id}`);
         return response.data;
     } catch (err) {
         console.log(err);
     }
+};
+
+export const getUserByUsername = async (username) => {
+    try {
+        const response = await httpRequest.get(`users/${username}`);
+        return response.data;
+    } catch (err) {
+        console.log(err);
+    }
+};
+
+export const update = async (_id, formData) => {
+    const response = await authRequest.put(`/users/${_id}`, formData);
+    return response.data;
 };
 
 export const remove = async (_id) => {

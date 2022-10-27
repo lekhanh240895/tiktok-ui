@@ -17,6 +17,22 @@ const UserModel = new Schema(
             type: String,
             required: [true, 'Please add a password!'],
         },
+        followings: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'user',
+            },
+        ],
+        followers: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'user',
+            },
+        ],
+        isAdmin: {
+            type: Boolean,
+            default: false,
+        },
         first_name: { type: String, default: '' },
         last_name: { type: String, default: '' },
         full_name: { type: String, default: '' },
@@ -29,22 +45,6 @@ const UserModel = new Schema(
         youtube_url: { type: String, default: '' },
         twitter_url: { type: String, default: '' },
         instagram_url: { type: String, default: '' },
-        followingIDs: [
-            {
-                type: Schema.Types.ObjectId,
-                ref: 'user',
-            },
-        ],
-        followerIDs: [
-            {
-                type: Schema.Types.ObjectId,
-                ref: 'user',
-            },
-        ],
-        isAdmin: {
-            type: Boolean,
-            default: false,
-        },
     },
     { timestamps: true },
 );

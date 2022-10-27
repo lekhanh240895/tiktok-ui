@@ -91,9 +91,15 @@ export default function Header({ innerWidth }) {
 
     const dispatch = useDispatch();
     const location = useLocation();
-    const [notifications, setNotifications] = useState([]);
+    const [notifications, setNotifications] = useState(
+        JSON.parse(localStorage.getItem('notifications')) || [],
+    );
     const [messagesNotification, setMessagesNotification] = useState([]);
     const { socket } = useSelector(appSelector);
+
+    const setNotifs = (notifs) => {
+        localStorage.setItem('notifications', JSON.stringify(notifs));
+    };
 
     useEffect(() => {
         socket?.on('getMessage', (data) => {
@@ -105,10 +111,9 @@ export default function Header({ innerWidth }) {
     useEffect(() => {
         (async () => {
             if (currentUser) {
-                const notifs = await notificationService.getUserNotifications(
-                    currentUser._id,
-                );
+                const notifs = await notificationService.get(currentUser._id);
                 setNotifications(notifs);
+                setNotifs(notifs);
             }
         })();
     }, [currentUser]);
@@ -123,6 +128,7 @@ export default function Header({ innerWidth }) {
                 },
             ];
             setNotifications(newNotifs);
+            setNotifs(newNotifs);
         });
     }, [socket, notifications]);
 
@@ -228,6 +234,7 @@ export default function Header({ innerWidth }) {
                                                 width="3.2rem"
                                                 height="3.2rem"
                                             />
+
                                             <span
                                                 className={cx(
                                                     'badge',

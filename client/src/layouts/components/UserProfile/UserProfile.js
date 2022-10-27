@@ -19,18 +19,18 @@ const cx = classnames.bind(styles);
 export const UserProfile = ({ user }) => {
     const { currentUser } = useSelector(authSelector);
     const { socket } = useSelector(appSelector);
-    const [isFollow, setIsFollow] = useState(false);
+    const [isFollowed, setIsFollowed] = useState(false);
     const dispatch = useDispatch();
 
     useEffect(() => {
-        setIsFollow(currentUser?.followingIDs.includes(user._id));
-    }, [currentUser?.followingIDs, user._id]);
+        setIsFollowed(currentUser?.followings.includes(user._id));
+    }, [currentUser, user]);
 
     const handleFollow = async () => {
         if (!currentUser) return dispatch(loginModalSlice.actions.show());
         const updatedUser = {
             ...currentUser,
-            followingIDs: currentUser.followingIDs.concat(user._id),
+            followings: currentUser.followings.concat(user._id),
         };
         dispatch(authSlice.actions.setCurrentUser(updatedUser));
         dispatch(followUser(user._id));
@@ -54,9 +54,7 @@ export const UserProfile = ({ user }) => {
 
         const updatedUser = {
             ...currentUser,
-            followingIDs: currentUser.followingIDs.filter(
-                (id) => id !== user._id,
-            ),
+            followings: currentUser.followings.filter((id) => id !== user._id),
         };
         dispatch(authSlice.actions.setCurrentUser(updatedUser));
         dispatch(unfollowUser(user._id));
@@ -73,7 +71,7 @@ export const UserProfile = ({ user }) => {
                     />
                 </Link>
 
-                {!isFollow ? (
+                {!isFollowed ? (
                     <Button
                         primary
                         className={cx('follow-btn')}

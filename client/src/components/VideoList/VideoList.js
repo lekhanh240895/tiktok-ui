@@ -61,7 +61,7 @@ export default function VideoList({ videos, time }) {
         if (!currentUser) return dispatch(loginModalSlice.actions.show());
         const updatedUser = {
             ...currentUser,
-            followingIDs: currentUser.followingIDs?.concat(_id),
+            followings: currentUser.followings?.concat(_id),
         };
         dispatch(authSlice.actions.setCurrentUser(updatedUser));
         dispatch(followUser(_id));
@@ -84,7 +84,7 @@ export default function VideoList({ videos, time }) {
         if (!currentUser) return dispatch(loginModalSlice.actions.show());
         const updatedUser = {
             ...currentUser,
-            followingIDs: currentUser.followingIDs?.filter((id) => id !== _id),
+            followings: currentUser.followings?.filter((id) => id !== _id),
         };
         dispatch(authSlice.actions.setCurrentUser(updatedUser));
         dispatch(unfollowUser(_id));
@@ -93,9 +93,10 @@ export default function VideoList({ videos, time }) {
         <>
             <ul className={cx('video-list')}>
                 {videos?.slice(0, videoCount).map((video) => {
-                    const isFollowed = currentUser?.followingIDs?.includes(
-                        video.user?._id,
+                    const isFollowed = currentUser?.followings.includes(
+                        video.user._id,
                     );
+
                     return (
                         <li key={video._id} className={cx('video-item')}>
                             <Link to={`/@${video.user?.username}`}>

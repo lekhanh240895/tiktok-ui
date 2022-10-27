@@ -2,15 +2,20 @@ const CommentModel = require('../models/CommentModel');
 const VideoModel = require('../models/VideoModel');
 
 class CommentController {
-    // [GET] api/comments/:videoID/comments
+    // [GET] api/comments/:videoID
     async getVideoComments(req, res, next) {
         try {
             const comments = await CommentModel.find({
                 video: req.params.videoID,
-            })
-                .populate('video')
-                .populate('user')
-                .exec();
+            }).populate([
+                {
+                    path: 'video',
+                },
+                {
+                    path: 'user',
+                    select: 'username full_name avatar tick ',
+                },
+            ]);
             res.status(200).json(comments);
         } catch (err) {
             res.status(500).json({ error: err });

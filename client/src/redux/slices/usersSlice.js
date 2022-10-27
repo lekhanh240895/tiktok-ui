@@ -25,7 +25,6 @@ const usersSlice = createSlice({
                 const currentUserIndex = state.users.findIndex(
                     (user) => user._id === action.payload.id,
                 );
-
                 state.users[currentUserIndex] = action.payload;
             })
             .addCase(deleteUser.fulfilled, (state, action) => {
@@ -45,8 +44,8 @@ export const getUsers = createAsyncThunk('users/getUsers', async () => {
 
 export const updateUser = createAsyncThunk(
     'userList/updateUser',
-    async ({ _id, updatedData }) => {
-        const data = await userService.update(_id, updatedData);
+    async ({ _id, formData }, thunkAPI) => {
+        const data = await userService.update(_id, formData);
         return data;
     },
 );

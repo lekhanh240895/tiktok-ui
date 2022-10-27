@@ -1,7 +1,7 @@
 import { authRequest, httpRequest } from '~/utils/httpRequest';
 
 export const get = async (videoID) => {
-    const response = await httpRequest.get(`comments/${videoID}/comments`);
+    const response = await httpRequest.get(`comments/${videoID}`);
     return response.data;
 };
 

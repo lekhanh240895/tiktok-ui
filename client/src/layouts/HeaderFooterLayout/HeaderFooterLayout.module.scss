@@ -1,6 +1,8 @@
 .wrapper {
     width: 100%;
     height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .container {
@@ -11,4 +13,11 @@
 
 .content {
     width: 100%;
+}
+
+.footer {
+    width: 100%;
+    color: #fff;
+    background-color: #000;
+    padding-bottom: 24px;
 }

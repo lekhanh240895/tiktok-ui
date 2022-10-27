@@ -29,12 +29,12 @@ function App() {
     const { isEditModalShow } = useSelector(editModalSelector);
     const { isLoginModalShow } = useSelector(loginModalSelector);
     const dispatch = useDispatch();
-    const location = useLocation();
     const { currentUser } = useSelector(authSelector);
     const { socket, isDeleteModalShow } = useSelector(appSelector);
+    const location = useLocation();
 
     useEffect(() => {
-        const socket = io('ws://localhost:8900');
+        const socket = io('https://tiktok-lekhanh-socket.herokuapp.com');
         dispatch(appSlice.actions.setSocket(socket));
     }, [dispatch]);
 
@@ -63,7 +63,6 @@ function App() {
         // Fetch videos
         dispatch(getVideos());
 
-        // Get currentUser
         if (token) dispatch(getMe());
 
         return () => {

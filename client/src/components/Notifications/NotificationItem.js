@@ -17,7 +17,7 @@ export default function NotificationItem({ notif }) {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        setIsFollowed(currentUser?.followingIDs.includes(notif.sender._id));
+        setIsFollowed(currentUser?.followings.includes(notif.sender._id));
     }, [currentUser, notif]);
 
     const handleFollow = async (e) => {
@@ -25,7 +25,7 @@ export default function NotificationItem({ notif }) {
         e.stopPropagation();
         const updatedUser = {
             ...currentUser,
-            followingIDs: currentUser.followingIDs.concat(notif.sender._id),
+            followings: currentUser?.followings.concat(notif.sender._id),
         };
         dispatch(authSlice.actions.setCurrentUser(updatedUser));
         dispatch(followUser(notif.sender._id));
@@ -49,7 +49,7 @@ export default function NotificationItem({ notif }) {
         e.stopPropagation();
         const updatedUser = {
             ...currentUser,
-            followingIDs: currentUser.followingIDs.filter(
+            followings: currentUser.followings.filter(
                 (id) => id !== notif.sender._id,
             ),
         };

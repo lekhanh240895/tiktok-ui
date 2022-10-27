@@ -3,6 +3,7 @@ import Avatar from '~/components/Avatar';
 import { AtIcon, SearchIcon, TimesIcon } from '~/components/Icons';
 import * as userService from '~/services/userService';
 import { useDebounce } from '~/hooks/useDebounce';
+import { Wrapper } from './styled';
 
 export default function SearchUser({
     currentUser,
@@ -45,7 +46,7 @@ export default function SearchUser({
         } else {
             if (currentUser) {
                 const followings = users.filter((user) =>
-                    currentUser.followingIDs.includes(user._id),
+                    currentUser.followings.includes(user._id),
                 );
                 setSearchUsers(followings);
             }
@@ -73,7 +74,7 @@ export default function SearchUser({
     };
 
     return (
-        <div className="form-group">
+        <Wrapper className="form-group">
             <div className="title">
                 <label htmlFor="search-user" className="label">
                     <AtIcon width="1.4rem" height="1.4rem" />
@@ -99,7 +100,7 @@ export default function SearchUser({
                     onChange={(e) => setSeachValue(e.target.value)}
                     ref={searchInputRef}
                 />
-                <div className="select-container">
+                <div className="user-search-container">
                     <div className="select-column">
                         <div className="select-title">
                             {searchValue ? 'All users' : 'Following'}
@@ -146,6 +147,6 @@ export default function SearchUser({
                     </div>
                 </div>
             </div>
-        </div>
+        </Wrapper>
     );
 }

@@ -10,7 +10,7 @@ export default function Following() {
     const { videos } = useSelector(videosSelector);
     const { currentUser } = useSelector(authSelector);
     const followingVideos = videos?.filter((video) =>
-        currentUser?.followingIDs?.includes(video.user._id),
+        currentUser?.followings.includes(video.user._id),
     );
     const getTime = (t) => new Date(t);
     const sortVideos = followingVideos?.sort(

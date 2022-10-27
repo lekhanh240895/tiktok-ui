@@ -8,16 +8,16 @@ import {
 import { storage } from '~/firebase/config';
 const mime = require('mime');
 
-export const handleUploadFileFirebase = (path, file) => {
+export const uploadFileFirebase = (path, file) => {
     return new Promise((resolve, reject) => {
         const extension = file.name.split('.')[1];
         const type = mime.getType(extension);
         const fileName = Date.now() + '-' + file.name;
-
         const metadata = {
             contentType: type,
         };
         const storageRef = ref(storage, path + fileName);
+
         const uploadTask = uploadBytesResumable(storageRef, file, metadata);
 
         // Listen for state changes, errors, and completion of the upload.
@@ -42,7 +42,7 @@ export const handleUploadFileFirebase = (path, file) => {
     });
 };
 
-export const handleUploadDataUrlFirebase = (path, dataUrlString) => {
+export const uploadDataUrlFirebase = (path, dataUrlString) => {
     return new Promise(async (resolve, reject) => {
         const type = dataUrlString.split(';base64,')[0].replace('data:', '');
         const extension = mime.getExtension(type);

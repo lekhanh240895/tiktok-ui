@@ -127,7 +127,7 @@ export default function Profile() {
     const { socket } = useSelector(appSelector);
     const [activeTab, setActiveTab] = useState('videos');
     const [isUser, setIsUser] = useState(false);
-    const [isFollowing, setIsFollowing] = useState(false);
+    const [isFollowed, setIsFollowed] = useState(false);
     const dispatch = useDispatch();
     const lineRef = useRef(null);
     const { username } = useParams();
@@ -140,10 +140,10 @@ export default function Profile() {
         } else {
             setIsUser(false);
 
-            if (currentUser?.followingIDs?.includes(user?._id)) {
-                setIsFollowing(true);
+            if (currentUser?.followings.includes(user._id)) {
+                setIsFollowed(true);
             } else {
-                setIsFollowing(false);
+                setIsFollowed(false);
             }
         }
     }, [users, user, currentUser]);
@@ -180,7 +180,7 @@ export default function Profile() {
         if (!currentUser) return dispatch(loginModalSlice.actions.show());
         const updatedUser = {
             ...currentUser,
-            followingIDs: currentUser.followingIDs.concat(user._id),
+            followings: currentUser.followings.concat(user._id),
         };
         dispatch(authSlice.actions.setCurrentUser(updatedUser));
         dispatch(followUser(user._id));
@@ -197,9 +197,7 @@ export default function Profile() {
 
         const updatedUser = {
             ...currentUser,
-            followingIDs: currentUser.followingIDs.filter(
-                (id) => id !== user._id,
-            ),
+            followings: currentUser.followings.filter((id) => id !== user._id),
         };
         dispatch(authSlice.actions.setCurrentUser(updatedUser));
         dispatch(unfollowUser(user._id));
@@ -241,7 +239,7 @@ export default function Profile() {
                         )}
 
                         {!isUser &&
-                            (!isFollowing ? (
+                            (!isFollowed ? (
                                 <StyledButton primary onClick={handleFollow}>
                                     Follow
                                 </StyledButton>
@@ -274,11 +272,11 @@ export default function Profile() {
 
                 <div>
                     <UserStats>
-                        <span>{configNumber(user.followingIDs?.length)}</span>
+                        <span>{configNumber(user.followings?.length)}</span>
                         Following
                     </UserStats>
                     <UserStats>
-                        <span>{configNumber(user.followerIDs?.length)}</span>
+                        <span>{configNumber(user.followers?.length)}</span>
                         Followers
                     </UserStats>
                     <UserStats>

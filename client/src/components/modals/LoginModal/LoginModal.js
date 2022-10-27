@@ -19,6 +19,7 @@ import PhoneEmailLogin from './PhoneEmailLogin';
 import QRCodeLogin from './QRCodeLogin';
 import { useCallback, useEffect, useState } from 'react';
 import PhoneEmailSignup from './PhoneEmailSignup';
+import authSlice from '~/redux/slices/authSlice';
 
 const LOGIN = {
     title: 'Log in to TikTok',
@@ -140,14 +141,16 @@ export default function LoginModal() {
         setSignUp(false);
     };
 
+    const onHide = () => {
+        dispatch(loginModalSlice.actions.hide());
+        dispatch(authSlice.actions.reset());
+    };
+
     return (
         <Wrapper>
             <div className="modal">
                 <div className="modal_inner">
-                    <span
-                        onClick={() => dispatch(loginModalSlice.actions.hide())}
-                        className="close-icon"
-                    >
+                    <span onClick={onHide} className="close-icon">
                         <TimesIcon width="1.5rem" height="1.5rem" />
                     </span>
 

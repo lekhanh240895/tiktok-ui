@@ -42,16 +42,27 @@ export const Wrapper = styled.div`
                 position: absolute;
                 left: 0;
                 right: 0;
-                top: 50px;
+                top: 110%;
                 z-index: 12;
-                transition: display 0.3s ease-out;
                 background-color: var(--white-color);
                 width: 120px;
                 overflow: auto;
-                border-radius: 4px;
+                border-radius: 0 0 4px 4px;
                 box-shadow: 0px 2px 12px rgba(0 0 0 / 12%);
                 max-height: 320px;
                 display: none;
+                animation: show-height 0.3s ease forwards;
+
+                @keyframes show-height {
+                    from {
+                        opacity: 0;
+                        height: 0;
+                    }
+                    to {
+                        opacity: 1;
+                        height: 320px;
+                    }
+                }
 
                 .select-option {
                     padding: 0 12px;
@@ -64,6 +75,17 @@ export const Wrapper = styled.div`
 
                 &::-webkit-scrollbar-thumb {
                     background-color: rgb(22 24 35 / 6%);
+                }
+            }
+
+            &.show {
+                .select-list {
+                    display: block;
+                }
+                .select-label {
+                    .icon {
+                        transform: rotateZ(180deg);
+                    }
                 }
             }
         }

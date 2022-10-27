@@ -85,7 +85,7 @@ const SHARE_MENU = [
 export default function Header({ video, currentUser, socket, comments }) {
     const [likes, setLikes] = useState(video.likes?.length);
     const [isLiked, setIsLiked] = useState(false);
-    const [isFollow, setIsFollow] = useState(false);
+    const [isFollowed, setIsFollowed] = useState(false);
     const isUser = video.user._id === currentUser?._id;
 
     const OPTION_MENU = [
@@ -102,7 +102,7 @@ export default function Header({ video, currentUser, socket, comments }) {
     ];
 
     useEffect(() => {
-        setIsFollow(currentUser?.followingIDs.includes(video.user._id));
+        setIsFollowed(currentUser?.followings.includes(video.user._id));
     }, [currentUser, video]);
 
     useEffect(() => {
@@ -210,7 +210,7 @@ export default function Header({ video, currentUser, socket, comments }) {
                             <OptionIcon width="2.4rem" height="2.4rem" />
                         </span>
                     </Menu>
-                ) : !isFollow ? (
+                ) : !isFollowed ? (
                     <Button
                         primary
                         className="follow-btn"

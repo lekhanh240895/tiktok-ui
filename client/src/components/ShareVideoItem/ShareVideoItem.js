@@ -20,7 +20,6 @@ export default function ShareVideoItem({ video, children }) {
             onMouseLeave={handleHoverOff}
         >
             <Video
-                username={video.user.username}
                 video={video}
                 muted
                 ref={videoRef}

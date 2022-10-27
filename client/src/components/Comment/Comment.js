@@ -42,7 +42,7 @@ export default function Comment({ comment, onDeleteComment }) {
         comment.likes.includes(currentUser?._id),
     );
 
-    const isUserComment = comment.user._id === currentUser._id;
+    const isUserComment = comment.user._id === currentUser?._id;
 
     const handleLike = async () => {
         await commentService.like(comment._id);

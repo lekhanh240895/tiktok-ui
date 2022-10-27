@@ -6,10 +6,22 @@ class VideosController {
     // [GET] api/videos
     async getVideos(req, res, next) {
         try {
-            const videos = await VideoModel.find()
-                .populate('user')
-                .populate('comments')
-                .exec();
+            const videos = await VideoModel.find().populate([
+                {
+                    path: 'user',
+                    select: 'username full_name avatar tick',
+                },
+                {
+                    path: 'comments',
+                    select: 'user text video',
+                    populate: [
+                        {
+                            path: 'user',
+                            select: 'username tick avatar',
+                        },
+                    ],
+                },
+            ]);
             res.status(200).json(videos);
         } catch (err) {
             res.status(500).json({ error: err });
@@ -20,10 +32,22 @@ class VideosController {
     // [GET] api/videos/:id
     async getVideo(req, res, next) {
         try {
-            const video = await VideoModel.findById(req.params.id)
-                .populate('user')
-                .populate('comments')
-                .exec();
+            const video = await VideoModel.findById(req.params.id).populate([
+                {
+                    path: 'user',
+                    select: 'username full_name avatar tick',
+                },
+                {
+                    path: 'comments',
+                    select: 'user text video',
+                    populate: [
+                        {
+                            path: 'user',
+                            select: 'username tick avatar',
+                        },
+                    ],
+                },
+            ]);
             res.status(200).json(video);
         } catch (err) {
             res.status(500).json({ error: err });

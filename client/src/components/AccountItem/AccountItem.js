@@ -35,7 +35,7 @@ export default function AccountItem({ user }) {
                     <span className={cx('seperate')}>-</span>
                     <span>
                         <span className={cx('followerNumber')}>
-                            {user.followerIDs.length}
+                            {user.followers.length}
                         </span>
                         Followers
                     </span>

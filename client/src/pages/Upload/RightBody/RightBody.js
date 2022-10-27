@@ -2,7 +2,12 @@ import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Button from '~/components/Button';
-import { AtIcon, TagIcon } from '~/components/Icons';
+import {
+    AtIcon,
+    InfoIcon,
+    SolidDownArrowIcon,
+    TagIcon,
+} from '~/components/Icons';
 import Spinner from '~/components/Spinner/Spinner';
 import { appSelector, usersSelector } from '~/redux/selectors';
 import videosSlice from '~/redux/slices/videosSlice';
@@ -12,8 +17,8 @@ import RedirectModal from './RedirectModal';
 import { Wrapper } from './styled';
 import * as notificationService from '~/services/notificationService';
 import {
-    handleUploadDataUrlFirebase,
-    handleUploadFileFirebase,
+    uploadDataUrlFirebase,
+    uploadFileFirebase,
 } from '~/services/firebaseService';
 import SearchUser from './SearchUser';
 
@@ -35,6 +40,7 @@ export default function RightBody({
     const [isUploaded, setIsUploaded] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [selectFormShow, setSelectFormShow] = useState(false);
+    const [copyrightActive, setCopyrightActive] = useState(false);
     const [formData, setFormData] = useState({
         src: '',
         privacy: 'public',
@@ -49,6 +55,8 @@ export default function RightBody({
     const { users } = useSelector(usersSelector);
     const { socket } = useSelector(appSelector);
     const captionRef = useRef(null);
+    const privacyRef = useRef(null);
+
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -122,8 +130,8 @@ export default function RightBody({
         setIsLoading(true);
 
         // Upload to firebase
-        const videoUrl = await handleUploadFileFirebase('videos/', video);
-        const imgUrl = await handleUploadDataUrlFirebase('images/', videoThumb);
+        const videoUrl = await uploadFileFirebase('videos/', video);
+        const imgUrl = await uploadDataUrlFirebase('images/', videoThumb);
 
         // Upload Video
         const newFormData = {
@@ -167,6 +175,8 @@ export default function RightBody({
             });
         }
     };
+
+    const privacys = ['public', 'friends', 'private'];
 
     if (isLoading) return <Spinner />;
 
@@ -272,22 +282,39 @@ export default function RightBody({
                     </div>
                 </div>
                 <div className="form-group">
-                    <div className="title">
-                        <label htmlFor="privacy">
-                            Who can view this video?
-                        </label>
-                    </div>
-                    <select
-                        id="privacy"
-                        className="privacy-select"
-                        defaultValue={formData.privacy}
-                        name="privacy"
-                        onChange={handleInputChange}
+                    <div
+                        className="privacy-select-container"
+                        ref={privacyRef}
+                        onClick={() =>
+                            privacyRef.current.classList.toggle('show')
+                        }
                     >
-                        <option value="public">Public</option>
-                        <option value="friends">Friends</option>
-                        <option value="private">Private</option>
-                    </select>
+                        <div className="select-label">
+                            <span className="text">{formData.privacy}</span>
+                            <span className="icon icon-wrapper">
+                                <SolidDownArrowIcon
+                                    width="1.6rem"
+                                    height="1.6rem"
+                                />
+                            </span>
+                        </div>
+                        <div className="select-list">
+                            {privacys.map((privacy, index) => (
+                                <div
+                                    className="select-option"
+                                    key={index}
+                                    onClick={() =>
+                                        setFormData({
+                                            ...formData,
+                                            privacy,
+                                        })
+                                    }
+                                >
+                                    {privacy}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
                 </div>
                 <div className="form-group">
                     <div className="title">Allow users to</div>
@@ -330,19 +357,34 @@ export default function RightBody({
                 <div className="form-group">
                     <div className="title title-copyright">
                         <span className="copyright">Run a copyright check</span>
-                        <div className="switch">
+                        <div
+                            className={
+                                copyrightActive ? 'switch active' : 'switch'
+                            }
+                            onClick={() => setCopyrightActive(!copyrightActive)}
+                        >
                             <div className="switch-wrapper">
                                 <span className="switch-inner"></span>
                             </div>
                         </div>
                     </div>
 
-                    <p className="copyright-desc">
-                        We'll check your video for potential copyright
-                        infringements on used sounds. If infringements are
-                        found, you can edit the video before posting.{' '}
-                        <b>Learn more</b>
-                    </p>
+                    {copyrightActive ? (
+                        <div className="copyright-check-desc">
+                            <span className="info icon-wrapper">
+                                <InfoIcon width="1.6rem" height="1.6rem" />
+                            </span>
+                            Kiểm tra bản quyền chỉ bắt đầu sau khi bạn tải video
+                            của mình lên.
+                        </div>
+                    ) : (
+                        <p className="copyright-desc">
+                            We'll check your video for potential copyright
+                            infringements on used sounds. If infringements are
+                            found, you can edit the video before posting.{' '}
+                            <b>Learn more</b>
+                        </p>
+                    )}
                 </div>
 
                 <div className="button-group">

@@ -38,15 +38,24 @@ export const Wrapper = styled.div`
             border-radius: 8px;
             display: flex;
             flex-direction: column;
+            overflow: hidden;
+
+            .error--edit {
+                padding: 16px;
+                font-size: 2rem;
+                margin-bottom: 0;
+            }
 
             .modal_header {
                 padding: 24px 24px 12px;
                 border-bottom: 1px solid rgba(22, 24, 35, 0.2);
                 display: flex;
-                justify-content: space-between;
                 align-items: center;
+                justify-content: space-between;
 
                 h1 {
+                    display: flex;
+                    align-items: center;
                     font-size: 2.4rem;
                     line-height: 3.6rem;
                     font-weight: 600;
@@ -60,8 +69,15 @@ export const Wrapper = styled.div`
                 }
             }
 
+            .form {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                background-color: var(--white-color);
+            }
             .modal_body {
                 padding: 8px 24px 0;
+                position: relative;
 
                 & > div {
                     display: flex;
@@ -126,14 +142,6 @@ export const Wrapper = styled.div`
                     }
                 }
 
-                .username {
-                    input {
-                    }
-                }
-
-                .name {
-                }
-
                 .bio {
                     padding: 16px 0 50px;
                     textarea {
@@ -148,9 +156,70 @@ export const Wrapper = styled.div`
                 }
             }
 
+            .modal_body--crop {
+                width: 100%;
+                height: 100%;
+                display: flex;
+                background-color: #000;
+                position: relative;
+                padding: 24px 12px;
+
+                .crop-wrapper {
+                    margin: auto;
+                    width: 360px;
+                    height: 360px;
+                    position: relative;
+                    overflow: hidden;
+
+                    .reactEasyCrop_Container {
+                        img {
+                            height: 100%;
+                        }
+                    }
+                    .avatar-view {
+                        position: absolute;
+                        left: 0;
+                        top: 0;
+                        width: 100%;
+                        height: 100%;
+                        border-radius: 50%;
+                        box-shadow: rgb(0 0 0 / 30%) 0px 0px 0px 250px;
+                        pointer-events: none;
+                    }
+                }
+
+                .slider-container {
+                    position: absolute;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    bottom: 20px;
+                    width: 360px;
+                    display: flex;
+                    align-items: center;
+
+                    span {
+                        color: #fff;
+                        font-size: 1.4rem;
+                        margin-right: 16px;
+                    }
+                    .zoom {
+                        flex: 1;
+                        &::-webkit-slider-thumb {
+                            background-color: var(--primary-color);
+                            height: 16px;
+                            width: 16px;
+                            border-radius: 50%;
+                        }
+                        &::-webkit-slider-runnable-track {
+                            background-color: #fff;
+                            height: 6px;
+                        }
+                    }
+                }
+            }
+
             .modal_footer {
-                flex: 1;
-                padding: 0 24px;
+                padding: 24px;
                 border-top: 1px solid rgba(22, 24, 35, 0.2);
                 display: flex;
                 align-items: center;

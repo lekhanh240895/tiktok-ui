@@ -6,10 +6,22 @@ class NotificationController {
     async getNotifications(req, res, next) {
         try {
             const notifications = await NotificationModel.find().populate([
-                'sender',
-                'video',
-                'comment',
-                'receiver',
+                {
+                    path: 'sender',
+                    select: 'avatar username',
+                },
+                {
+                    path: 'video',
+                    select: 'cover',
+                },
+                {
+                    path: 'comment',
+                    select: 'text user',
+                    populate: {
+                        path: 'user',
+                        select: 'username',
+                    },
+                },
             ]);
 
             res.status(200).json(notifications);
@@ -25,34 +37,26 @@ class NotificationController {
         try {
             const notifications = await NotificationModel.find({
                 receiver: req.params.userID,
-            }).populate(['sender', 'video', 'comment', 'receiver']);
+            }).populate([
+                {
+                    path: 'sender',
+                    select: 'avatar username',
+                },
+                {
+                    path: 'video',
+                    select: 'cover',
+                },
+                {
+                    path: 'comment',
+                    select: 'text user',
+                    populate: {
+                        path: 'user',
+                        select: 'username',
+                    },
+                },
+            ]);
 
-            let promises = [];
-            notifications.forEach((notif) => {
-                if (notif.comment) {
-                    promises.push(
-                        CommentModel.findById(notif.comment.id).populate(
-                            'user',
-                        ),
-                    );
-                }
-            });
-
-            Promise.all(promises).then((comments) => {
-                let newNotifications = [];
-                notifications.map((notif) => {
-                    if (notif.comment) {
-                        const newComment = comments.find(
-                            (comment) => comment.id === notif.comment.id,
-                        );
-                        return newNotifications.push({
-                            ...notif._doc,
-                            comment: newComment,
-                        });
-                    }
-                });
-                res.status(200).json(newNotifications);
-            });
+            res.status(200).json(notifications);
         } catch (err) {
             res.status(500).json({ error: err });
             next();

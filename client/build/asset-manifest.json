@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.4b5b82ff.css",
-    "main.js": "/static/js/main.73a9ecd2.js",
+    "main.css": "/static/css/main.c5c346f3.css",
+    "main.js": "/static/js/main.26a57b11.js",
     "static/media/sofiapro-semibold.otf": "/static/media/sofiapro-semibold.a9a8148f7d5d0db20db8.otf",
     "static/media/404page_bgImg.png": "/static/media/404page_bgImg.532e06c8382fb6011df0.png",
     "static/media/ProximaNova-Semibold.woff2": "/static/media/ProximaNova-Semibold.db7972dbe0b808f96bae.woff2",
@@ -12,13 +12,12 @@
     "static/media/Proxima-Nova-Bold.woff": "/static/media/Proxima-Nova-Bold.6cd7dcaa6293ecf61e80.woff",
     "static/media/Proxima-Nova-Regular.woff2": "/static/media/Proxima-Nova-Regular.6c83037ae28747e6d774.woff2",
     "static/media/logo.svg": "/static/media/logo.3ffa8c5de85faddba58391bd98e85740.svg",
-    "static/media/MenuHeader": "/static/media/MenuHeader.87a34a30b8e77ca770d0",
     "index.html": "/index.html",
-    "main.4b5b82ff.css.map": "/static/css/main.4b5b82ff.css.map",
-    "main.73a9ecd2.js.map": "/static/js/main.73a9ecd2.js.map"
+    "main.c5c346f3.css.map": "/static/css/main.c5c346f3.css.map",
+    "main.26a57b11.js.map": "/static/js/main.26a57b11.js.map"
   },
   "entrypoints": [
-    "static/css/main.4b5b82ff.css",
-    "static/js/main.73a9ecd2.js"
+    "static/css/main.c5c346f3.css",
+    "static/js/main.26a57b11.js"
   ]
 }

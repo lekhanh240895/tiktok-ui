@@ -5,7 +5,7 @@ const { protect } = require('../middlewares/authMiddleware');
 
 router.put('/follow', protect, UsersController.follow);
 router.put('/unfollow', protect, UsersController.unfollow);
-router.put('/:id/update', protect, UsersController.updateUser);
+router.put('/:id', protect, UsersController.updateUser);
 router.delete('/:id/delete', protect, UsersController.deleteUser);
 router.get('/me', protect, UsersController.getMe);
 router.get('/search', protect, UsersController.getUsersByQuery);

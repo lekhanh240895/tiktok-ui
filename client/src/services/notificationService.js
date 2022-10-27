@@ -1,7 +1,7 @@
 import { authRequest, httpRequest } from '~/utils/httpRequest';
 
 // Get notifications of a user
-export const getUserNotifications = async (userID) => {
+export const get = async (userID) => {
     const response = await httpRequest.get(`notifications/${userID}`);
     return response.data;
 };

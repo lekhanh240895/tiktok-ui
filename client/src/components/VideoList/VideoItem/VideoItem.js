@@ -112,7 +112,6 @@ export default function VideoItem({
                         ref={containerRef}
                     >
                         <Video
-                            username={video.user?.username}
                             video={video}
                             ref={videoRef}
                             loop
