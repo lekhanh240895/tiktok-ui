@@ -6,7 +6,7 @@ const VideoModel = new Schema(
         user: {
             type: Schema.Types.ObjectId,
             required: true,
-            ref: 'user',
+            ref: 'User',
         },
         title: { type: String, default: '' },
         privacy: { type: String, default: 'public' },
@@ -23,19 +23,19 @@ const VideoModel = new Schema(
         likes: [
             {
                 type: Schema.Types.ObjectId,
-                ref: 'user',
+                ref: 'User',
             },
         ],
         shares: [
             {
                 type: Schema.Types.ObjectId,
-                ref: 'user',
+                ref: 'User',
             },
         ],
         comments: [
             {
                 type: Schema.Types.ObjectId,
-                ref: 'comment',
+                ref: 'Comment',
             },
         ],
         music: { type: String, default: '' },
@@ -45,4 +45,4 @@ const VideoModel = new Schema(
     { timestamps: true },
 );
 
-module.exports = mongoose.model('video', VideoModel);
+module.exports = mongoose.model('Video', VideoModel);

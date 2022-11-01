@@ -21,12 +21,14 @@ const protect = async (req, res, next) => {
             next();
         } catch (error) {
             res.status(401);
+            next(err);
             throw new Error('Not authorized!');
         }
     }
 
     if (!token) {
         res.status(401);
+        next(err);
         throw new Error('Not authorized, no token!');
     }
 };

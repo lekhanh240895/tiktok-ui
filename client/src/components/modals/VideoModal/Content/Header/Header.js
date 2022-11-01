@@ -137,11 +137,12 @@ export default function Header({ video, currentUser, socket, comments }) {
             });
         }
     };
+    
     const handleFollow = async () => {
         if (!currentUser) return dispatch(loginModalSlice.actions.show());
         const updatedUser = {
             ...currentUser,
-            followingIDs: currentUser.followingIDs.concat(video.user._id),
+            followings: currentUser.followings.concat(video.user._id),
         };
         dispatch(authSlice.actions.setCurrentUser(updatedUser));
         dispatch(followUser(video.user._id));
@@ -165,7 +166,7 @@ export default function Header({ video, currentUser, socket, comments }) {
 
         const updatedUser = {
             ...currentUser,
-            followingIDs: currentUser.followingIDs.filter(
+            followings: currentUser.followings.filter(
                 (id) => id !== video.user._id,
             ),
         };

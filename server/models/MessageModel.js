@@ -5,22 +5,22 @@ const MessageModel = new Schema(
     {
         sender: {
             type: Schema.Types.ObjectId,
-            ref: 'user',
+            ref: 'User',
         },
 
         text: { type: String, trim: true },
         likes: [
             {
                 type: Schema.Types.ObjectId,
-                ref: 'user',
+                ref: 'User',
             },
         ],
         conversation: {
             type: Schema.Types.ObjectId,
-            ref: 'conversation',
+            ref: 'Conversation',
         },
     },
     { timestamps: true },
 );
 
-module.exports = mongoose.model('message', MessageModel);
+module.exports = mongoose.model('Message', MessageModel);

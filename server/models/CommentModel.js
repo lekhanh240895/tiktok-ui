@@ -5,28 +5,28 @@ const CommentModel = new Schema(
     {
         user: {
             type: Schema.Types.ObjectId,
-            ref: 'user',
+            ref: 'User',
         },
         text: { type: String, trim: true },
         video: {
             type: Schema.Types.ObjectId,
-            ref: 'video',
+            ref: 'Video',
         },
         comments: [
             {
                 type: Schema.Types.ObjectId,
-                ref: 'comment',
+                ref: 'Comment',
             },
         ],
 
         likes: [
             {
                 type: Schema.Types.ObjectId,
-                ref: 'user',
+                ref: 'User',
             },
         ],
     },
     { timestamps: true },
 );
 
-module.exports = mongoose.model('comment', CommentModel);
+module.exports = mongoose.model('Comment', CommentModel);

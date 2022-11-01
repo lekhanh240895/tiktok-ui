@@ -6,6 +6,12 @@ export const getUserConversations = async (userID) => {
     return response.data;
 };
 
+// Get a conversations
+export const getConversation = async (id) => {
+    const response = await httpRequest.get(`conversations/`);
+    return response.data;
+};
+
 // Create a conversation
 export const create = async (receiverID) => {
     try {

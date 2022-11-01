@@ -20,7 +20,6 @@ import LoginModal from './components/modals/LoginModal';
 import PrivateOutlet from './components/PrivateRouteOutlet';
 import { getMe } from './redux/slices/authSlice';
 import Spinner from './components/Spinner/Spinner';
-import VideoModal from './components/modals/VideoModal';
 import { io } from 'socket.io-client';
 import DeleteVideoModal from './components/modals/DeleteVideoModal';
 
@@ -45,16 +44,6 @@ function App() {
         });
     }, [socket, dispatch, currentUser]);
 
-    function unique(arr) {
-        var newArr = [];
-        for (var i = 0; i < arr.length; i++) {
-            if (!newArr.includes(arr[i])) {
-                newArr.push(arr[i]);
-            }
-        }
-        return newArr;
-    }
-
     useEffect(() => {
         const token = localStorage.getItem('token');
         // Fetch users
@@ -69,6 +58,16 @@ function App() {
             dispatch(videosSlice.actions.reset());
         };
     }, [dispatch]);
+
+    function unique(arr) {
+        var newArr = [];
+        for (var i = 0; i < arr.length; i++) {
+            if (!newArr.includes(arr[i])) {
+                newArr.push(arr[i]);
+            }
+        }
+        return newArr;
+    }
 
     useEffect(() => {
         (async () => {
@@ -147,10 +146,10 @@ function App() {
                     );
                 })}
 
-                <Route
+                {/* <Route
                     path={`@:username/video/:videoID`}
                     element={<VideoModal />}
-                />
+                /> */}
             </Routes>
 
             {/* {background && (

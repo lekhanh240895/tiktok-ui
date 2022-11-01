@@ -12,6 +12,7 @@ import NotFound from '~/pages/NotFound';
 import Messages from '~/pages/Messages';
 import SharedLayout from '~/layouts/SharedLayout';
 import HeaderFooterLayout from '~/layouts/HeaderFooterLayout';
+import VideoModal from '~/components/modals/VideoModal';
 
 const publicRoutes = [
     {
@@ -54,6 +55,11 @@ const publicRoutes = [
         path: config.routes.music,
         component: Music,
         layout: SharedLayout,
+    },
+    {
+        path: config.routes.video,
+        component: VideoModal,
+        layout: null,
     },
 ];
 

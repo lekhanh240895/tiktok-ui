@@ -28,21 +28,6 @@ export default function AddCommentForm({
         const newComment = { ...response, video, user: currentUser };
         setComments(comments.concat(newComment));
 
-        const data = {
-            receiver: video.user._id,
-            type: 'comment',
-            video: video,
-            sender: currentUser,
-            comment: newComment,
-        };
-
-        socket.emit('sendNotification', data);
-
-        await notificationService.create({
-            ...data,
-            createdAt: new Date(),
-        });
-
         const tagUsernames = newComment.text.match(/[@]\w*\b/g) || [];
         if (tagUsernames.length > 0) {
             const tagUsers = users.filter((user) =>
@@ -55,17 +40,36 @@ export default function AddCommentForm({
                     receiver: user._id,
                     type: 'mention',
                     subType: 'mention-comment',
-                    video: video,
+                    video,
                     sender: currentUser,
                     comment: newComment,
                 };
                 socket.emit('sendNotification', tagData);
 
+                if (tagData.receiver !== tagData.sender._id) {
+                    await notificationService.create({
+                        ...tagData,
+                        createdAt: new Date(),
+                    });
+                }
+            });
+        } else {
+            const data = {
+                receiver: video.user._id,
+                type: 'comment',
+                video,
+                sender: currentUser,
+                comment: newComment,
+            };
+
+            socket.emit('sendNotification', data);
+
+            if (data.receiver !== data.sender._id) {
                 await notificationService.create({
-                    ...tagData,
+                    ...data,
                     createdAt: new Date(),
                 });
-            });
+            }
         }
     };
 

@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.c5c346f3.css",
-    "main.js": "/static/js/main.26a57b11.js",
+    "main.js": "/static/js/main.b91bda7b.js",
     "static/media/sofiapro-semibold.otf": "/static/media/sofiapro-semibold.a9a8148f7d5d0db20db8.otf",
     "static/media/404page_bgImg.png": "/static/media/404page_bgImg.532e06c8382fb6011df0.png",
     "static/media/ProximaNova-Semibold.woff2": "/static/media/ProximaNova-Semibold.db7972dbe0b808f96bae.woff2",
@@ -14,10 +14,10 @@
     "static/media/logo.svg": "/static/media/logo.3ffa8c5de85faddba58391bd98e85740.svg",
     "index.html": "/index.html",
     "main.c5c346f3.css.map": "/static/css/main.c5c346f3.css.map",
-    "main.26a57b11.js.map": "/static/js/main.26a57b11.js.map"
+    "main.b91bda7b.js.map": "/static/js/main.b91bda7b.js.map"
   },
   "entrypoints": [
     "static/css/main.c5c346f3.css",
-    "static/js/main.26a57b11.js"
+    "static/js/main.b91bda7b.js"
   ]
 }

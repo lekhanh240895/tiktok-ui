@@ -20,13 +20,13 @@ const UserModel = new Schema(
         followings: [
             {
                 type: Schema.Types.ObjectId,
-                ref: 'user',
+                ref: 'User',
             },
         ],
         followers: [
             {
                 type: Schema.Types.ObjectId,
-                ref: 'user',
+                ref: 'User',
             },
         ],
         isAdmin: {
@@ -49,4 +49,4 @@ const UserModel = new Schema(
     { timestamps: true },
 );
 
-module.exports = mongoose.model('user', UserModel);
+module.exports = mongoose.model('User', UserModel);

@@ -6,7 +6,7 @@ const ConversationModel = new Schema(
         members: [
             {
                 type: Schema.Types.ObjectId,
-                ref: 'user',
+                ref: 'User',
             },
         ],
         title: {
@@ -17,4 +17,4 @@ const ConversationModel = new Schema(
     { timestamps: true },
 );
 
-module.exports = mongoose.model('conversation', ConversationModel);
+module.exports = mongoose.model('Conversation', ConversationModel);

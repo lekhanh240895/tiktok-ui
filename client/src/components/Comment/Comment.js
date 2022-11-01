@@ -61,10 +61,12 @@ export default function Comment({ comment, onDeleteComment }) {
 
             socket.emit('sendNotification', data);
 
-            await notificationService.create({
-                ...data,
-                createdAt: new Date(),
-            });
+            if (data.receiver !== data.sender._id) {
+                await notificationService.create({
+                    ...data,
+                    createdAt: new Date(),
+                });
+            }
         }
     };
 

@@ -34,6 +34,7 @@ import Avatar from '~/components/Avatar';
 import Notifications from '~/components/Notifications';
 import { appSelector } from '~/redux/selectors';
 import * as notificationService from '~/services/notificationService';
+import { isEqual } from 'lodash';
 
 const cx = classnames.bind(styles);
 
@@ -94,53 +95,69 @@ export default function Header({ innerWidth }) {
     const [notifications, setNotifications] = useState(
         JSON.parse(localStorage.getItem('notifications')) || [],
     );
-    const [messagesNotification, setMessagesNotification] = useState([]);
-    const { socket } = useSelector(appSelector);
+    const [unreadMessages, setUnreadMessages] = useState(
+        JSON.parse(localStorage.getItem('unreadMessages')) || [],
+    );
+    const { socket, selectedConversationID } = useSelector(appSelector);
 
-    const setNotifs = (notifs) => {
-        localStorage.setItem('notifications', JSON.stringify(notifs));
+    const setLocalData = (name, data) => {
+        localStorage.setItem(name, JSON.stringify(data));
     };
 
     useEffect(() => {
         socket?.on('getMessage', (data) => {
-            const newMessages = messagesNotification.concat(data);
-            setMessagesNotification(newMessages);
+            if (selectedConversationID === data.conversation) {
+                setUnreadMessages([]);
+                setLocalData('unreadMessages', []);
+            } else {
+                const newMessages = unreadMessages.concat(data);
+                setUnreadMessages(newMessages);
+                setLocalData('unreadMessages', newMessages);
+            }
         });
-    }, [socket, messagesNotification]);
+    }, [socket, unreadMessages, selectedConversationID]);
 
     useEffect(() => {
         (async () => {
             if (currentUser) {
                 const notifs = await notificationService.get(currentUser._id);
                 setNotifications(notifs);
-                setNotifs(notifs);
+                setLocalData('notifications', notifs);
             }
         })();
     }, [currentUser]);
 
     useEffect(() => {
         socket?.on('getNotification', async (data) => {
-            const newNotifs = [
-                ...notifications,
-                {
-                    ...data,
-                    createdAt: new Date(),
-                },
-            ];
-            setNotifications(newNotifs);
-            setNotifs(newNotifs);
+            const newNotif = {
+                ...data,
+                createdAt: new Date(),
+            };
+
+            const notifsData = notifications.map((n) => {
+                const { createdAt, updatedAt, _id, __v, ...other } = n;
+                return other;
+            });
+
+            const isExists = notifsData.some((notif) => isEqual(notif, data));
+
+            if (!isExists) {
+                const newNotifs = notifications.concat(newNotif);
+                setNotifications(newNotifs);
+                setLocalData('notifications', newNotifs);
+            }
         });
     }, [socket, notifications]);
 
-    const handleclick = (e) => {
+    const handleClickUpload = (e) => {
         if (!currentUser) {
             e.preventDefault();
             dispatch(loginModalSlice.actions.show());
         }
     };
-    const toTime = (time) => new Date(time);
+
     const orderedNotifications = notifications.sort(
-        (a, b) => toTime(b.createdAt) - toTime(a.createdAt),
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
     );
     return (
         <header className={cx('wrapper')}>
@@ -156,7 +173,7 @@ export default function Header({ innerWidth }) {
                         secondary
                         className={cx('upload-btn')}
                         to="/upload"
-                        onClick={handleclick}
+                        onClick={handleClickUpload}
                         leftIcon={<UploadIcon width="2rem" height="2rem" />}
                     >
                         Upload
@@ -187,7 +204,7 @@ export default function Header({ innerWidth }) {
                                     <span
                                         className={cx('badge', 'icon-wrapper')}
                                     >
-                                        {messagesNotification.length}
+                                        {unreadMessages.length}
                                     </span>
                                 </Link>
                             </Tippy>

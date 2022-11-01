@@ -5,11 +5,11 @@ const NotificationModel = new Schema(
     {
         sender: {
             type: Schema.Types.ObjectId,
-            ref: 'user',
+            ref: 'User',
         },
         receiver: {
             type: Schema.Types.ObjectId,
-            ref: 'user',
+            ref: 'User',
         },
         type: {
             type: String,
@@ -20,14 +20,14 @@ const NotificationModel = new Schema(
         },
         video: {
             type: Schema.Types.ObjectId,
-            ref: 'video',
+            ref: 'Video',
         },
         comment: {
             type: Schema.Types.ObjectId,
-            ref: 'comment',
+            ref: 'Comment',
         },
     },
     { timestamps: true },
 );
 
-module.exports = mongoose.model('notification', NotificationModel);
+module.exports = mongoose.model('Notification', NotificationModel);

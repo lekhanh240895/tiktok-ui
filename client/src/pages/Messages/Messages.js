@@ -5,7 +5,6 @@ import { SettingIcon2 } from '~/components/Icons';
 import Header from '~/layouts/components/Header';
 import { appSelector, authSelector } from '~/redux/selectors';
 import { Wrapper } from './styled';
-import * as messageService from '~/services/messageService';
 import * as conversationService from '~/services/conversationService';
 import appSlice from '~/redux/slices/appSlice';
 import Chatbox from '~/components/Chatbox/Chatbox';
@@ -15,6 +14,8 @@ export default function Messages() {
     const { currentUser } = useSelector(authSelector);
     const { selectedConversationID, onlineUsers } = useSelector(appSelector);
     const dispatch = useDispatch();
+    const unreadMessages =
+        JSON.parse(localStorage.getItem('unreadMessages')) || [];
 
     // Get user's conversations
     useEffect(() => {
@@ -30,35 +31,17 @@ export default function Messages() {
     }, [currentUser]);
 
     useEffect(() => {
-        if (conversations.length > 0 && !selectedConversationID) {
-            dispatch(
-                appSlice.actions.setSelectedConversationID(
-                    conversations[0]._id,
-                ),
-            );
-        }
-    }, [conversations, selectedConversationID, dispatch]);
-
-    useEffect(() => {
         return () => {
-            if (conversations.length > 0) {
-                conversations.forEach(async (conversation) => {
-                    const messages = await messageService.get(conversation._id);
-                    if (messages.length === 0) {
-                        await conversationService.remove(conversation._id);
-                    }
-                });
-            }
+            dispatch(appSlice.actions.setSelectedConversationID(null));
         };
-    }, [conversations]);
+    }, [dispatch]);
 
     const selectedConversation = conversations.find(
         (conversation) => conversation._id === selectedConversationID,
     );
 
-    const toTime = (timestamp) => new Date(timestamp);
     const orderedConversations = conversations.sort(
-        (a, b) => toTime(b.createdAt) - toTime(a.createdAt),
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
     );
 
     const handleDeleteConversation = async (conversationID) => {
@@ -101,6 +84,7 @@ export default function Messages() {
 
                                 return (
                                     <ConversationItem
+                                        unreadMessages={unreadMessages}
                                         onDeleteConversation={
                                             handleDeleteConversation
                                         }

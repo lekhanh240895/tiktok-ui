@@ -12,7 +12,7 @@ class ConversationController {
             res.status(200).json(conversations);
         } catch (err) {
             res.status(500).json({ error: err });
-            next();
+            next(err);
         }
     }
 
@@ -28,24 +28,25 @@ class ConversationController {
             res.status(200).json(conversation);
         } catch (err) {
             res.status(500).json({ error: err });
-            next();
+            next(err);
         }
     }
 
-    // // Get conversation with another user
-    // async getConversationWithAnotherUser(req, res, next) {
-    //     try {
-    //         const conversation = await ConversationModel.find({
-    //             members: {
-    //                 $all: [req.params.userID, req.body.receiverID],
-    //             },
-    //         }).populate('members');
-    //         res.status(200).json(conversation);
-    //     } catch (err) {
-    //         res.status(500).json({ error: err });
-    //         next();
-    //     }
-    // }
+    // Get conversation with another user
+    // [GET] api/conversations/:userID/:receiverID
+    async getConversationWithAnotherUser(req, res, next) {
+        try {
+            const conversation = await ConversationModel.find({
+                members: {
+                    $all: [req.params.userID, req.params.receiverID],
+                },
+            }).populate('members');
+            res.status(200).json(conversation);
+        } catch (err) {
+            res.status(500).json({ error: err });
+            next(err);
+        }
+    }
 
     // [POST] api/conversations
     async createConversation(req, res, next) {
@@ -66,7 +67,7 @@ class ConversationController {
             res.status(200).json(newConversation);
         } catch (err) {
             res.status(500).json({ error: err });
-            next();
+            next(err);
         }
     }
 
@@ -81,7 +82,7 @@ class ConversationController {
             res.status(200).json(conversation);
         } catch (err) {
             res.status(500).json({ error: err });
-            next();
+            next(err);
         }
     }
 
@@ -103,7 +104,7 @@ class ConversationController {
                 .catch((err) => console.log(err));
         } catch (err) {
             res.status(500).json({ error: err });
-            next();
+            next(err);
         }
     }
 }

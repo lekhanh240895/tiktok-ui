@@ -59,13 +59,13 @@ app.get('/set-cookies', (req, res) => {
     res.send('You create cookies');
 });
 
-// app.listen(process.env.API_PORT, () => {
-//     console.log(
-//         `App listening on port http://localhost:${process.env.API_PORT}`,
-//     );
-// });
+app.listen(process.env.API_PORT, () => {
+    console.log(
+        `App listening on port http://localhost:${process.env.API_PORT}`,
+    );
+});
 
 // Deploy to Heroku
-app.listen(process.env.PORT, () => {
-    console.log(`App listening on port ${process.env.PORT}`);
-});
+// app.listen(process.env.PORT, () => {
+//     console.log(`App listening on port ${process.env.PORT}`);
+// });

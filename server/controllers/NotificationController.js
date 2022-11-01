@@ -27,7 +27,7 @@ class NotificationController {
             res.status(200).json(notifications);
         } catch (err) {
             res.status(500).json({ error: err });
-            next();
+            next(err);
         }
     }
 
@@ -59,29 +59,38 @@ class NotificationController {
             res.status(200).json(notifications);
         } catch (err) {
             res.status(500).json({ error: err });
-            next();
+            next(err);
         }
     }
 
     // [POST] api/notifications
     async createNotification(req, res, next) {
         try {
-            const isOwn = req.user.id === req.body.receiver;
-            if (isOwn) {
-                res.status(500).json({
-                    error: 'A user notification is not created!',
-                });
-            } else {
+            const notification = await NotificationModel.findOne({
+                $and: [
+                    { type: req.body.type },
+                    { sender: req.body.sender?._id },
+                    { receiver: req.body.receiver },
+                    { video: req.body.video?._id },
+                    { subType: req.body.subType },
+                ],
+            }).populate('comment');
+
+            const isComment = req.body.comment;
+
+            if (!notification || isComment) {
                 const newNotification = new NotificationModel({
                     ...req.body,
                     sender: req.user._id,
                 });
                 await newNotification.save();
                 res.status(200).json(newNotification);
+            } else {
+                res.status(400).json('Error: Notification already exists!');
             }
         } catch (err) {
             res.status(500).json({ error: err });
-            next();
+            next(err);
         }
     }
 
@@ -96,7 +105,7 @@ class NotificationController {
             res.status(200).json(notification);
         } catch (err) {
             res.status(500).json({ error: err });
-            next();
+            next(err);
         }
     }
 
@@ -108,7 +117,7 @@ class NotificationController {
             res.status(200).json(deletedNotification);
         } catch (err) {
             res.status(500).json({ error: err });
-            next();
+            next(err);
         }
     }
 }

@@ -15,16 +15,36 @@ import {
 } from '../Icons';
 import Menu from '../Popper/Menu';
 
-export default function ChatItem({
+export default function ConversationItem({
     user,
-    onSelectedConversation,
     conversation,
     active,
     isOnline,
+    onSelectedConversation,
     onDeleteConversation,
+    unreadMessages,
 }) {
+    const unreadConversationMessages = unreadMessages.filter(
+        (message) => message.conversation === conversation._id,
+    );
     const [messages, setMessages] = useState([]);
     const { socket } = useSelector(appSelector);
+    const [isRead, setIsRead] = useState(
+        unreadConversationMessages?.length === 0,
+    );
+
+    const handleSelectConversation = () => {
+        onSelectedConversation();
+        setIsRead(true);
+        const newUnreads = unreadMessages.filter(
+            (message) =>
+                !unreadConversationMessages.some((m) => m._id === message._id),
+        );
+
+        if (newUnreads)
+            localStorage.setItem('unreadMessages', JSON.stringify(newUnreads));
+    };
+
     // Get conversation's messages
     useEffect(() => {
         (async () => {
@@ -32,6 +52,7 @@ export default function ChatItem({
             setMessages(messages);
         })();
     }, [conversation]);
+
     useEffect(() => {
         socket?.on('getMessage', (data) => {
             setMessages((prev) => [...prev, data]);
@@ -82,7 +103,7 @@ export default function ChatItem({
             className={
                 active ? 'conversation-item--active' : 'conversation-item'
             }
-            onClick={() => onSelectedConversation()}
+            onClick={handleSelectConversation}
         >
             <div className="avatar-wrapper">
                 <Avatar
@@ -97,7 +118,13 @@ export default function ChatItem({
                 <h4 className="conversation-user">{user?.full_name}</h4>
                 <div className="conversation-content">
                     {lastMessage && (
-                        <span className="conversation-text">
+                        <span
+                            className={
+                                isRead
+                                    ? 'conversation-text'
+                                    : 'conversation-text unread'
+                            }
+                        >
                             {lastMessage.text}
                         </span>
                     )}

@@ -18,6 +18,18 @@ export default function Chatbox({ selectedConversation }) {
     const { currentUser } = useSelector(authSelector);
     const { socket } = useSelector(appSelector);
 
+    // Get conversation's messages
+    useEffect(() => {
+        (async () => {
+            if (selectedConversation) {
+                const messages = await messageService.get(
+                    selectedConversation._id,
+                );
+                setMessages(messages);
+            }
+        })();
+    }, [selectedConversation]);
+
     useEffect(() => {
         socket?.on('getMessage', (data) => {
             setNewMessage(data);
@@ -40,18 +52,6 @@ export default function Chatbox({ selectedConversation }) {
             block: 'end',
         });
     }, [messages]);
-
-    // Get conversation's messages
-    useEffect(() => {
-        (async () => {
-            if (selectedConversation) {
-                const messages = await messageService.get(
-                    selectedConversation._id,
-                );
-                setMessages(messages);
-            }
-        })();
-    }, [selectedConversation]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();

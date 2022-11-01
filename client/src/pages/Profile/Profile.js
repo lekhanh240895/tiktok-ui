@@ -60,6 +60,7 @@ import {
     WhatsappIcon,
 } from '~/components/Icons';
 import * as conversationService from '~/services/conversationService';
+import * as notificationService from '~/services/notificationService';
 import appSlice from '~/redux/slices/appSlice';
 
 const SHARE_MENU = [
@@ -176,7 +177,7 @@ export default function Profile() {
         setActiveTab(tab);
     };
 
-    const handleFollow = () => {
+    const handleFollow = async () => {
         if (!currentUser) return dispatch(loginModalSlice.actions.show());
         const updatedUser = {
             ...currentUser,
@@ -185,10 +186,17 @@ export default function Profile() {
         dispatch(authSlice.actions.setCurrentUser(updatedUser));
         dispatch(followUser(user._id));
 
-        socket.emit('sendNotification', {
+        const data = {
             receiver: user._id,
             type: 'follow',
             sender: currentUser,
+        };
+
+        socket.emit('sendNotification', data);
+
+        await notificationService.create({
+            ...data,
+            createdAt: new Date(),
         });
     };
 

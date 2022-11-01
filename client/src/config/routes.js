@@ -9,5 +9,6 @@ export const routes = {
     tag: '/tag/:tagname',
     music: '/music/:musicname',
     messages: '/messages',
+    video: '@:username/video/:videoID',
     notFound: '*',
 };

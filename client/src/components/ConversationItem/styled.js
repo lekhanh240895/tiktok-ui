@@ -50,6 +50,10 @@ export const Wrapper = styled.li`
                 white-space: nowrap;
                 text-overflow: ellipsis;
                 margin-right: 5px;
+
+                &.unread {
+                    font-weight: 700;
+                }
             }
             .conversation-time {
                 flex-shrink: 0;
